@@ -2,13 +2,13 @@
 Adder parametrizable para N bits
 15/03/24
 */
-module adder # (parameter N = 32) (
-		input  logic [N-1:0]   A;
-		input  logic [N-1:0]   B;
-		input  logic  	     C_in;
+module adder # (parameter N = 24) (
+		input  logic [N-1:0]   A,
+		input  logic [N-1:0]   B,
+		input  logic  	     C_in,
 
 		output logic [N-1:0] R,
-		output Z_flag
+		output Z_flag,
 		output N_flag,
 		output C_flag,
 		output V_flag,

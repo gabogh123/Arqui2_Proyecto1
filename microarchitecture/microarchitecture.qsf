@@ -56,9 +56,17 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/mux_8NtoN.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/mux_4NtoN.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/mux_2NtoN.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/adder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file_vector.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/multiplier.sv
 set_global_assignment -name SYSTEMVERILOG_FILE fir_filter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/full_adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/test_benches/mux8NtoN_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/test_benches/mux4NtoN_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/test_benches/mux2NtoN_tb.sv
