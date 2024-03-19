@@ -22,8 +22,6 @@ module tb_multiplier;
         .v_flag(v_flag_expected)
     );
 
-
-
     // Initialize inputs
     initial begin
         // Clock wait
@@ -44,11 +42,20 @@ module tb_multiplier;
         $display("Expected V_flag: %b", V_flag_expected);
 
         // Verify the result using assertions
-        assert(result_expected === dut.result) else $error("Error: Result mismatch");
-        assert(z_flag_expected === dut.z_flag) else $error("Error: z_flag mismatch");
-        assert(c_flag_expected === dut.c_flag) else $error("Error: c_flag mismatch");
-        assert(n_flag_expected === dut.n_flag) else $error("Error: n_flag mismatch");
-        assert(v_flag_expected === dut.v_flag) else $error("Error: v_flag mismatch");
+        assert(result_expected === dut.result) 
+        else $error("Error: Result mismatch");
+
+        assert(z_flag_expected === dut.z_flag) 
+        else $error("Error: z_flag mismatch");
+
+        assert(c_flag_expected === dut.c_flag) 
+        else $error("Error: c_flag mismatch");
+
+        assert(n_flag_expected === dut.n_flag) 
+        else $error("Error: n_flag mismatch");
+
+        assert(v_flag_expected === dut.v_flag) 
+        else $error("Error: v_flag mismatch");
 
         // Display message if all checks pass
         $display("All checks passed");
