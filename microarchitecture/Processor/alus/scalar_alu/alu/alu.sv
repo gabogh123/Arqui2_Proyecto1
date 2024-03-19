@@ -6,7 +6,7 @@ MODIFICAR:
 - Cambiar la cantidad de los mux utilizados y sus resultados
 */
 `timescale 1 ps / 100 fs
-module alu #(parameter N = 32) (
+module alu #(parameter N = 24) (
 		input  [N-1:0] 			A, // Input A (24-bit)
 		input  [N-1:0] 			B, // Input B (24-bit)
 		input  [2:0]   ALUControl, // ALU Control (3-bit)

@@ -7,7 +7,7 @@ module mux_4NtoN # (parameter N = 24) (
 		input  logic [N-1:0] I1,
 		input  logic [N-1:0] I2,
 		input  logic [N-1:0] I3,
-
+		
 		input  logic   [1:0]  S,
 		input  logic 		rst,
 		input  logic	 enable,

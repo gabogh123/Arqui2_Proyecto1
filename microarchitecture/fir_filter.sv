@@ -5,7 +5,7 @@ MODIFICAR
 module fir_filter(clk, rst, btn, Y);
 
 	timeunit 1ps;
-   timeprecision 1ps;
+    timeprecision 1ps;
 
 	input  logic clk;
 	input  logic rst;

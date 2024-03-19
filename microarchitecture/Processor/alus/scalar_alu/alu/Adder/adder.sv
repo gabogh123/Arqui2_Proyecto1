@@ -11,7 +11,7 @@ module adder # (parameter N = 24) (
 		output Z_flag,
 		output N_flag,
 		output C_flag,
-		output V_flag,
+		output V_flag
 	);
 
 	logic [N:0] C_ins, B_logic;
