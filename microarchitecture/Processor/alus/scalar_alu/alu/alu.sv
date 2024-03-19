@@ -11,7 +11,7 @@ module alu #(parameter N = 24) (
 		input  [N-1:0] 			B, // Input B (24-bit)
 		input  [2:0]   ALUControl, // ALU Control (3-bit)
 
-		output [N-1:0]	   Output, // ALU Result (24-bit)
+		output [N-1:0]	   result, // ALU Result (24-bit)
 		output			   c_flag, // Carry Out
 		output 			   z_flag, // z_flag Flag
 		output 			  gt_flag, // Greater than Flag
@@ -22,7 +22,7 @@ module alu #(parameter N = 24) (
 	logic [N-1:0] add, sub, slt, xori, sll, srl, mult;
 	logic C_add, C_sub, C_mult, Z_add, Z_sub, Z_mult, V_add, V_sub, V_mult, N_add, N_sub, N_mult, gt_sub;
 	logic [4:0] shamt;
-	
+	 
 	/*
 	REVISAR EN TESTBENCH QUE FUNCIONE LOL
 	*/
@@ -53,7 +53,7 @@ module alu #(parameter N = 24) (
 	multiplicator #(N) multi(A, B, mult, Z_mult, C_mult, V_mult, N_mult);
 
 
-	//mux7to1 #(N) mux_result(add, xori, sub, slt, sll, srl, mult, ALUControl, Output);
+	//mux7to1 #(N) mux_result(add, xori, sub, slt, sll, srl, mult, ALUControl, result);
 	mux_8NtoN # (.N(N)) m8NtoN_R (.I0(add),
 								  .I1(xori),
 								  .I2(sub),
@@ -65,7 +65,7 @@ module alu #(parameter N = 24) (
 								  .enable(1),
 								  .rst(0),
 								  .S(ALUControl),
-								  .O(Output));
+								  .O(result));
 
 	//mux7to1 #(1) mux_C(C_add, 0, C_sub, 0, 0, 0, C_mult, ALUControl, c_flag);
 	mux_8NtoN # (.N(N)) m8NtoN_C (.I0(C_add),
