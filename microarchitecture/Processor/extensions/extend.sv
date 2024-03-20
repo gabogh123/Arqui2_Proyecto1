@@ -1,28 +1,31 @@
-// Modulo extend para obtener señal ImmSrc
-
+/*
+Modulo extend para obtener ImmSrc
+*/
 module extend()(
 
 		input [2:0] Opcode,
 		input Vec,
 
 		output [1:0] ImmSrc
-);
+	);
 
-assign ov = {Opcode,Vec}
+	assign ov = {Opcode,Vec}
 
-if(Opcode == 3'b000) //Instrucciones tipo R
+	if(Opcode == 3'b000) //Instrucciones tipo R
 
-	assign ImmSrc = 2'bXX;
+		assign ImmSrc = 2'bXX;
 
-else
+	else
 
-	begin
-		
-		if(ov=4'b1111) //branch
+		begin
+			
+			if(ov=4'b1111) //branch
 
-			assign ImmSrc = 2'b01;
+				assign ImmSrc = 2'b01;
 
-		else
+			else
 
-			assign ImmSrc = 2'b00;
-	end
+				assign ImmSrc = 2'b00;
+		end
+
+endmodule

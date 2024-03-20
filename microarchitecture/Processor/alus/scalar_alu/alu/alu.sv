@@ -1,6 +1,6 @@
 /*
 ALU parametrizable para N
-16/03/24
+Date: 16/03/24
 MODIFICAR:
 - Instrucciones xori y set less than
 - Cambiar la cantidad de los mux utilizados y sus resultados

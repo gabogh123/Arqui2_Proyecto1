@@ -1,6 +1,6 @@
 /*
 Full Adder
-15/03/24
+Date: 15/03/24
 */
 module full_adder (
 		input  logic A,

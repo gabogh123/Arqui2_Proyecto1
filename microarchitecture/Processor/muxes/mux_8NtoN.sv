@@ -1,6 +1,6 @@
 /*
 MUX 8:1 parametrizable para N bits
-16/03/24
+Date: 16/03/24
 */
 module mux_8NtoN # (parameter N = 24) (	
 		input  logic [N-1:0]  	 I0,

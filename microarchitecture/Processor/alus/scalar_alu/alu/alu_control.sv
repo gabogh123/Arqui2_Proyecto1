@@ -1,6 +1,6 @@
 /*
-	ALU control unit module
-	19/3/24
+ALU control unit module
+Date: 19/3/24
 */
 
 module alu_control()(

@@ -1,6 +1,6 @@
 /*
 Adder parametrizable para N bits
-15/03/24
+Date: 15/03/24
 */
 module adder # (parameter N = 24) (
 		input  logic [N-1:0]   A,

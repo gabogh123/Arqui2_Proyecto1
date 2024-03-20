@@ -29,7 +29,7 @@ MODIFICAR
 |       |             |     1     |       | |                  |     11     |    0    |    1    |
 |-----------------------------------------------------------------------------------------------|
 
-20/03/24
+Date: 20/03/24
 */
 module alu_decoder(
         input  logic [2:0]     Opcode,
@@ -50,17 +50,17 @@ module alu_decoder(
                 end
 
                 /* addi */
-                3'b001 : begin
+                3'b100 : begin
                     ALUControl = 3'b000;
                 end
 
                 /* subi */
-                3'b001 : begin
+                3'b101 : begin
                     ALUControl = 3'b001;
                 end
 
                 /* muli */
-                3'b001 : begin
+                3'b110 : begin
                     ALUControl = 3'b010;
                 end
 

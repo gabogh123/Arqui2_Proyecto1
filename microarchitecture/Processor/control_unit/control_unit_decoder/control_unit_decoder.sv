@@ -3,7 +3,7 @@ Decoder del Control Unit
 Diseño basado en la figura 7.16 (b) del libro
 Digital Design and Computer Architecture ARM Editon
 de Sarah L. Harries & David Money Harries.
-20/03/24
+Date: 20/03/24
 */
 module control_unit_decoder(
     	input  logic [2:0]     Opcode,
@@ -14,7 +14,6 @@ module control_unit_decoder(
         output logic              PCS,
         output logic             RegW,
         output logic             MemW,
-        output logic          NoWrite,
         output logic         MemtoReg,
         output logic           ALUSrc,
         output logic [1:0]     ImmSrc,
@@ -24,8 +23,8 @@ module control_unit_decoder(
     wire wBranch;
     wire wAluOp;
 
-    /* PC Logic */ /* tb */
-    pc_logic pc_l (.Rd(RD),
+    /* PC Logic */ /* tb done */
+    pc_logic pc_l (.Rd(Rd),
                    .Branch(wBranch),
                    .RegW(RegW),
                    .PCS(PCS));
@@ -42,7 +41,7 @@ module control_unit_decoder(
                             .RegW(RegW),
                             .ALUOp(wAluOp));
 
-    /* ALU Decoder */ /* tb */
+    /* ALU Decoder */ /* tb done */
     alu_decoder alu_deco (.Opcode(Opcode),
                           .Funct(Funct),
                           .ALUOp(wAluOp),

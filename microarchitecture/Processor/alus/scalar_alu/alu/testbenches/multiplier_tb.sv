@@ -1,5 +1,6 @@
-
-
+/*
+Multiplier testbench
+*/
 module tb_multiplier;
 
 

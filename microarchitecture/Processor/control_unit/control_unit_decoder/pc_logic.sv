@@ -5,7 +5,7 @@ Digital Design and Computer Architecture ARM Editon
 de Sarah L. Harries & David Money Harries.
 
 PCS = [ (Rd == 15) & RegW ] | Branch
-20/03/24
+Date: 20/03/24
 */
 module pc_logic(
     input  logic [3:0] Rd,

@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY ram_scalar
+set_global_assignment -name TOP_LEVEL_ENTITY control_unit_decoder
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 22.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:41:29  MARCH 15, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
@@ -57,14 +57,10 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH ram_scalar_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH main_decoder_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME ram_scalar_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ram_scalar_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ram_scalar_tb -section_id ram_scalar_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_global_assignment -name EDA_TEST_BENCH_FILE Memory/ram_scalar/testbenches/ram_scalar_tb.sv -section_id ram_scalar_tb
 set_global_assignment -name MIF_FILE "Memory/instruction memory/rom.mif"
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/testbenches/full_adder_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/testbenches/adder_tb.sv
@@ -88,4 +84,27 @@ set_global_assignment -name QIP_FILE "Memory/instruction memory/rom.qip"
 set_global_assignment -name MIF_FILE Memory/ram_scalar/ram_scalar.mif
 set_global_assignment -name QIP_FILE Memory/ram_scalar/ram_scalar.qip
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/ram_scalar/testbenches/ram_scalar_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/control_unit_decoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/pc_logic.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/main_decoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/alu_decoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/testbenches/pc_logic_tb.sv
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_NAME pc_logic_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id pc_logic_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME pc_logic_tb -section_id pc_logic_tb
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/testbenches/alu_decoder_tb.sv
+set_global_assignment -name EDA_TEST_BENCH_NAME alu_decoder_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id alu_decoder_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME alu_decoder_tb -section_id alu_decoder_tb
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_unit_decoder/testbenches/main_decoder_tb.sv
+set_global_assignment -name EDA_TEST_BENCH_FILE Memory/ram_scalar/testbenches/ram_scalar_tb.sv -section_id ram_scalar_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/control_unit_decoder/testbenches/pc_logic_tb.sv -section_id pc_logic_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/control_unit_decoder/testbenches/alu_decoder_tb.sv -section_id alu_decoder_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME main_decoder_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id main_decoder_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME main_decoder_tb -section_id main_decoder_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/control_unit_decoder/testbenches/main_decoder_tb.sv -section_id main_decoder_tb
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

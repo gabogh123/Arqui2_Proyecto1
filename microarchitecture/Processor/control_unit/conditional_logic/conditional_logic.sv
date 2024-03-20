@@ -1,6 +1,6 @@
 /*
-	Conditional Logic module 
-	Date: 20/3/2024
+Conditional Logic module 
+Date: 20/3/2024
 */
 
 module condition_logic()(

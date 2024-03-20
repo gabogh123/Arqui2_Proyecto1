@@ -1,5 +1,7 @@
+/*
+ALU testbench
+*/
 `timescale 1ps / 1ps
-
 module alu_tb;
 
     parameter N = 24;

@@ -1,5 +1,6 @@
-/* Condition checked module 
-   Date: 20/3/2024
+/*
+Condition checked module 
+Date: 20/3/2024
 */
 
 module condition_checker(cond, N, Z, C, V, condEx);

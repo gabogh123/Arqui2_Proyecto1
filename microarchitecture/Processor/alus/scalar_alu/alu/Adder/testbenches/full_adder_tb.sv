@@ -1,4 +1,7 @@
-module tb_full_adder;
+/*
+full_adder testbench
+*/
+module full_adder_tb;
     // Time parameter
     parameter SIM_TIME = 20;
 

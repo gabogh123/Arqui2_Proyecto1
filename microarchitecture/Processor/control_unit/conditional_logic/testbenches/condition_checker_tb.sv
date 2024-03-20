@@ -1,6 +1,6 @@
 /*
 Condition Checker testbench
-20/03/24
+Date: 20/03/24
 */
 
 module condition_checker_tb;

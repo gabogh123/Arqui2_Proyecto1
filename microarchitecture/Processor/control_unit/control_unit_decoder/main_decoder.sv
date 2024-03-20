@@ -8,14 +8,14 @@ MODIFICAR
 |---------------------------------------------------------------------------------------------------|
 | Instr | Type | Opcode |  V  | Funct | | Branch | MemtoReg | MemW | ALUSrc | ImmSrc | RegW | ALUOp |
 |---------------------------------------------------------------------------------------------------|
-|   00  |   0   |     X     | DP Reg | |    0   |     0     |   0  |    0   |   XX   |   1  |   0   |
+|  add  |   0   |     X     | DP Reg | |    0   |     0     |   0  |    0   |   XX   |   1  |   0   |
 | 00 |     1     |     X     | DP Imm | |    0   |     0    |   0  |    1   |   00   |   1  |   X0   |
 | 01 |     X     |     0     |  STR   | |    0   |     X    |   1  |    1   |   01   |   0  |   10   |
 | 01 |     X     |     1     |  LDR   | |    0   |     1    |   0  |    1   |   01   |   1  |   X0   |
 | 10 |     X     |     X     |   B    | |    1   |     0    |   0  |    1   |   10   |   0  |   X1   |
 |---------------------------------------------------------------------------------------------------|
 
-20/03/24
+Date: 20/03/24
 */
 module main_decoder(
         input  logic [2:0]   Opcode,
@@ -114,10 +114,10 @@ module main_decoder(
                 end
             end
 
-            /* str */
+            /* str */ /* Vector missing */
             3'b001 : begin
                 Branch   = 1'b0;
-                MemtoReg = 1'b1; // X
+                MemtoReg = 1'b0; // X
                 MemW     = 1'b1;
                 ALUSrc   = 1'b1;
                 ImmSrc   = 2'b00;
@@ -125,7 +125,7 @@ module main_decoder(
                 ALUOp    = 1'b0;
             end
 
-            /* ldr */
+            /* ldr */ /* Vector missing */
             3'b010 : begin
                 Branch   = 1'b0;
                 MemtoReg = 1'b1;
@@ -136,26 +136,27 @@ module main_decoder(
                 ALUOp    = 1'b0;
             end
 
-            /* beq */
-            3'b011 : begin
-                Branch   = 1'b1;
-                MemtoReg = 1'b0;
-                MemW     = 1'b0;
-                ALUSrc   = 1'b1;
-                ImmSrc   = 2'b00;
-                RegW     = 1'b0;
-                ALUOp    = 1'b0;
-            end
-
-            /* b */
             3'b111 : begin
-                Branch   = 1'b1;
-                MemtoReg = 1'b0;
-                MemW     = 1'b0;
-                ALUSrc   = 1'b1;
-                ImmSrc   = 2'b01;
-                RegW     = 1'b0;
-                ALUOp    = 1'b0;
+                /* b */
+                if (V) begin
+                    Branch   = 1'b1;
+                    MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    ALUSrc   = 1'b1;
+                    ImmSrc   = 2'b01;
+                    RegW     = 1'b0;
+                    ALUOp    = 1'b0;
+                end
+                /* beq */
+                else begin
+                    Branch   = 1'b1;
+                    MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    ALUSrc   = 1'b1;
+                    ImmSrc   = 2'b00;
+                    RegW     = 1'b0;
+                    ALUOp    = 1'b0;
+                end
             end
 
             /* default */

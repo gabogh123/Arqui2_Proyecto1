@@ -1,6 +1,6 @@
 /*
 ram_scalar testbench
-19/03/24
+Date: 19/03/24
 */
 module ram_scalar_tb;
 

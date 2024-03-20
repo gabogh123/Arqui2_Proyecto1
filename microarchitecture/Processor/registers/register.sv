@@ -1,6 +1,6 @@
 /*
 Register parametrizable para N bits
-16/03/24
+Date: 16/03/24
 */
 module register	# (parameter N = 24) (
 		input  logic [N-1:0]   RegIn,
