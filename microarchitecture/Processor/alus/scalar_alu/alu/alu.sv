@@ -35,13 +35,6 @@ module alu #(parameter N = 24) (
 	adder #(N) subtractor(.A(A), .B(B), .Cin(1), .R(sub), .C(C_sub), .Neg(N_sub), .V(V_sub), .Z(Z_sub));
 	assign gt_sub = ~N_sub & ~V_sub & ~Z_sub;
 
-	/* QUITAR */
-	//xori
-	assign xori = A ^ B;
-	
-	/* QUITAR */
-	//set less than
-	assign slt = (A < B) ? 24'b1 : 24'b0;
 	
 	//shift left logical
 	assign sll = A << shamt;

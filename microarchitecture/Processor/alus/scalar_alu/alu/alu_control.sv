@@ -4,13 +4,13 @@
 */
 
 module alu_control()(
-		input [1:0] Alu_op;
-		input [2:0] funct;
+		input [1:0] Alu_op,
+		input [2:0] funct,
 
-		reg [2:0] control;
-		wire [4:0] alu_in;
+		reg [2:0] control,
+		wire [4:0] alu_in,
 
-		output [1:0] control;
+		output [2:0] control,
 		);
 
 		assign alu_in = {alu_op,funct}
