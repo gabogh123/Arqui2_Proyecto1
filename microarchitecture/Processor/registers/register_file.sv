@@ -4,16 +4,16 @@ Register File parametrizable para N bits
 */
 `timescale 1 ps / 100 fs
 module register_file # (parameter N = 24) (
-		input  logic [N-1:0] reg_write_data,
-		input  logic [3:0]   reg_read_addr_1,
-		input  logic [3:0]   reg_read_addr_2,
-		input  logic [3:0]   reg_write_dest,
-		input  logic         reg_write_en,
+		input  logic [N-1:0] reg_write_data,    // WD3 data
+		input  logic [3:0]   reg_read_addr_1,   // A1
+		input  logic [3:0]   reg_read_addr_2,   // A2
+		input  logic [3:0]   reg_write_dest,    // A3 address
+		input  logic         reg_write_en,      // WE3
 		input  logic         rst,
 		input  logic         clk,
 
-		output logic [N-1:0] reg_read_data_1,
-		output logic [N-1:0] reg_read_data_2
+		output logic [N-1:0] reg_read_data_1,   // RD1
+		output logic [N-1:0] reg_read_data_2    // RD2
      );
 
       reg     [N-1:0]     reg_array [15:0];  

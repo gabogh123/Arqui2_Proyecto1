@@ -2,7 +2,7 @@
 // Control unit module 
 //19/3/2024
 
-module control_unit()(
+module control_unit(
 		
 		input [2:0] Opcode,
 		input [2:0] Funct,
