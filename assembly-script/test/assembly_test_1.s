@@ -1,59 +1,37 @@
-.global main
+.data
+    A: .word 5       # A = 5
+    B: .word 3       # B = 3
+    Result: .word 0  # Resultado = 0
 
-main:
-    # Initialize registers
+.text
+    # Cargar A en un registro
+    lw $e0, A($zero)         # $e0 = 5
     
-    mov r0, #10     # Load 10 in r0
-    mov r1, #5      # Load 5 in r1
-    mov r2, #2      # Load 2 in r2
-    mov r3, $zero   # Load 0 in r3
-    mov r4, $zero   # Load 0 in r4
-    mov r5, $zero   # Load 0 in r5
-    mov r6, $zero   # Load 0 in r6
+    # Cargar B en un registro 
+    lw $e1, B($zero)  # $e1 = 3
+    
+    # add A y B
+    add $e2, $e0, $e1  # $e2 = 5 + 3 = 8
+    
+    # sub B de A
+    sub $e3, $e0, $e1  # $e3 = 5 - 3 = 2
+    
+    # Mul A por B
+    mul $e4, $e0, $e1  # $e4 = 5 * 3 = 15
+    
+    # addi 10 a A
+    addi $e0, $e0, 10  # $e0 = 5 + 10 = 15
+    
+    # subi 5 de B
+    subi $e1, $e1, 5   # $e1 = 3 - 5 = -2
+    
+    # muli A por 2
+    muli $e3, $e3, 2   # $e3 = 15 * 2 = 30
 
-    # Sum instruction
-    add r4, r0, r1  # r4 = r0 + r1 ---> 15 = 10 + 5
+    sw $e2, Result($zero)
+    
+    b End
 
-    # Sub instruction
-    sub r5, r0, r1  # r5 = r0 - r1 ---> 5 = 10 - 5 
-
-    # Mul instruction
-    mul r6, r1, r2  # r6 = r1 * r2 ---> 10 = 2 * 5
-
-    # Sumi instruction
-    add r6, r6, #2  # r6 = r6 + 5 ---> 12 = 10 + 2 
-
-    # Subi instruction
-    sub r5, r6, #5  # r5 = r6 - 5 ---> 7 = 12 - 5
-
-    # Str instruction
-    str r6, [sp]    # str r6 value in sp ---> sp = 7
-
-    # Ldr instruction
-    mov r3, [sp]    # load in r3 sp's value ---> r3 = 7
-
-    b end
-
-
-end:
-    # Exit code
-    mov r7, #0x18  # Loads exit code
-    syscall      # Syscall to exit program
-
-
-/*
-
-
-    # Compares
-    cmp r7, r2      # Comparar r7 con r2
-
-    beq equal       # Branch si r7 == r2
-    bgt greater     # Branch si r7 > r2
-    blt less        # Branch si r7 < r2
-
- */
-
-
-
-
-
+End:
+    end $zero
+    
