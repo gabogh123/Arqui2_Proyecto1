@@ -1,50 +1,57 @@
 /*
 Control Unit module 
-Date: 19/3/2024
+Date: 20/3/2024
 */
 module control_unit(
+
+		input clk,
+		input rst,
 		
 		input [2:0] Opcode,
+		input V,
 		input [2:0] Funct,
-		input Vec,
+		input [3:0] Rd,
+
+		input [3:0] ALUFlags,
 
 		output PCSrc,
-		output RegWrite,
-		output ImmSrc,
-		output ALUSrc,
-		output [2:0] AluOp,
+		output MemtoReg,
 		output MemWrite,
-		output MemRead,
-		output MemtoReg
+		output [2:0] ALUControl,
+		output ALUSrc,
+		output [1:0] ImmSrc,
+		output RegWrite
 	);
 
-	casex (Opcode)
+	wire FlagW;
+	wire PCS;
+	wire RegW;
+	wire MemW;
 
-		3'b000 : begin 
-		end
+	/* Decoder */
+	control_unit_decoder decoder (.Opcode(Opcode),
+                            	  .V(V),
+                            	  .Funct(Funct),
+								  .Rd(Rd),
+								  .PCS(PCS),
+								  .RegW(RegW),
+								  .MemW(MemW),
+								  .MemtoReg(MemtoReg),
+								  .ALUSrc(ALUSrc),
+								  .ImmSrc(ImmSrc),
+								  .ALUControl(ALUControl));
 
-		3'b001 : begin
-		end
-
-		3'b010 : begin
-		end
-
-		3'b011 : begin
-		end
-
-		3'b100 : begin
-		end
-
-		3'b101 : begin
-		end
-
-		3'b110 : begin
-		end
-
-		3'b111 : begin
-		end
-
-	endcase
-
+	/* Conditional Logic */
+    condition_logic cond_logic (.clk(clk),
+                         .rst(rst),
+                         .Opcode(Opcode),
+                        .ALUFlags(ALUFlags),
+                        .FlagW(FlagW),
+                        .PCS(PCS),
+                        .RegW(RegW),
+                        .MemW(MemW),
+                        .PCSrc(PCSrc),
+                        .RegWrite(RegWrite),
+                        .MemWrite(MemWrite));
 
 endmodule

@@ -9,6 +9,7 @@ module pc_logic_tb;
 	logic		Branch;
 	logic		RegW;
     logic		PCS;
+
     /* pc_logic instance */
     pc_logic uut (.Rd(Rd),
                   .Branch(Branch),

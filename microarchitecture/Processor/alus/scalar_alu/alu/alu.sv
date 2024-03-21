@@ -1,9 +1,7 @@
 /*
 ALU parametrizable para N
 Date: 16/03/24
-MODIFICAR:
-- Instrucciones xori y set less than
-- Cambiar la cantidad de los mux utilizados y sus resultados
+HACER TESTBENCH
 */
 `timescale 1 ps / 100 fs
 module alu #(parameter N = 24) (
@@ -12,16 +10,18 @@ module alu #(parameter N = 24) (
 		input  [2:0]   ALUControl, // ALU Control (3-bit)
 
 		output [N-1:0]	   result, // ALU Result (24-bit)
-		output			   c_flag, // Carry Out
-		output 			   z_flag, // z_flag Flag
-		output 			  gt_flag, // Greater than Flag
-		output 			   v_flag, // Overflow Flag
-		output 			   n_flag  // Negative Flag
+		output [3:0]		flags
 	);
 
 	logic [N-1:0] add, sub, slt, xori, sll, srl, mult;
 	logic C_add, C_sub, C_mult, Z_add, Z_sub, Z_mult, V_add, V_sub, V_mult, N_add, N_sub, N_mult, gt_sub;
 	logic [4:0] shamt;
+
+	logic			   c_flag; // Carry Out
+	logic 			   z_flag; // Zero Flag
+	logic 			  gt_flag; // Greater than Flag
+	logic 			   v_flag; // Overflow Flag
+	logic 			   n_flag; // Negative Flag
 	 
 	/*
 	REVISAR EN TESTBENCH QUE FUNCIONE LOL
@@ -29,10 +29,24 @@ module alu #(parameter N = 24) (
 	assign shamt = B[7:3];
 
 	//add
-	adder #(N) adder(.A(A), .B(B), .Cin(0), .R(add), .C(C_add), .Neg(N_add), .V(V_add), .Z(Z_add));
+	adder #(N) adder(.A(A),
+					 .B(B),
+					 .C_in(0),
+					 .R(add),
+					 .N_flag(N_add),
+					 .Z_flag(Z_add),
+					 .C_flag(C_add),
+					 .V_flag(V_add));
 	
 	//sub
-	adder #(N) subtractor(.A(A), .B(B), .Cin(1), .R(sub), .C(C_sub), .Neg(N_sub), .V(V_sub), .Z(Z_sub));
+	adder #(N) subtractor(.A(A),
+						  .B(B),
+						  .C_in(1),
+						  .R(sub),
+						  .N_flag(N_sub),
+						  .Z_flag(Z_sub),
+						  .C_flag(C_sub),
+						  .V_flag(V_sub));
 	assign gt_sub = ~N_sub & ~V_sub & ~Z_sub;
 
 	
@@ -43,8 +57,13 @@ module alu #(parameter N = 24) (
 	assign srl = A >> shamt;
 
 	//multiplication
-	multiplicator #(N) multi(A, B, mult, Z_mult, C_mult, V_mult, N_mult);
-
+	multiplier #(.N(N)) multi(A,
+							B,
+							mult,
+							Z_mult,
+							C_mult,
+							V_mult,
+							N_mult);
 
 	//mux7to1 #(N) mux_result(add, xori, sub, slt, sll, srl, mult, ALUControl, result);
 	mux_8NtoN # (.N(N)) m8NtoN_R (.I0(add),
@@ -129,5 +148,8 @@ module alu #(parameter N = 24) (
 								   .rst(0),
 								   .S(ALUControl),
 								   .O(gt_flag));
+
+	/* All flags are in a single 4 bit bus */
+	assign flags = {n_flag, z_flag, c_flag, v_flag};
 
 endmodule

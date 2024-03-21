@@ -1,29 +1,29 @@
 /*
 Top Memory Module
 Date: 16/03/24
-FALTA VECTOR RAM
+FALTA VECTOR MEMORY
 */
 `timescale 1 ps / 100 fs
-module memory #(parameter N = 24) (
-		input logic [N-1:0] instruction_address,
-		input logic [N-1:0] scalar_data_address,
-		input logic [N-1:0] vector_data_address,
-
-		input logic [N-1:0] write_scalar_data,
-		input logic [255:0] write_vector_data,
-
-		input logic InstructionMemRead,
-		input logic ScalarMemRead,
-		input logic VectorMemRead,
-
-		input logic ScalarMemWrite,
-		input logic VectorMemWrite,
-		
+module memory # (parameter N = 24) (
 		input logic clk,
 
-		output logic [23:0] instruction,
-		output logic [23:0] scalar_data,
-		output logic [255:0] vector_data
+		input logic [N-1:0] instruction_address,	// from PC to A in instruction memory
+		input logic [N-1:0] scalar_data_address,	// from ALUResult to A in data memory
+		input logic [N-1:0] vector_data_address,	// NYI
+
+		input logic [N-1:0] write_scalar_data,		// WriteData (RD2 from register file) to WD
+		input logic [255:0] write_vector_data,		// NYI
+
+		input logic InstructionMemRead,				// Always 1
+		input logic ScalarMemRead,					// Always 1, NYI
+		input logic VectorMemRead,					// NYI
+
+		input logic ScalarMemWrite,					// MemWrite from Control Unit 
+		input logic VectorMemWrite,					// NYI
+
+		output logic [23:0] instruction,			// to Instruction after instruction memory
+		output logic [23:0] scalar_data_read,		// ReadData from RD in data memory to MemtoRegMux
+		output logic [255:0] vector_data			// NYI
 	);
 
 	// Specific addresses for ips
@@ -48,7 +48,7 @@ module memory #(parameter N = 24) (
         .wren_a (1'b0),				// Instructions cant write
         .wren_b (ScalarMemWrite),
         .q_a (instruction),			// 24 bits
-        .q_b (scalar_data)			// 24 bits
+        .q_b (scalar_data_read)		// 24 bits
 	);
 
 	/* Vector Data Memory */
@@ -57,7 +57,7 @@ module memory #(parameter N = 24) (
 	/*
 	always @(posedge clk)
 		if (ScalarMemWrite)
-			$display("mem_address=", scalar_data_address, " - scalar_data=", scalar_data);
+			$display("mem_address=", scalar_data_address, " - scalar_data_read=", scalar_data_read);
 	*/
 
 endmodule

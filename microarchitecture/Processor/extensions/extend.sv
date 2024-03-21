@@ -1,31 +1,31 @@
 /*
-Modulo extend para obtener ImmSrc
+Extend Module
+Makes Zero Extention
+Date: 20/03/24
 */
-module extend()(
-
-		input [2:0] Opcode,
-		input Vec,
-
-		output [1:0] ImmSrc
+module extend # (parameter N = 24) (
+	input  logic  [19:0] A,
+    input  logic   [1:0] ImmSrc,
+	output logic [N-1:0] ExtImm
 	);
 
-	assign ov = {Opcode,Vec}
+	always @(*)
+        casex (ImmSrc)
 
-	if(Opcode == 3'b000) //Instrucciones tipo R
+            /* Zero Extention 12 bits */
+            2'b00 : begin
+                ExtImm = {12'b0, A[11:0]};
+            end
 
-		assign ImmSrc = 2'bXX;
+            /* Zero Extention 4 bits */
+            2'b01 : begin
+                ExtImm = {4'b0, A[19:0]};
+            end
 
-	else
+			default : begin
+				ExtImm = 24'b111111111111111111111111;
+			end
 
-		begin
-			
-			if(ov=4'b1111) //branch
-
-				assign ImmSrc = 2'b01;
-
-			else
-
-				assign ImmSrc = 2'b00;
-		end
+		endcase
 
 endmodule

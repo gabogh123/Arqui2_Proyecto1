@@ -3,19 +3,19 @@ Condition checked module
 Date: 20/3/2024
 */
 
-module condition_checker(cond, N, Z, C, V, condEx);
+module condition_checker(
+    input logic [2:0] Opcode,
+    input logic N,
+    input logic Z,
+    input logic C,
+    input logic V,
 
-    input logic [2:0] opcode;
-    input logic N;
-    input logic Z;
-    input logic C;
-    input logic V;
-
-    output logic condEx;
+    output logic condEx
+);
 
     always_comb begin
         
-        case (opcode)
+        case (Opcode)
 
             /* EQ -> Equal */
             3'b011:    condEx = Z;

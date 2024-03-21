@@ -2,7 +2,7 @@
 Multiplier parametrizable para N bits
 Date: 15/03/24
 */
-module multiplier #(parameter N = 32) (
+module multiplier #(parameter N = 24) (
 		input  logic [N-1:0] a,
 		input  logic [N-1:0] b,
 		output logic [N-1:0] result,

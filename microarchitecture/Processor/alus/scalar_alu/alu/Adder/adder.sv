@@ -8,8 +8,8 @@ module adder # (parameter N = 24) (
 		input  logic  	     C_in,
 
 		output logic [N-1:0] R,
-		output Z_flag,
 		output N_flag,
+		output Z_flag,
 		output C_flag,
 		output V_flag
 	);
@@ -30,7 +30,7 @@ module adder # (parameter N = 24) (
 		end
 	endgenerate
 
-	assign Z_flag = (R == 24'h000000) ? 1 : 0;
+	assign Z_flag = (R == 24'h00000) ? 1 : 0;
 	assign N_flag = R[N-1];
 	assign C_flag = C_ins[N];
 	assign V_flag = (~C_in && (A[N-1] == B[N-1]) && (R[N-1] != A[N-1])) || (C_in && (A[N-1] != B[N-1]) && (R[N-1] != A[N-1])); 
