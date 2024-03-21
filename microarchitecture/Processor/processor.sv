@@ -12,7 +12,7 @@ module processor # (parameter N = 24) (
         output logic [N-1:0] pc_address,        // to A from instruction memory
         output logic MemWrite,                  // ScalarMemWrite from Data memory
         output logic [N-1:0] alu_scalar_result, // to A from, data memory
-        output logic write_scalar_data          // to WD (write_scalar_data) from data memory
+        output logic [N-1:0] write_scalar_data          // to WD (write_scalar_data) from data memory
     );
 
     /* wires */
@@ -27,7 +27,7 @@ module processor # (parameter N = 24) (
 	wire		 RegWrite;
 	wire  [1:0]	 ImmSrc;
 	wire     	 ALUSrc;
-	wire  [1:0]  ALUControl;
+	wire  [2:0]  ALUControl;
 	wire 		 MemtoReg;
 
     wire [N-1:0] data_addr_2;

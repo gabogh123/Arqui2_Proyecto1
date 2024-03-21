@@ -8,8 +8,9 @@ module fir_filter # (parameter N = 24) (
 		input  logic rst,
 		input  logic pwr,
 		input  logic dbg,
+		input  logic stp,
 
-		output logic   Y
+		output logic out
 	);
 
 	timeunit 1ps;
@@ -23,8 +24,8 @@ module fir_filter # (parameter N = 24) (
 	wire [N-1:0] scalar_data_read;
 	wire [255:0] vector_data_read;
 	
-	logic [N-1:0] pc_address;
-	logic [N-1:0] scalar_data_address;
+	wire [N-1:0] pc_address;
+	wire [N-1:0] scalar_data_address;
 
 	wire mem_write_scalar;
 
@@ -57,8 +58,8 @@ module fir_filter # (parameter N = 24) (
 								  .vector_data_address(24'b0),
 								  .write_scalar_data(write_scalar_data),
 								  .write_vector_data(1'b0),
-								  .InstructionMemRead(1'b1),
-								  .ScalarMemRead(1'b1),
+								  .InstructionMemRead(1'b1 & eclk),
+								  .ScalarMemRead(1'b1 & eclk),
 								  .VectorMemRead(1'b0),
 								  .ScalarMemWrite(mem_write_scalar),
 								  .VectorMemWrite(1'b0),
@@ -67,6 +68,6 @@ module fir_filter # (parameter N = 24) (
 								  .vector_data(vector_data_read));
 					
 
-	assign Y = 1;
+	assign out = pwr & stp & stp;
 
 endmodule

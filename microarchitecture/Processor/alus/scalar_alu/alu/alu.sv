@@ -80,7 +80,7 @@ module alu #(parameter N = 24) (
 								  .O(result));
 
 	//mux7to1 #(1) mux_C(C_add, 0, C_sub, 0, 0, 0, C_mult, ALUControl, c_flag);
-	mux_8NtoN # (.N(N)) m8NtoN_C (.I0(C_add),
+	mux_8NtoN # (.N(1)) m8NtoN_C (.I0(C_add),
 								  .I1(0),
 								  .I2(C_sub),
 								  .I3(0),
@@ -94,7 +94,7 @@ module alu #(parameter N = 24) (
 								  .O(c_flag));
 
 	//mux7to1 #(1) mux_Z(Z_add, 0, Z_sub, 0, 0, 0, Z_mult, ALUControl, z_flag);
-	mux_8NtoN # (.N(N)) m8NtoN_Z (.I0(Z_add),
+	mux_8NtoN # (.N(1)) m8NtoN_Z (.I0(Z_add),
 								  .I1(0),
 								  .I2(Z_sub),
 								  .I3(0),
@@ -108,7 +108,7 @@ module alu #(parameter N = 24) (
 								  .O(z_flag));
 
 	//mux7to1 #(1) mux_V(V_add, 0, V_sub, 0, 0, 0, V_mult, ALUControl, v_flag);
-	mux_8NtoN # (.N(N)) m8NtoN_V (.I0(V_add),
+	mux_8NtoN # (.N(1)) m8NtoN_V (.I0(V_add),
 								  .I1(0),
 								  .I2(V_sub),
 								  .I3(0),
@@ -122,7 +122,7 @@ module alu #(parameter N = 24) (
 								  .O(v_flag));
 
 	//mux7to1 #(1) mux_N(N_add, 0, N_sub, 0, 0, 0, N_mult, ALUControl, n_flag);
-	mux_8NtoN # (.N(N)) m8NtoN_N (.I0(N_add),
+	mux_8NtoN # (.N(1)) m8NtoN_N (.I0(N_add),
 								  .I1(0),
 								  .I2(N_sub),
 								  .I3(0),
@@ -136,7 +136,7 @@ module alu #(parameter N = 24) (
 								  .O(n_flag));
 
 	//mux7to1 #(1) mux_gt(0, 0, gt_sub, 0, 0, 0, 0, ALUControl, gt_flag);
-	mux_8NtoN # (.N(N)) m8NtoN_GT (.I0(0),
+	mux_8NtoN # (.N(1)) m8NtoN_GT (.I0(0),
 								   .I1(0),
 								   .I2(gt_sub),
 								   .I3(0),

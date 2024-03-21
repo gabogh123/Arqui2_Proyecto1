@@ -40,7 +40,7 @@ module memory # (parameter N = 24) (
 	ram_scalar	instructions_and_scalar_data (
         .address_a (in_address),	// 13 bits
         .address_b (sd_address),	// 13 bits
-        .clock (~clk),
+        .clock (clk),
         .data_a (24'b0),		
         .data_b (write_scalar_data),
         .rden_a (InstructionMemRead),

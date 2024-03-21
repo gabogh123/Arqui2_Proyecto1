@@ -23,7 +23,7 @@ module control_unit(
 		output RegWrite
 	);
 
-	wire FlagW;
+	wire [1:0] FlagW;
 	wire PCS;
 	wire RegW;
 	wire MemW;
