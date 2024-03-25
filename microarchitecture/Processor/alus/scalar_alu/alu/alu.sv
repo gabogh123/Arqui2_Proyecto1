@@ -31,7 +31,7 @@ module alu #(parameter N = 24) (
 	//add
 	adder #(N) adder(.A(A),
 					 .B(B),
-					 .C_in(0),
+					 .C_in(1'b0),
 					 .R(add),
 					 .N_flag(N_add),
 					 .Z_flag(Z_add),
@@ -41,7 +41,7 @@ module alu #(parameter N = 24) (
 	//sub
 	adder #(N) subtractor(.A(A),
 						  .B(B),
-						  .C_in(1),
+						  .C_in(1'b1),
 						  .R(sub),
 						  .N_flag(N_sub),
 						  .Z_flag(Z_sub),

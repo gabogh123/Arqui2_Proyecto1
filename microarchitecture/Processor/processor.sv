@@ -116,7 +116,7 @@ module processor # (parameter N = 24) (
 									  		.Y(PCPlus8));
 
     /* Register File */ //HACER TESTBENCH
-	register_file reg_file (.clk(clk),
+	register_file  # (.N(N)) reg_file (.clk(clk),
 							.rst(rst),
 							.reg_write_data(Result),
 							.reg_read_addr_1(Rs),

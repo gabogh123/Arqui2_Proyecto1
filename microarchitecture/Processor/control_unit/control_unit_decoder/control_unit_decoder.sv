@@ -10,7 +10,6 @@ module control_unit_decoder(
 		input  logic                V,
 		input  logic [2:0]      Funct,
         input  logic [3:0]         Rd,      // instruction[19:16]
-
         output logic              PCS,
         output logic             RegW,
         output logic             MemW,
