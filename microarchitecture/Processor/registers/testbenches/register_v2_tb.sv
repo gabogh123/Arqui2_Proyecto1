@@ -3,10 +3,10 @@ Testbench for register_v2 module
 */
 module register_v2_tb;
 
-    timeunit 1ps;
-    timeprecision 1ps;
+	timeunit 1ps;
+  	timeprecision 1ps;
 
-    parameter N = 24;
+  	parameter N = 24;
 
 	logic	      clk;
 	logic	      rst;

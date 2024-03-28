@@ -14,22 +14,22 @@ module memory # (parameter N = 24) (
 		input logic [N-1:0] write_scalar_data,		// WriteData (RD2 from register file) to WD
 		input logic [255:0] write_vector_data,		// NYI
 
-		input logic InstructionMemRead,				// Always 1
-		input logic ScalarMemRead,					// Always 1, NYI
-		input logic VectorMemRead,					// NYI
+		input logic InstructionMemRead,				// Control Signal: Always 1
+		input logic ScalarMemRead,					// Control Signal: Always 1, NYI
+		input logic VectorMemRead,					// Control Signal: NYI
 
-		input logic ScalarMemWrite,					// MemWrite from Control Unit 
-		input logic VectorMemWrite,					// NYI
-
-		output logic [23:0] instruction,			// to Instruction after instruction memory
-		output logic [23:0] scalar_data_read,		// ReadData from RD in data memory to MemtoRegMux
+		input logic ScalarMemWrite,					// Control Signal: MemWrite from Control Unit 
+		input logic VectorMemWrite,					// Control Signal: NYI
+	
+		output logic [N-1:0] instruction,			// to Instruction after instruction memory
+		output logic [N-1:0] scalar_data_read,		// ReadData from RD in data memory to MemtoRegMux
 		output logic [255:0] vector_data			// NYI
 	);
 
 	// Specific addresses for ips
-	logic [11:0] in_address;
-	logic [17:0] sd_address;	// 16384 addresses de 24 bits
-	logic [17:0] vd_address;	// 32768 addresses de 256 bits
+	logic [13:0] in_address;
+	logic [13:0] sd_address;	// 16384 addresses de 24 bits
+	logic [14:0] vd_address;	// 32768 addresses de 256 bits
 
 	// Bus length adjust
 	assign in_address = instruction_address[13:0];

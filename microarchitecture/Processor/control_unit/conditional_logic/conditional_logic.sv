@@ -43,17 +43,17 @@ module condition_logic(
 
 	assign FlagWrite[0] = FlagW[0] & CondEx;
 
-	register #(.N(2)) flagsRegister1 (.clk(clk),
+	register_v2 #(.N(2)) flagsRegister1 (.clk(clk),
 									  .rst(rst),
-									  .WriteEn(FlagWrite[1]),
-									  .RegIn(ALUFlags[1:0]),
-									  .RegOut(Flags[1:0]));
+									  .en(FlagWrite[1]),
+									  .D(ALUFlags[1:0]),
+									  .Q(Flags[1:0]));
 
-	register #(.N(2)) flagsRegister2 (.clk(clk),
+	register_v2 #(.N(2)) flagsRegister2 (.clk(clk),
 									  .rst(rst),
-									  .WriteEn(FlagWrite[0]),
-									  .RegIn(ALUFlags[1:0]),
-									  .RegOut(Flags[3:2]));
+									  .en(FlagWrite[0]),
+									  .D(ALUFlags[1:0]),
+									  .Q(Flags[3:2]));
 
 
 endmodule

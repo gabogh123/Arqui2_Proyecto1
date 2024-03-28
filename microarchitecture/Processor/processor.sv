@@ -12,7 +12,7 @@ module processor # (parameter N = 24) (
         output logic [N-1:0] pc_address,        // to A from instruction memory
         output logic MemWrite,                  // ScalarMemWrite from Data memory
         output logic [N-1:0] alu_scalar_result, // to A from, data memory
-        output logic [N-1:0] write_scalar_data          // to WD (write_scalar_data) from data memory
+        output logic [N-1:0] write_scalar_data  // to WD (write_scalar_data) from data memory
     );
 
     /* wires */
@@ -82,17 +82,17 @@ module processor # (parameter N = 24) (
 								.enable(1'b1),
 								.O(next_pc_address));
 
-    /* PC Register */
-	register # (.N(N)) program_counter (.clk(clk),
-										.rst(rst),
-										.RegIn(next_pc_address),
-										.WriteEn(1'b1),
-										.RegOut(pc_address));
+    /* PC Register */ /* tb ready */
+	register_v2 # (.N(N)) program_counter (.clk(clk),
+										   .rst(rst),
+										   .D(next_pc_address),
+										   .en(1'b1),
+										   .Q(pc_address));
 
     /* PCPlus4_Adder */
 	single_adder # (.N(N)) pc_plus_4_adder (.A(pc_address),
-									  		 .B(24'b100),
-									  		 .Y(PCPlus4));
+									  		.B(24'b01),
+									  		.Y(PCPlus4));
 
     /* Control_Unit */ // HACER TESTBENCHES
 	control_unit cont_unit (.clk(clk),
@@ -112,7 +112,7 @@ module processor # (parameter N = 24) (
 
     /* PCPlus8_Adder */
 	single_adder # (.N(N)) pc_plus_8_adder (.A(PCPlus4),
-									  		.B(24'b100),
+									  		.B(24'b10),
 									  		.Y(PCPlus8));
 
     /* Register File */ //HACER TESTBENCH
@@ -126,6 +126,9 @@ module processor # (parameter N = 24) (
                             .reg_write_r15(PCPlus8),
 							.reg_read_data_1(SrcA),
 							.reg_read_data_2(data_addr_2));
+
+    /* Write to WD on Data Memory */
+    assign write_scalar_data = data_addr_2;
 
     /* Extend */
 	extend # (.N(N)) extender (.A(InstAddress),

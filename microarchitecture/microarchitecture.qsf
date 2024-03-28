@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY register_v2
+set_global_assignment -name TOP_LEVEL_ENTITY fir_filter
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 22.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:41:29  MARCH 15, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
@@ -57,7 +57,7 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH register_v2_tb -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH fir_filter_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME ram_scalar_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ram_scalar_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ram_scalar_tb -section_id ram_scalar_tb
@@ -70,6 +70,27 @@ set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME alu_decoder_tb -section_i
 set_global_assignment -name EDA_TEST_BENCH_NAME main_decoder_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id main_decoder_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME main_decoder_tb -section_id main_decoder_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME fir_filter_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id fir_filter_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME fir_filter_tb -section_id fir_filter_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME processor_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id processor_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME processor_tb -section_id processor_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME control_unit_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_unit_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_unit_tb -section_id control_unit_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME register_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_tb -section_id register_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME register_v2_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_v2_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_v2_tb -section_id register_v2_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME memory_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id memory_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME memory_tb -section_id memory_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/conditional_logic/conditional_logic.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/conditional_logic/condition_checker.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/extensions/extend.sv
@@ -83,7 +104,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/mux_2NtoN.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/adder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file_vector.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/multiplier.sv
 set_global_assignment -name SYSTEMVERILOG_FILE fir_filter.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Adder/full_adder.sv
@@ -105,29 +125,12 @@ set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/control_un
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/processor.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/single_adder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE testbenches/fir_filter_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME fir_filter_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id fir_filter_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME fir_filter_tb -section_id fir_filter_tb
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/testbenches/processor_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME processor_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id processor_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME processor_tb -section_id processor_tb
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/control_unit/testbenches/control_unit_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME control_unit_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id control_unit_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME control_unit_tb -section_id control_unit_tb
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/testbenches/register_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME register_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_tb -section_id register_tb
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_v2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/testbenches/register_v2_tb.sv
-set_global_assignment -name EDA_TEST_BENCH_NAME register_v2_tb -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_v2_tb
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_v2_tb -section_id register_v2_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/testbenches/memory_tb.sv
 set_global_assignment -name EDA_TEST_BENCH_FILE Memory/ram_scalar/testbenches/ram_scalar_tb.sv -section_id ram_scalar_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/control_unit_decoder/testbenches/pc_logic_tb.sv -section_id pc_logic_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/control_unit_decoder/testbenches/alu_decoder_tb.sv -section_id alu_decoder_tb
@@ -137,4 +140,5 @@ set_global_assignment -name EDA_TEST_BENCH_FILE Processor/testbenches/processor_
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/control_unit/testbenches/control_unit_tb.sv -section_id control_unit_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/registers/testbenches/register_tb.sv -section_id register_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/registers/testbenches/register_v2_tb.sv -section_id register_v2_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE Memory/testbenches/memory_tb.sv -section_id memory_tb
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
