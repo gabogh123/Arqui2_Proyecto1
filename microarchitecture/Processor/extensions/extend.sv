@@ -22,6 +22,13 @@ module extend # (parameter N = 24) (
                 ExtImm = {4'b0, A[19:0]};
             end
 
+            /* 2'b10 */
+
+            /* Zero Extention 16 bits */
+            2'b11 : begin
+                ExtImm = {16'b0, A[7:0]};
+            end
+
 			default : begin
 				ExtImm = 24'b111111111111111111111111;
 			end

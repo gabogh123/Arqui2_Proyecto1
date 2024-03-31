@@ -151,8 +151,8 @@ module processor # (parameter N = 24) (
                               .flags(ALUFlags));
 
     /* Data_MUX */
-    mux_2NtoN # (.N(N)) data_mux (.I0(read_scalar_data),
-                                  .I1(alu_scalar_result),
+    mux_2NtoN # (.N(N)) data_mux (.I0(alu_scalar_result),
+                                  .I1(read_scalar_data),
                                   .rst(rst),
                                   .S(MemtoReg),
                                   .enable(1'b1),

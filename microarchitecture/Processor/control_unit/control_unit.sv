@@ -4,23 +4,23 @@ Date: 20/3/2024
 */
 module control_unit(
 
-		input clk,
-		input rst,
+		input  logic clk,
+		input  logic rst,
 		
-		input [2:0] Opcode,
-		input V,
-		input [2:0] Funct,
-		input [3:0] Rd,
+		input  logic [2:0] Opcode,
+		input  logic V,
+		input  logic [2:0] Funct,
+		input  logic [3:0] Rd,
 
-		input [3:0] ALUFlags,
+		input  logic [3:0] ALUFlags,
 
-		output PCSrc,
-		output MemtoReg,
-		output MemWrite,
-		output [2:0] ALUControl,
-		output ALUSrc,
-		output [1:0] ImmSrc,
-		output RegWrite
+		output logic PCSrc,
+		output logic MemtoReg,
+		output logic MemWrite,
+		output logic [2:0] ALUControl,
+		output logic ALUSrc,
+		output logic [1:0] ImmSrc,
+		output logic RegWrite
 	);
 
 	wire [1:0] FlagW;

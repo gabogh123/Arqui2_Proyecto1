@@ -12,7 +12,7 @@ module register_v2 # (parameter N = 24) (
 		output logic [N-1:0]   Q  // RegOut
 	);
 
-	always_ff @ (negedge clk or posedge rst) begin
+	always_ff @ (posedge clk or posedge rst) begin
 		
 		if (rst)
 			Q <= 0;

@@ -40,7 +40,8 @@
 module ram_scalar (
 	address_a,	// Instructions
 	address_b,	// Data
-	clock,
+	clk0,
+	clk1,
 	data_a,
 	data_b,
 	rden_a,
@@ -52,7 +53,8 @@ module ram_scalar (
 
 	input	[13:0]  address_a;
 	input	[13:0]  address_b;
-	input	  clock;
+	input	  clk0;
+	input	  clk1;
 	input	[23:0]  data_a;
 	input	[23:0]  data_b;
 	input	  rden_a;
@@ -81,7 +83,7 @@ module ram_scalar (
 	altsyncram	altsyncram_component (
 				.address_a (address_a),
 				.address_b (address_b),
-				.clock0 (clock),
+				.clock0 (clk0),
 				.data_a (data_a),
 				.data_b (data_b),
 				.rden_a (rden_a),
@@ -96,7 +98,7 @@ module ram_scalar (
 				.addressstall_b (1'b0),
 				.byteena_a (1'b1),
 				.byteena_b (1'b1),
-				.clock1 (1'b1),
+				.clock1 (clk1),
 				.clocken0 (1'b1),
 				.clocken1 (1'b1),
 				.clocken2 (1'b1),

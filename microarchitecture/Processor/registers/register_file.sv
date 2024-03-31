@@ -17,7 +17,7 @@ module register_file # (parameter N = 24) (
 		output logic [N-1:0] reg_read_data_2    // RD2
      );
 
-     reg     [N-1:0]     reg_array [15:0];  
+     logic     [N-1:0]     reg_array [15:0];  
      always @ (posedge clk or posedge rst) begin  
           if(rst) begin  
                reg_array[0]  <= 24'h00000;  // zero

@@ -23,7 +23,8 @@ module ram_scalar_tb;
     ram_scalar	uut (
         .address_a ( address_a_t ),
         .address_b ( address_b_t ),
-        .clock ( clk ),
+        .clk0 ( clk ),
+        .clk1 ( dclk ),
         .data_a ( data_a_t ),
         .data_b ( data_b_t ),
         .rden_a ( rden_a_t ),
@@ -40,6 +41,7 @@ module ram_scalar_tb;
 		$display("ram_scalar testbench:\n");
 
 		clk = 0;
+        dclk = 0;
 
         address_a_t = 14'b01;
         address_b_t = 14'b00;
@@ -69,6 +71,10 @@ module ram_scalar_tb;
 
     always
 		#50 clk = !clk;
+    
+    always
+		#25 dclk = !dclk;
+    
 
     initial	begin
 

@@ -36,13 +36,26 @@ module main_decoder(
 
             /* Type R */
             3'b000 : begin
-                Branch   = 1'b0;
-                MemtoReg = 1'b0;
-                MemW     = 1'b0;
-                ALUSrc   = 1'b0;
-                ImmSrc   = 2'b00; //XX
-                RegW     = 1'b1;
-                ALUOp    = 1'b1;
+                /* sll & slr */
+                if (Funct[1:0] == 2'b11) begin
+                    Branch   = 1'b0;
+                    MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    ALUSrc   = 1'b1;    // needs extend for shamt
+                    ImmSrc   = 2'b11;   // needs extend result in alu
+                    RegW     = 1'b1;
+                    ALUOp    = 1'b1;
+                end
+                /* add, sub, mul */
+                else begin
+                    Branch   = 1'b0;
+                    MemtoReg = 1'b0;
+                    MemW     = 1'b0;
+                    ALUSrc   = 1'b0;
+                    ImmSrc   = 2'b00; //XX
+                    RegW     = 1'b1;
+                    ALUOp    = 1'b1;
+                end
             end
 
             3'b100 : begin

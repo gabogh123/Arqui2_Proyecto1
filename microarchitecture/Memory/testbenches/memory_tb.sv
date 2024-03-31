@@ -58,7 +58,7 @@ module memory_tb;
 		clk = 1;
 
 		instruction_address = 24'h0;;
-		scalar_data_address = 24'h10;
+		scalar_data_address = 24'h2000;
 		// vector_data_address = 24'b0;
 
 		write_scalar_data = 24'b0;
@@ -105,18 +105,41 @@ module memory_tb;
 
         #300
 
-        InstructionMemRead = 1'b1;
-        ScalarMemRead = 1'b1;
-        ScalarMemWrite = 1'b0;
+		scalar_data_address = 24'h1;    // cambio address si
+		ScalarMemRead = 0;              // cambio enable  no
+		ScalarMemWrite = 0;
 
         #100
 
-        instruction_address = 24'h1;;
-		scalar_data_address = 24'h11;
+		scalar_data_address = 24'h2;    // cambio address si
+		ScalarMemRead = 1;              // cambio enable  si
+		ScalarMemWrite = 0;
 
+        #100
     	
+		scalar_data_address = 24'h3;    // cambio address si
+		ScalarMemRead = 1;              // cambio enable  no
+		ScalarMemWrite = 0;
 
+        #100
 
+		scalar_data_address = 24'h3;    // cambio address no
+		ScalarMemRead = 1;              // cambio enable  no
+		ScalarMemWrite = 0;
+
+        #100
+
+		scalar_data_address = 24'h3;    // cambio address no
+		ScalarMemRead = 0;              // cambio enable  si
+		ScalarMemWrite = 0;
+
+        #100
+
+        scalar_data_address = 24'h4;    // cambio address si
+		ScalarMemRead = 1;              // cambio enable  si
+		ScalarMemWrite = 0;
+
+        #100
 
 
 
@@ -127,6 +150,6 @@ module memory_tb;
     end
 
     initial
-	#1500 $finish;                                 
+	#1100 $finish;                                 
 
 endmodule
