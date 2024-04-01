@@ -2,70 +2,82 @@
 Condition checked module 
 Date: 20/3/2024
 */
-
 module condition_checker(
     input logic [2:0] Opcode,
-    input logic N,
-    input logic Z,
-    input logic C,
     input logic V,
+    input logic N_flag,
+    input logic Z_flag,
+    input logic C_flag,
+    input logic V_flag,
 
     output logic condEx
 );
 
     always_comb begin
         
-        case (Opcode)
+        if (V) begin
 
-            /* EQ -> Equal */
-            3'b011:    condEx = Z;
+            case (Opcode)
 
-            /* NE -> Not equal */
-            3'b100:    condEx = ~Z;
+                /* b -> Always / unconditional */
+                3'b111:    condEx = 1;
 
-            /* LT -> Signed less than */
-            3'b110:    condEx = (N ^ V);
+                default: condEx = 0;
 
-            /* GT -> Signed greater than */
-            3'b101:    condEx = ~Z & ~(N ^ V);
+            endcase
+        
+        end else begin
 
-            /* AL -> Always / unconditional */
-            3'b111:    condEx = 1;
-  
-            /* CS/HS -> Carry set / unsigned higher or same */
-            //4'b0010:    condEx = C;
+            case (Opcode)
 
-            /* CC/LO -> Carry clear / usigned lower */
-            //4'b0011:    condEx = ~C;
+                /* EQ -> Equal */
+                3'b111:    condEx = Z_flag;
 
-            /* MI -> Minus / negative */
-            //4'b0100:    condEx = N;
+                /* NE -> Not equal */
+                3'b100:    condEx = ~Z_flag;
 
-            /* PL -> Plus / positive or zero */
-            //4'b0101:    condEx = ~N;
+                /* GT -> Signed greater than */
+                3'b101:    condEx = ~Z_flag & ~(N_flag ^ V_flag);
+                
+                /* LT -> Signed less than */
+                3'b110:    condEx = (N_flag ^ V_flag);
 
-            /* VS -> Overflow / overflow set */
-            //4'b0110:    condEx = V;
+                default: condEx = 0;
 
-            /* VC -> No overflow / overflow clear */
-            //4'b0111:    condEx = ~V;
+            endcase
 
-            /* HI -> Usigned higher */
-            //4'b1000:    condEx = ~Z & C;
-
-            /* LS -> Usigned lower o same */
-            //4'b1001:    condEx = Z | ~C;
-
-            /* GE -> Signed greater than or equal */
-            //4'b1010:    condEx = ~(N ^ V);
-
-            /* LE -> Signed less than or equal */
-            //4'b1101:    condEx = Z | (N ^ V);
-
-            default: condEx = 1;
-
-        endcase
+        end
 
     end 
 
 endmodule
+
+/* CS/HS -> Carry set / unsigned higher or same */
+//4'b0010:    condEx = C;
+
+/* CC/LO -> Carry clear / usigned lower */
+//4'b0011:    condEx = ~C;
+
+/* MI -> Minus / negative */
+//4'b0100:    condEx = N;
+
+/* PL -> Plus / positive or zero */
+//4'b0101:    condEx = ~N;
+
+/* VS -> Overflow / overflow set */
+//4'b0110:    condEx = V;
+
+/* VC -> No overflow / overflow clear */
+//4'b0111:    condEx = ~V;
+
+/* HI -> Usigned higher */
+//4'b1000:    condEx = ~Z & C;
+
+/* LS -> Usigned lower o same */
+//4'b1001:    condEx = Z | ~C;
+
+/* GE -> Signed greater than or equal */
+//4'b1010:    condEx = ~(N ^ V);
+
+/* LE -> Signed less than or equal */
+//4'b1101:    condEx = Z | (N ^ V);

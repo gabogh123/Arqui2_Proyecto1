@@ -9,8 +9,9 @@ module condition_logic_tb;
     logic rst;
 
     logic [2:0] Opcode;
+    logic 		V,
     logic [3:0] ALUFlags;
-    logic [1:0] FlagW;
+    // logic [1:0] FlagW;
 
     logic		PCS;
 	logic		RegW;
@@ -24,18 +25,19 @@ module condition_logic_tb;
     logic CondEx;
     logic [3:0] Flags;
 
-    condition_logic uut (.clk(clk),
-                         .rst(rst),
-                         .Opcode(Opcode),
-                        .ALUFlags(ALUFlags),
-                        .FlagW(FlagW),
-                        .PCS(PCS),
-                        .RegW(RegW),
-                        .MemW(MemW),
-                        .PCSrc(PCSrc),
-                        .RegWrite(RegWrite),
-                        .MemWrite(MemWrite)
-                        );
+    conditional_logic uut (.clk(clk),
+                            .rst(rst),
+                            .Opcode(Opcode),
+                            .V(V),
+                            .ALUFlags(ALUFlags),
+                            //.FlagW(FlagW),
+                            .PCS(PCS),
+                            .RegW(RegW),
+                            .MemW(MemW),
+                            .PCSrc(PCSrc),
+                            .RegWrite(RegWrite),
+                            .MemWrite(MemWrite)
+                            );
 
     initial begin
         $display("Conditional_logic testbench :\n");
@@ -56,7 +58,7 @@ module condition_logic_tb;
              "Opcode=%b ",                 Opcode,
              "ALUFlags=%b\n",              ALUFlags,
              "Control_unit_decoder's Inputs:         ",
-             "FlagW=%b ",                  FlagW,
+             //"FlagW=%b ",                  FlagW,
              "PCS=%b ",                    PCS,
              "RegW=%b ",                   RegW,
              "MemW=%b ",                   MemW,

@@ -36,7 +36,7 @@ module memory_tb;
 	// logic [17:0] vd_address;	// 32768 addresses de 256 bits
 
 	/* ASIP Processor */
-	memory # (.N(N)) uut (.clk(clk),
+	memory # (.N(N)) uut (.eclk(clk),
 						  .instruction_address(instruction_address),
 						  .scalar_data_address(scalar_data_address),
 						  .vector_data_address(vector_data_address),

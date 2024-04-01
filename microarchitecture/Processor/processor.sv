@@ -5,7 +5,8 @@ Date: 20/03/24
 module processor # (parameter N = 24) (
         input  logic			clk,
 		input  logic			rst,
-    
+		input  logic			en,
+
         input  logic [N-1:0] instruction,       // RD from instruction memory
         input  logic [N-1:0] read_scalar_data,  // RD from data memory
 
@@ -82,11 +83,24 @@ module processor # (parameter N = 24) (
 								.enable(1'b1),
 								.O(next_pc_address));
 
+	logic await;
+
+	counter # (.MAX_VALUE(2)) wait_count (.clk(clk),
+										  .rst(rst),
+										  .count(await));
+
+	logic pc_enable;
+
+	always @ (posedge clk) begin
+		if (await)
+			pc_enable = 1;
+	end
+
     /* PC Register */ /* tb ready */
 	register_v2 # (.N(N)) program_counter (.clk(clk),
 										   .rst(rst),
 										   .D(next_pc_address),
-										   .en(1'b1),
+										   .en(en & pc_enable),
 										   .Q(pc_address));
 
     /* PCPlus4_Adder */

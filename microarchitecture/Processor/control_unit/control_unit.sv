@@ -23,7 +23,7 @@ module control_unit(
 		output logic RegWrite
 	);
 
-	wire [1:0] FlagW;
+	// wire [1:0] FlagW;
 	wire PCS;
 	wire RegW;
 	wire MemW;
@@ -42,16 +42,17 @@ module control_unit(
 								  .ALUControl(ALUControl));
 
 	/* Conditional Logic */
-    condition_logic cond_logic (.clk(clk),
-                         .rst(rst),
-                         .Opcode(Opcode),
-                        .ALUFlags(ALUFlags),
-                        .FlagW(FlagW),
-                        .PCS(PCS),
-                        .RegW(RegW),
-                        .MemW(MemW),
-                        .PCSrc(PCSrc),
-                        .RegWrite(RegWrite),
-                        .MemWrite(MemWrite));
+    conditional_logic cond_logic (.clk(clk),
+								.rst(rst),
+								.Opcode(Opcode),
+								.V(V),
+								.ALUFlags(ALUFlags),
+								// .FlagW(FlagW),
+								.PCS(PCS),
+								.RegW(RegW),
+								.MemW(MemW),
+								.PCSrc(PCSrc),
+								.RegWrite(RegWrite),
+								.MemWrite(MemWrite));
 
 endmodule

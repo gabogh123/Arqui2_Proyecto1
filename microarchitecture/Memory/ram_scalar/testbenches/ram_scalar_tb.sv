@@ -41,7 +41,6 @@ module ram_scalar_tb;
 		$display("ram_scalar testbench:\n");
 
 		clk = 0;
-        dclk = 0;
 
         address_a_t = 14'b01;
         address_b_t = 14'b00;

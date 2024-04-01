@@ -19,7 +19,7 @@ module fir_filter # (parameter N = 24) (
 
 	logic enable;
 	logic eclk;
-	logic neg_eclk;
+	
 
 	wire [N-1:0] instruction;
 	wire [N-1:0] scalar_data_read;
@@ -41,12 +41,10 @@ module fir_filter # (parameter N = 24) (
 	/* Inicio del clock al presionar el boton */
 	assign eclk = clk & enable;
 
-	assign neg_eclk = !eclk;
-
-
 	/* ASIP Processor */
 	processor # (.N(N)) asip (.clk(eclk),
 							  .rst(!pwr),
+							  .en(enable),
 							  .instruction(instruction),
 							  .read_scalar_data(scalar_data_read),
 							  .pc_address(pc_address),
@@ -55,15 +53,15 @@ module fir_filter # (parameter N = 24) (
 							  .write_scalar_data(write_scalar_data));
 
 	/* Instruction, Scalar and Vector Memory */
-	memory # (.N(N)) full_memory (.clk(eclk),
+	memory # (.N(N)) full_memory (.clk(!eclk),
 								  .instruction_address(pc_address),
 								  .scalar_data_address(scalar_data_address),
 								  .vector_data_address(24'b0),
 								  .write_scalar_data(write_scalar_data),
-								  .write_vector_data(1'b0),
-								  .InstructionMemRead(1'b1),
-								  .ScalarMemRead(1'b1),
-								  .VectorMemRead(1'b0),
+								  .write_vector_data(255'b0),
+								  //.InstructionMemRead(1'b1),
+								//   .ScalarMemRead(1'b1),
+								//   .VectorMemRead(1'b0),
 								  .ScalarMemWrite(mem_write_scalar),
 								  .VectorMemWrite(1'b0),
 								  .instruction(instruction),

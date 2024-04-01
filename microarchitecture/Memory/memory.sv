@@ -14,9 +14,9 @@ module memory # (parameter N = 24) (
 		input logic [N-1:0] write_scalar_data,		// WriteData (RD2 from register file) to WD
 		input logic [255:0] write_vector_data,		// NYI
 
-		input logic InstructionMemRead,				// Control Signal: Always 1
-		input logic ScalarMemRead,					// Control Signal: Always 1, NYI
-		input logic VectorMemRead,					// Control Signal: NYI
+		//input logic InstructionMemRead,			// Control Signal: Always 1
+		//input logic ScalarMemRead,					// Control Signal: Always 1, NYI
+		// input logic VectorMemRead,					// Control Signal: NYI
 
 		input logic ScalarMemWrite,					// Control Signal: MemWrite from Control Unit 
 		input logic VectorMemWrite,					// Control Signal: NYI
@@ -36,28 +36,51 @@ module memory # (parameter N = 24) (
 	assign sd_address = scalar_data_address[13:0];
 	assign vd_address = vector_data_address[14:0];
 
-	/* Scalar Data Memory */
+	
+	/* Instruction memory (no clk) */
+	instruction_memory_v2 #(.N(N)) inst_memory (.address(in_address),
+								  	   .instruction(instruction));
+
+	/* Scalar data mamory */
+	ram_scalar_v3 #(.N(N)) ram_scalar_v2_inst (.address ( sd_address ),
+										.clock ( clk ),
+										.data ( write_scalar_data ),
+										.rden ( 1'b1 ),
+										.wren ( ScalarMemWrite ),
+										.q ( scalar_data_read ));
+
+	/*
+	ram_scalar instructions_and_scalar_data_2clks	(
+					.address_a ( in_address ),
+					.address_b ( sd_address ),
+					.clock ( clk ),
+					.data_a ( 24'b0 ),
+					.data_b ( write_scalar_data ),
+					.rden_a ( InstructionMemRead ),
+					.rden_b ( ScalarMemRead ),
+					.wren_a ( 1'b0 ),
+					.wren_b ( ScalarMemWrite ),
+					.q_a ( instruction ),
+					.q_b ( scalar_data_read ));
+	*/
+
+	/* Scalar Data Memory */ /*
 	ram_scalar	instructions_and_scalar_data (
-        .address_a (in_address),	// 13 bits
-        .address_b (sd_address),	// 13 bits
-        .clock (clk),
-        .data_a (24'b0),		
-        .data_b (write_scalar_data),
-        .rden_a (InstructionMemRead),
-        .rden_b (ScalarMemRead),
-        .wren_a (1'b0),				// Instructions cant write
-        .wren_b (ScalarMemWrite),
-        .q_a (instruction),			// 24 bits
-        .q_b (scalar_data_read)		// 24 bits
-	);
+					.address_a (in_address),	// 13 bits
+					.address_b (sd_address),	// 13 bits
+					.clk0 (clk),
+					.clk1 (dclk),
+					.data_a (24'b0),		
+					.data_b (write_scalar_data),
+					.rden_a (InstructionMemRead),
+					.rden_b (ScalarMemRead),
+					.wren_a (1'b0),				// Instructions cant write
+					.wren_b (ScalarMemWrite),
+					.q_a (instruction),			// 24 bits
+					.q_b (scalar_data_read)		// 24 bits
+	);*/
 
 	/* Vector Data Memory */
 	// vector ram
-
-	/*
-	always @(posedge clk)
-		if (ScalarMemWrite)
-			$display("mem_address=", scalar_data_address, " - scalar_data_read=", scalar_data_read);
-	*/
 
 endmodule

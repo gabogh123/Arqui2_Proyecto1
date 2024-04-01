@@ -20,6 +20,8 @@ module fir_filter_tb;
     /* internal signals */
 
     // PC Adresses
+	logic await;
+	logic pc_enable;
     logic [N-1:0] next_pc_address;
     logic [N-1:0] pc_address;       //instruction_address from memory
 
@@ -45,13 +47,20 @@ module fir_filter_tb;
     logic [N-1:0] pc_reg;
 
     // Control Signals
+    logic PCS;
+    logic RegW;
+    logic MemW;
+    logic CondEx;
     logic PCSrc;
-    logic MemtoReg;
     logic MemWrite;
-    logic [2:0] ALUControl;
-    logic ALUSrc;
-    logic [1:0] ImmSrc;
     logic RegWrite;
+    logic MemtoReg;
+    logic next_PCSrc;
+    logic next_RegWrite;
+    logic next_MemWrite;
+    logic [1:0] ImmSrc;
+    logic ALUSrc;
+    logic [2:0] ALUControl;
 
     // Extend
     logic [N-1:0] ExtImm;
@@ -64,8 +73,8 @@ module fir_filter_tb;
     logic [N-1:0] alu_scalar_result;
 
     // Memory
-    logic InstructionMemRead;
-    logic ScalarMemRead;
+   //  logic InstructionMemRead;
+   //  logic ScalarMemRead;
     logic [N-1:0] write_scalar_data;
     logic [N-1:0] scalar_data_read;
 
@@ -132,87 +141,96 @@ module fir_filter_tb;
                     "ALUFlags = %b (%h)\n", ALUFlags, ALUFlags,
                     "alu_scalar_result = %b (%h)\n", alu_scalar_result, alu_scalar_result,
                  "Memory\n",
-                    "InstructionMemRead = %b \n", InstructionMemRead,
-                    "ScalarMemRead = %b \n", ScalarMemRead,
+                  //   "InstructionMemRead = %b \n", InstructionMemRead,
+                  //   "ScalarMemRead = %b \n", ScalarMemRead,
                     "write_scalar_data = %b (%h)\n", write_scalar_data, write_scalar_data,
                     "scalar_data_read = %b (%h)\n", scalar_data_read, scalar_data_read,
                  "Result\n",
                     "Result = %b (%h)\n", Result, Result);
-    end
+   end
 
-    always begin
-		#50 clk = !clk;
-        // PC Address
-        next_pc_address = uut.asip.next_pc_address;
-        pc_address = uut.pc_address;
-        // Instruction
-        instruction = uut.asip.instruction;
-        Opcode = uut.asip.Opcode;
-        V = uut.asip.V;
-        Rd = uut.asip.Rd;
-        Rs = uut.asip.Rs;
-        Rt = uut.asip.Rt;
-        Funct = uut.asip.Funct;
-        //InstImmediate = uut.asip.InstImmediate;
-        InstAddress = uut.asip.InstAddress;
-        //Registers
-        e0_reg = uut.asip.reg_file.reg_array[8];
-        e1_reg = uut.asip.reg_file.reg_array[9];
-        e2_reg = uut.asip.reg_file.reg_array[10];
-        e3_reg = uut.asip.reg_file.reg_array[11];
-        e4_reg = uut.asip.reg_file.reg_array[12];
-        e5_reg = uut.asip.reg_file.reg_array[13];
-        e6_reg = uut.asip.reg_file.reg_array[14];
-        pc_reg = uut.asip.reg_file.reg_array[15];
-        // Control Unit
-        PCSrc = uut.asip.PCSrc;
-        MemtoReg = uut.asip.MemtoReg;
-        MemWrite = uut.asip.MemWrite;
-        ALUControl = uut.asip.ALUControl;
-        ALUSrc = uut.asip.ALUSrc;
-        ImmSrc = uut.asip.ImmSrc;
-        RegWrite = uut.asip.RegWrite;
-        // Extend
-        ExtImm = uut.asip.ExtImm;
-        // ALU
-        alu_SrcA = uut.asip.SrcA;
-        alu_SrcB = uut.asip.SrcB;
-        shamt = uut.asip.alu_scalar.shamt;
-        ALUFlags = uut.asip.ALUFlags;
-        alu_scalar_result = uut.asip.alu_scalar_result;
-        // Memory
-        InstructionMemRead = uut.full_memory.InstructionMemRead; 
-        ScalarMemRead = uut.full_memory.ScalarMemRead;
-        write_scalar_data = uut.asip.data_addr_2; 
-        scalar_data_read = uut.asip.read_scalar_data;
-        // Result
-        Result = uut.asip.Result;
-    end
+   always begin
+   	  #50 clk = !clk;
+      // PC Address
+	  await = uut.asip.await;
+	  pc_enable = uut.asip.pc_enable;
+      next_pc_address = uut.asip.next_pc_address;
+      pc_address = uut.pc_address;
+      // Instruction
+      instruction = uut.asip.instruction;
+      Opcode = uut.asip.Opcode;
+      V = uut.asip.V;
+      Rd = uut.asip.Rd;
+      Rs = uut.asip.Rs;
+      Rt = uut.asip.Rt;
+      Funct = uut.asip.Funct;
+      //InstImmediate = uut.asip.InstImmediate;
+      InstAddress = uut.asip.InstAddress;
+      //Registers
+      e0_reg = uut.asip.reg_file.reg_array[8];
+      e1_reg = uut.asip.reg_file.reg_array[9];
+      e2_reg = uut.asip.reg_file.reg_array[10];
+      e3_reg = uut.asip.reg_file.reg_array[11];
+      e4_reg = uut.asip.reg_file.reg_array[12];
+      e5_reg = uut.asip.reg_file.reg_array[13];
+      e6_reg = uut.asip.reg_file.reg_array[14];
+      pc_reg = uut.asip.reg_file.reg_array[15];
+      // Control Unit
+      PCS = uut.asip.cont_unit.PCS;
+      RegW = uut.asip.cont_unit.RegW;
+      MemW = uut.asip.cont_unit.MemW;
+      CondEx = uut.asip.cont_unit.cond_logic.CondEx;
+      PCSrc = uut.asip.PCSrc;
+      MemWrite = uut.asip.MemWrite;
+      RegWrite = uut.asip.RegWrite;
+      MemtoReg = uut.asip.MemtoReg;
+      next_PCSrc = uut.asip.cont_unit.cond_logic.next_PCSrc;
+      next_MemWrite = uut.asip.cont_unit.cond_logic.next_MemWrite;
+      next_RegWrite = uut.asip.cont_unit.cond_logic.next_RegWrite;
+      ImmSrc = uut.asip.ImmSrc;
+      ALUSrc = uut.asip.ALUSrc;
+      ALUControl = uut.asip.ALUControl;
+      // Extend
+      ExtImm = uut.asip.ExtImm;
+      // ALU
+      alu_SrcA = uut.asip.SrcA;
+      alu_SrcB = uut.asip.SrcB;
+      shamt = uut.asip.alu_scalar.shamt;
+      ALUFlags = uut.asip.ALUFlags;
+      alu_scalar_result = uut.asip.alu_scalar_result;
+      // Memory
+   //   InstructionMemRead = uut.full_memory.InstructionMemRead; 
+   //   ScalarMemRead = uut.full_memory.ScalarMemRead;
+      write_scalar_data = uut.asip.data_addr_2; 
+      scalar_data_read = uut.asip.read_scalar_data;
+      // Result
+      Result = uut.asip.Result;
+   end
 
-    initial	begin
+   initial	begin
 
-         #200
+      #200
 
-         //$display("Instruction read, no data read, no data write\n");
+      //$display("Instruction read, no data read, no data write\n");
 
-         pwr <= 0;
+      pwr <= 0;
 
-         #300
-         
-         pwr <= 1;
-         // rst <= 0;
+      #300
+      
+      pwr <= 1;
+      // rst <= 0;
 
-         #300;
+      #300;
 
-         // rst = 1;
+      // rst = 1;
 
-         // #100;
+      // #100;
 
-      // Done
+   // Done
 
-    end
+   end
 
-    initial
-	 #3000 $finish;                                 
+   initial
+   #3000 $finish;                                 
 
 endmodule
