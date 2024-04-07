@@ -3,7 +3,7 @@ Instruction memory module v2
 Date: 31/03/24
 */
 module instruction_memory_v2 # (parameter N = 24) (
-        input logic [13:0] address,
+        input logic [N-1:0] address,
         output logic [N-1:0] instruction
     );
 

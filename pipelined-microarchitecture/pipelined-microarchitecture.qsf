@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
-set_global_assignment -name TOP_LEVEL_ENTITY "pipelined-microarchitecture"
+set_global_assignment -name TOP_LEVEL_ENTITY fetch_tb
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 22.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "02:07:03  APRIL 06, 2024"
 set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.0 Lite Edition"
@@ -56,6 +56,19 @@ set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH fetch_tb -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME fetch_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id fetch_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME fetch_tb -section_id fetch_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE Processor/fetch/testbenches/fetch_tb.sv -section_id fetch_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/vec_generator.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Memory/memory.sv
+set_global_assignment -name SOURCE_FILE mem
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/instruction_memory/testbenches/instruction_memory_v2_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/instruction_memory/instruction_memory_v2.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/muxes/test_benches/mux8NtoN_tb.sv
@@ -73,5 +86,22 @@ set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/Add
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/testbenches/multiplier_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/testbenches/alu_tb.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/multiplier.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/alu_control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/alus/scalar_alu/alu/alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_FD.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/fetch/fetch.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/decode.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/control_unit/control_unit.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/extend/extend.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_DE.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/condition_unit/condition_checker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/condition_unit/condition_unit.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_EM.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/hazard_unit/hazard_unit.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file_vec.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/execute.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_MW.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/fetch/datapath_selector.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/fetch/testbenches/fetch_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/fetch/single_adder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipelined_processor.sv
