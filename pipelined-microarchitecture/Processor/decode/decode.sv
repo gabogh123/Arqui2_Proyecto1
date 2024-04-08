@@ -1,65 +1,167 @@
-module Decode (input logic clk, reset, RegWriteW, FlushE,
-					input logic [3:0] InFlags,
-					input logic [25:0] InstD, 
-					input logic [31:0] PCPlus8, ResultW, 
-					input logic [2:0] WA3W,
-					output logic [31:0] RD1E, RD2E, ExtImmE,
-					output logic PCSrcD, PCSrcE, RegWriteE, MemtoRegE, MemWriteE, BranchE, ALUSrcE, Stuck,
-					output logic [2:0] ALUControlE, 
-					output logic [1:0] FlagWriteE, 
-					output logic CondE,
-					output logic [3:0] FlagsE, 
-					output logic [2:0] WA3E, ra1d, ra2d, RA1E, RA2E);
+/*
+Pipeline's Decode Stage
+Date: 07/04/24
+*/
+module decode # (parameter N = 24) (
+		input logic clk,
+		input logic rst,
+		input logic RegWriteW,
+		input logic FlushE,
+		input logic [3:0] NFlags,
+		input logic [N-1:0] InstrD, // instruction for decoding
+		input logic [N-1:0] PCPlus8D,
+		input logic [N-1:0] ResultW,
+		input logic [3:0] WA3W,
 
-	logic [31:0] RD1, RD2, ExtOut;
-	logic [2:0] RA1D, RA2D;
+		output logic PCSrcD,
+		output logic PCSrcE,
+		output logic RegWriteE,
+		output logic MemtoRegE,
+		output logic MemWriteE,
+		output logic [2:0] ALUControlE,
+		output logic BranchE,
+		output logic ALUSrcE,
+		output logic [1:0] FlagWriteE,
+		output logic CondE,
+		output logic [3:0] FlagsE,
+		output logic [N-1:0] RD1E,
+		output logic [N-1:0] RD2E,
+		output logic [3:0] WA3E,
+		output logic [N-1:0] ExtImmE,
+		output logic [3:0] A3E,
+		output logic [3:0] RA1E,
+		output logic [3:0] RA2E,
+		output logic Stuck
+	);
+
+	/* Instruction */
+	logic [2:0] inst_opcode;
+	logic inst_V;
+	logic [3:0] inst_rd;
+	logic [3:0] inst_rs;
+	logic [3:0] inst_rt;
+	logic [2:0] inst_funct;
+	logic [19:0] inst_add;
+	assign inst_opcode = InstrD[23:21];
+	assign inst_V = InstrD[20];
+	assign inst_rd = InstrD[19:16];
+	assign inst_rs = InstrD[15:12];
+	assign inst_rt = InstrD[11:8];
+	assign inst_funct = InstrD[2:0];
+	assign inst_add = InstrD[19:0];
+
+	/* $pc's address */
+	logic [3:0] reg15_address;
+	assign reg15_address = 4'b1111;
+
+	logic [3:0] RA1D;
+	logic [3:0] RA2D;
+	logic [N-1:0] RD1D;
+	logic [N-1:0] RD2D;
+	logic [N-1:0] ExtImmD;
 	
-	
-	logic CondD;
-	logic [2:0] Rd;
-	logic [5:0] Funct;
-	logic [1:0] Opcode;
-	logic [1:0] RegSrcD, ImmSrcD;
-	
-	logic [1:0] FlagWriteD;
-	logic RegWriteD,MemtoRegD;
-	logic MemWriteD, BranchD,ALUSrcD;
+	logic RegWriteD;
+	logic MemtoRegD;
+	logic MemWriteD;
 	logic [2:0] ALUControlD;
+	logic BranchD;
+	logic ALUSrcD;
+	logic [1:0] FlagWriteD;
+
+	logic [1:0] ImmSrcD;
+	logic [1:0] RegSrcD;
+
+	logic CondD;
+	assign CondD = 1'b0;
 	
-	assign Opcode = InstD [24:23];
-	assign Funct = InstD [22:17];
-	assign Rd = InstD [13:11];
-	assign CondD = InstD [25];
+
+	/* RA1D (A1 from Register File) Mux */ /* A = mux_ra1 */
+	mux_2NtoN # (.N(4)) mux_ra1d (.I0(inst_rs),
+								  .I1(reg15_address),
+								  .rst(rst),
+								  .S(RegSrcD[0]),
+								  .en(1'b1),
+								  .O(RA1D));
+
+	/* RA2D (A2 from Register File) Mux */ /* A = mux_ra2 */
+	mux_2NtoN # (.N(4)) mux_ra2d (.I0(inst_rt),
+								  .I1(inst_rd),
+								  .rst(rst),
+								  .S(RegSrcD[1]),
+								  .en(1'b1),
+								  .O(RA2D));
+
+	/* Control_Unit */ /* A uses Stuck, but not implemented(?) */
+	control_unit_v2 cont_unit (.Opcode(inst_opcode),
+							   .V(inst_V),
+							   .Funct(inst_funct),
+							   .Rd(inst_rd),
+							   .PCSrc(PCSrcD),
+							   .RegWrite(RegWriteD),
+							   .MemtoReg(MemtoRegD),
+							   .MemWrite(MemWriteD),
+							   .ALUControl(ALUControlD),
+							   .Branch(BranchD),
+							   .ALUSrc(ALUSrcD),
+							   .FlagWrite(FlagWriteD),
+							   .ImmSrc(ImmSrcD),
+							   .RegSrc(RegSrcD),
+							   .Stuck(Stuck));
+
+	/* Register File */
+	register_file # (.N(N)) reg_file (.clk(clk),
+									  .rst(rst),
+									  .WD3(ResultW),
+									  .A1(RA1D),
+									  .A2(RA2D),
+									  .A3(WA3W),
+									  .WE3(RegWriteW),
+									  .R15(PCPlus8D),
+									  .RD1(RD1D),
+									  .RD2(RD2D));
+
+	assign WA3E = inst_rd;
+
+	/* Extend */
+	extend # (.N(N)) extender (.A(inst_add),
+							   .ImmSrc(ImmSrcD),
+						   	   .ExtImm(ExtImmD));
 	
-	//unidad de control
-	Control_Unit controlUnit (	Opcode, Funct, Rd,
-										FlagWriteD,
-										PCSrcD, RegWriteD,MemtoRegD,
-										MemWriteD, BranchD,ALUSrcD, Stuck,
-										ALUControlD,ImmSrcD,RegSrcD);
-	
-	Mux2 # (3) mux_ra1 (InstD[16:14], 3'b111, RegSrcD[0], RA1D);
-	Mux2 # (3) mux_ra2 (InstD[2:0], InstD[13:11], RegSrcD[1], RA2D);
-	
-	BancoRegistros BR (clk, RegWriteW, reset, RA1D, RA2D, WA3W, ResultW, PCPlus8, RD1, RD2);
-	
-	Extend extend (InstD[20:0], ImmSrcD, ExtOut);
-	
-	//registro de Deco-Exe
-	
-	assign ra1d = RA1D;
-	assign ra2d = RA2D;
-	
-	RegDE regde (	clk, FlushE,reset,
-						PCSrcD, RegWriteD, MemtoRegD, MemWriteD, BranchD, ALUSrcD,
-						ALUControlD, FlagWriteD, 
-						CondD, InFlags,
-						RD1, RD2, ExtOut,
-						InstD[13:11], RA1D, RA2D,
-						RD1E, RD2E, ExtImmE,
-						WA3E, RA1E, RA2E,
-						PCSrcE, RegWriteE, MemtoRegE, MemWriteE, BranchE, ALUSrcE,
-						ALUControlE, FlagWriteE, 
-						CondE, FlagsE);
-						
-endmodule 
+	/* Pipeline Register Decode-Execute Stages */ /* A = regde */
+	register_DE # (.N(N)) reg_DE (.clk(clk),
+								  .rst(rst),
+								  .clr(FlushE),
+								  .PCSrcD(PCSrcD),
+								  .RegWriteD(RegWriteD),
+								  .MemtoRegD(MemtoRegD),
+								  .MemWriteD(MemWriteD),
+								  .ALUControlD(ALUControlD),
+								  .BranchD(BranchD),
+								  .ALUSrcD(ALUSrcD),
+								  .FlagWriteD(FlagWriteD),
+								  .CondD(CondD),
+								  .NFlags(NFlags),
+								  .RD1D(RD1D),
+								  .RD2D(RD2D),
+								  .ExtImmD(ExtImmD),
+								  .A3D(WA3W),
+								  .RA1D(RA1D),
+								  .RA2D(RA2D),
+								  .PCSrcE(PCSrcE),
+								  .RegWriteE(RegWriteE),
+								  .MemtoRegE(MemtoRegE),
+								  .MemWriteE(MemWriteE),
+								  .ALUControlE(ALUControlE),
+								  .BranchE(BranchE),
+								  .ALUSrcE(ALUSrcE),
+								  .FlagWriteE(FlagWriteE),
+								  .CondE(CondE),
+								  .FlagsE(FlagsE),
+								  .RD1E(RD1E),
+								  .RD2E(RD2E),
+								  .ExtImmE(ExtImmE),
+								  .A3E(A3E),
+								  .RA1E(RA1E),
+								  .RA2E(RA2E));
+
+endmodule

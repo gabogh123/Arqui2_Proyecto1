@@ -1,41 +1,50 @@
 /*
-Testbench for Fetch module
-Date: 07/04/24
+Testbench for Decode module
+Date: 08/04/24
+FALTA
 */
-module fetch_tb;
+module decode_tb;
 
 	parameter N = 24;
 
 	logic clk;
 	logic rst;
-	logic [N-1:0] ResultW;
-	logic [N-1:0] ALUResultE;
-	logic PCSrcW;
-	logic BranchTakenE;
-	logic StallF;
-	logic StallD;
-	logic FlushD;
-	logic [N-1:0] instruction;
-	/* */
-	logic V;
-	logic [2:0] opcode;
-	/* */
-	logic [N-1:0] PCF;
+	logic RegWriteW;
+	logic FlushE;
+	logic [3:0] NFlags;
 	logic [N-1:0] InstrD;
-	logic [N-1:0] InstrD_vector;
 	logic [N-1:0] PCPlus8D;
+	logic [N-1:0] ResultW;
+	logic [3:0] WA3W;
+
+	logic PCSrcD;
+	logic PCSrcE;
+	logic RegWriteE; 
+	logic MemtoRegE;
+	logic MemWriteE; 
+	logic [2:0] ALUControlE; 
+	logic BranchE; 
+	logic ALUSrcE;
+	logic [1:0] FlagWriteE; 
+	logic CondE; 
+	logic [3:0] FlagsE; 
+	logic [N-1:0] RD1E; 
+	logic [N-1:0] RD2E; 
+	logic [3:0] WA3E; 
+	logic [N-1:0] ExtImmE;
+	logic [3:0] A3E;
+	logic [3:0] RA1E;
+	logic [3:0] RA2E;
+	logic Stuck;
 
 	/* internal signals */
-	// logic [N-1:0] PCPlus4F;
-	// logic [N-1:0] PCJump;
-	// logic [N-1:0] NPC;
-	// logic [N-1:0] InstF;
-	// logic [N-1:0] InstF_vector;
+	//
 
 	
 	assign V = instruction[20];
 	assign opcode = instruction[23:21];
 
+	// CAMBIAR POR LA INSTANCIA DE DECODE O AGREGAR Y USAR ESTA TAMBIEN PARA EL TEST
 	fetch # (.N(N)) uut (.clk(clk),
 						 .rst(rst),
 						 .ResultW(ResultW),
@@ -76,11 +85,7 @@ module fetch_tb;
 
     always begin
 		#50 clk = !clk;
-		// PCPlus4F = uut.PCPlus4F;
-		// PCJump = uut.PCJump;
-		// NPC = uut.NPC;
-		// InstF = uut.InstF;
-		// InstF_vector = uut.InstF_vector;
+
     end
 
     initial	begin
