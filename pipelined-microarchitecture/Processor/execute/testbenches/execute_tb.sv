@@ -40,9 +40,7 @@ module execute_tb;
 	/* internal signals */
 	//
 
-	
-	assign V = instruction[20];
-	assign opcode = instruction[23:21];
+
 
 	// CAMBIAR POR LA INSTANCIA DE EXECUTE O AGREGAR Y USAR ESTA TAMBIEN PARA EL TEST
 	fetch # (.N(N)) uut (.clk(clk),

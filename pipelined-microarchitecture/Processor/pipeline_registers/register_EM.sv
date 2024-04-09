@@ -2,7 +2,7 @@
 Register for Execute and Memory pipeline datapath.
 Date: 08/04/24
 */
-module register_EM (parameter N = 24) (
+module register_EM # (parameter N = 24) (
 		input  logic clk,
 		input  logic PCSrcE_cond,
 		input  logic RegWriteE_cond,
@@ -31,7 +31,6 @@ module register_EM (parameter N = 24) (
 			ALUResultM <= ALUResultE;
 			WriteDataM <= WriteDataE;
 			WA3M <= WA3E;
-
 
 	end
 

@@ -62,6 +62,9 @@ set_global_assignment -name EDA_TEST_BENCH_NAME fetch_tb -section_id eda_simulat
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id fetch_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME fetch_tb -section_id fetch_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/fetch/testbenches/fetch_tb.sv -section_id fetch_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/vec_generator.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Memory/memory.sv
 set_global_assignment -name SOURCE_FILE mem
@@ -89,8 +92,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/decode.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/control_unit/control_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/extend/extend.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_DE.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/condition_unit/condition_checker.sv
-set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/condition_unit/condition_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/pipeline_registers/register_EM.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/hazard_unit/hazard_unit.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/registers/register_file_vec.sv
@@ -105,7 +106,10 @@ set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/control_unit/pc_
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/control_unit/main_decoder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/control_unit/alu_decoder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/register_file/register_file.sv
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/decode/testbenches/decode_tb.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/conditional_unit/conditional_unit.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/conditional_unit/condition_checker.sv
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/execute/testbenches/execute_tb.sv
+set_global_assignment -name MIF_FILE Memory/ram_scalar/scalar_data.mif
+set_global_assignment -name QIP_FILE Memory/ram_scalar/ram_scalar.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

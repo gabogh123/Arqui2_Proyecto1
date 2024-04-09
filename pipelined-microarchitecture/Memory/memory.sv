@@ -7,6 +7,7 @@ module memory (input logic clk, clock_img,
 					input logic [255:0] ALUResultMV, WriteDataMV,
 					input logic [2:0] WA3MV,
 					input logic [15:0] ImgAddrV,
+					
 					output logic PCSrcW, RegWriteW, MemtoRegW,
 					output logic [31:0] ReadDataW, ALUOutW, ALUOutM, ImgData,
 					output logic [2:0] WA3W,

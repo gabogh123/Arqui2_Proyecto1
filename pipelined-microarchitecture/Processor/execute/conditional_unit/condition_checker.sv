@@ -19,37 +19,40 @@ module condition_checker(
     assign C_flag = Flags[2];
     assign V_flag = Flags[3];
 
+    logic V;
+    assign V = 1;
+
 
 	always_comb begin
         
         if (V) begin
-            case (Opcode)
+            case (Cond)
 
                 /* b -> Always / unconditional */
-                3'b111:    condEx = 1;
+                3'b111:    CondEx = 1;
 
 				/* undefined */
-                default: condEx = 1'bx;
+                default: CondEx = 1'bx;
 
             endcase
         end
 		else begin
-            case (Opcode)
+            case (Cond)
 
                 /* EQ -> Equal */
-                3'b111:    condEx = Z_flag;
+                3'b111:    CondEx = Z_flag;
 
                 /* NE -> Not equal */
-                3'b100:    condEx = ~Z_flag;
+                3'b100:    CondEx = ~Z_flag;
 
                 /* GT -> Signed greater than */
-                3'b101:    condEx = ~Z_flag & ~(N_flag ^ V_flag);
+                3'b101:    CondEx = ~Z_flag & ~(N_flag ^ V_flag);
                 
                 /* LT -> Signed less than */
-                3'b110:    condEx = (N_flag ^ V_flag);
+                3'b110:    CondEx = (N_flag ^ V_flag);
 
                 /* undefined */
-                default: condEx = 1'bx;
+                default: CondEx = 1'bx;
 
             endcase
         end
@@ -59,31 +62,31 @@ module condition_checker(
 endmodule
 
 /* CS/HS -> Carry set / unsigned higher or same */
-//4'b0010:    condEx = C;
+//4'b0010:    CondEx = C;
 
 /* CC/LO -> Carry clear / usigned lower */
-//4'b0011:    condEx = ~C;
+//4'b0011:    CondEx = ~C;
 
 /* MI -> Minus / negative */
-//4'b0100:    condEx = N;
+//4'b0100:    CondEx = N;
 
 /* PL -> Plus / positive or zero */
-//4'b0101:    condEx = ~N;
+//4'b0101:    CondEx = ~N;
 
 /* VS -> Overflow / overflow set */
-//4'b0110:    condEx = V;
+//4'b0110:    CondEx = V;
 
 /* VC -> No overflow / overflow clear */
-//4'b0111:    condEx = ~V;
+//4'b0111:    CondEx = ~V;
 
 /* HI -> Usigned higher */
-//4'b1000:    condEx = ~Z & C;
+//4'b1000:    CondEx = ~Z & C;
 
 /* LS -> Usigned lower o same */
-//4'b1001:    condEx = Z | ~C;
+//4'b1001:    CondEx = Z | ~C;
 
 /* GE -> Signed greater than or equal */
-//4'b1010:    condEx = ~(N ^ V);
+//4'b1010:    CondEx = ~(N ^ V);
 
 /* LE -> Signed less than or equal */
-//4'b1101:    condEx = Z | (N ^ V);
+//4'b1101:    CondEx = Z | (N ^ V);

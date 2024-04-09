@@ -5,45 +5,45 @@ Date: 08/04/24
 module execute # (parameter N = 24) (
 		input  logic clk,
 		input  logic rst,
-		input  logic [N-1:0] RD1E, //used
-		input  logic [N-1:0] RD2E, //used
-		input  logic [N-1:0] ExtImmE, //used
-		input  logic [N-1:0] ResultW, //used
-		input  logic [N-1:0] ALUResultMFB, //used
+		input  logic [N-1:0] RD1E,
+		input  logic [N-1:0] RD2E,
+		input  logic [N-1:0] ExtImmE,
+		input  logic [N-1:0] ResultW,
+		input  logic [N-1:0] ALUResultMFB,
 
-		input  logic PCSrcE, //used
-		input  logic RegWriteE, //used
+		input  logic PCSrcE,
+		input  logic RegWriteE,
 		input  logic MemtoRegE,
-		input  logic MemWriteE, //used
-		input  logic [2:0] ALUControlE, //used
-		input  logic BranchE, //used
-		input  logic ALUSrcE, //used
-		input  logic [1:0] FlagWriteE, //used
-		input  logic CondE, //used
-		input  logic [3:0] FlagsE, //used
+		input  logic MemWriteE,
+		input  logic [2:0] ALUControlE,
+		input  logic BranchE,
+		input  logic ALUSrcE,
+		input  logic [1:0] FlagWriteE,
+		input  logic CondE,
+		input  logic [3:0] FlagsE,
 
 		input  logic [3:0] WA3E,
-		input  logic [1:0] ForwardAE, //used
-		input  logic [1:0] ForwardBE, //used
+		input  logic [1:0] ForwardAE,
+		input  logic [1:0] ForwardBE,
 
 		output logic PCSrcM,
 		output logic RegWriteM,
 		output logic MemWriteM,
 		output logic MemtoRegM,
-		output logic BranchTakenE, //used
-		output logic [N-1:0] ALUResultM, //used
+		output logic BranchTakenE,
+		output logic [N-1:0] ALUResultM,
 		output logic [N-1:0] WriteDataM,
 		output logic [N-1:0] ALUResultF, 
-		output logic [3:0] WA3M, //used
-		output logic [3:0] ALUFlagsD //used
+		output logic [3:0] WA3M,
+		output logic [3:0] ALUFlagsD
 	);
 
 	/* wiring */
-	logic [N-1:0] WriteDataE; //used
-	logic [N-1:0] SrcAE; //used
-	logic [N-1:0] SrcBE; //used
-	logic [N-1:0] ALUResultE; //used
-	logic [3:0] ALUFlags; //used
+	logic [N-1:0] WriteDataE;
+	logic [N-1:0] SrcAE;
+	logic [N-1:0] SrcBE;
+	logic [N-1:0] ALUResultE;
+	logic [3:0] ALUFlags;
 	
 
 	/* SrcAE (ALU's A Operand) Mux */ /* A = mux_ra1E */
