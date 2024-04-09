@@ -22,7 +22,7 @@ module register_EM # (parameter N = 24) (
 	);
 					
 
-	always_ff @(posedge clk) begin
+	always_ff @ (posedge clk) begin
 
 			PCSrcM <= PCSrcE_cond;
 			RegWriteM <= RegWriteE_cond;

@@ -1,30 +1,58 @@
-module memory (input logic clk, clock_img,
-					input logic PCSrcM, RegWriteM, MemtoRegM, MemWriteM,
-					input logic [31:0] ALUResultM, WriteDataM,
-					input logic [2:0] WA3M,
-					input logic [15:0] ImgAddr,
-					input logic PCSrcMV, RegWriteMV, MemtoRegMV, MemWriteMV,
-					input logic [255:0] ALUResultMV, WriteDataMV,
-					input logic [2:0] WA3MV,
-					input logic [15:0] ImgAddrV,
-					
-					output logic PCSrcW, RegWriteW, MemtoRegW,
-					output logic [31:0] ReadDataW, ALUOutW, ALUOutM, ImgData,
-					output logic [2:0] WA3W,
-					output logic PCSrcWV, RegWriteWV, MemtoRegWV,
-					output logic [255:0] ReadDataWV, ALUOutWV, ALUOutMV, ImgDataV,
-					output logic [2:0] WA3WV);
+/*
+Top Memory Module
+Date: 16/03/24
+FALTA VECTOR MEMORY
+*/
+module memory # (parameter N = 24) (
+		input  logic clk,
 
-	logic [31:0] MemOut;
+		input  logic [N-1:0] pc_address,	// from PC to A in instruction memory
+		input  logic [N-1:0] data_address_scalar,	// from ALUResult to A in data memory
+		input  logic [N-1:0] data_address_vector,	// NYI: not yet implemented
+
+		input  logic [N-1:0] write_data_scalar,		// WriteData (RD2 from register file) to WD
+		input  logic [255:0] write_data_vector,		// NYI
+
+		input  logic MemWrite_scalar,				// Control Signal: MemWrite from Control Unit 
+		input  logic MemWrite_vector,				// Control Signal: NYI
 	
-	logic wren_b;
-	logic [31:0] data_b;
-	assign wren_b = 0;
-	assign data_b = 32'b0;
+		output logic [N-1:0] instruction,			// to Instruction after instruction memory
+		output logic [N-1:0] read_data_scalar,		// ReadData from RD in data memory to MemtoRegMux
+		output logic [255:0] read_data_vector		// NYI
+	);
+
+	// Specific addresses for ips
+	logic [13:0] in_address;
+	logic [13:0] sd_address;	// 16384 addresses of 24 bits
+	logic [14:0] vd_address;	// 32768 addresses of 256 bits
+
+	// Bus length adjust
+	assign in_address = pc_address[13:0];
+	assign sd_address = data_address_scalar[13:0];
+	assign vd_address = data_address_vector[14:0];
+
 	
-	
-	//Aqui va la RAM lol
-	
-	
+	/* Instruction memory (no clk) */
+	instruction_memory_v2 #(.N(N)) inst_memory (.address(in_address),
+								  	   			.instruction(instruction));
+
+
+	/* Scalar data mamory */
+	ram_scalar ram_scalar_memory (.address(sd_address),
+								  .clock(clk),
+								  .data(write_data_scalar),
+								  .rden(1'b1),
+								  .wren(MemWrite_scalar),
+								  .q(read_data_scalar));
+
+
+	/* Vector Data Memory */ /*
+	ram_vector ram_scalar_memory (.address(vd_address),
+								  .clock(clk),
+								  .data(write_data_vector),
+								  .rden(1'b1),
+								  .wren(MemWrite_vector),
+								  .q(read_data_vector));
+	*/
 
 endmodule

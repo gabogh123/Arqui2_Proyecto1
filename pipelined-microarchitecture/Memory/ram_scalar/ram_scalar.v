@@ -38,19 +38,20 @@
 `timescale 1 ps / 1 ps
 // synopsys translate_on
 module ram_scalar (
-	address,
-	clock,
-	data,
-	rden,
-	wren,
-	q);
+		address,
+		clock,
+		data,
+		rden,
+		wren,
+		q
+	);
 
-	input	[13:0]  address;
-	input	  clock;
-	input	[23:0]  data;
-	input	  rden;
-	input	  wren;
-	output	[23:0]  q;
+	input [13:0] address;
+	input clock;
+	input [23:0] data;
+	input rden;
+	input wren;
+	output [23:0] q;
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_off
 `endif

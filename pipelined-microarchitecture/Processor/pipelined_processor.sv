@@ -15,102 +15,174 @@ module pipelined_processor # (parameter N = 24) (
         output logic [N-1:0] ALUResult_scalar,	// to A from, data memory
         output logic [N-1:0] WriteData_scalar  	// to WD (write_scalar_data) from data memory
     );
-/*
-	fetch # (.N(N)) sFetch (
-		input  logic clk,
-		input  logic rst,
-		input  logic [N-1:0] ResultW,
-		input  logic [N-1:0] ALUResultE,
-		input  logic PCSrcW,
-		input  logic BranchTakenE,
-		input  logic StallF,
-		input  logic StallD,
-		input  logic FlushD,
-		input  logic [N-1:0] instruction, /* Input from Memory /
 
-		output logic [N-1:0] PCF, /* Output to Memory / //A = PCout / L = PCF / RG = pc_address
-		output logic [N-1:0] InstrD,
-		output logic [N-1:0] InstrD_vector,
-		output logic [N-1:0] PCPlus8D
-	);
+	/*
+	fetch # (.N(N)) fetch_stage (.clk(clk),
+							.rst(rst),
+							.ResultW(),
+							.ALUResultE(),
+							.PCSrcW(),
+							.BranchTakenE(),
+							.StallF(),
+							.StallD(),
+							.FlushD(),
+							.instruction(),
 
+							.PCF(),
+							.InstrD(),
+							.InstrD_vector(),
+							.PCPlus8D());
+	*/
 
-	decode # (parameter N = 24) (
-		input logic clk,
-		input logic rst,
-		input logic RegWriteW,
-		input logic FlushE,
-		input logic [3:0] NFlags,
-		input logic [N-1:0] InstrD, // instruction for decoding
-		input logic [N-1:0] PCPlus8D,
-		input logic [N-1:0] ResultW,
-		input logic [3:0] WA3W,
+	/*
+	decode # (.N(N)) sDecode (
+		.clk(),
+		.rst(),
+		.RegWriteW(),
+		.FlushE(),
+		.NFlags(),
+		.InstrD(),
+		.PCPlus8D(),
+		.ResultW(),
+		.WA3W(),
 
-		output logic PCSrcD,
-		output logic PCSrcE,
-		output logic RegWriteE,
-		output logic MemtoRegE,
-		output logic MemWriteE,
-		output logic [2:0] ALUControlE,
-		output logic BranchE,
-		output logic ALUSrcE,
-		output logic [1:0] FlagWriteE,
-		output logic CondE,
-		output logic [3:0] FlagsE,
-		output logic [N-1:0] RD1E,
-		output logic [N-1:0] RD2E,
-		output logic [3:0] WA3E,
-		output logic [N-1:0] ExtImmE,
-		output logic [3:0] A3E,
-		output logic [3:0] RA1E,
-		output logic [3:0] RA2E,
-		output logic Stuck
-	);
+		.PCSrcD(),
+		.PCSrcE(),
+		.RegWriteE(),
+		.MemtoRegE(),
+		.MemWriteE(),
+		.ALUControlE(),
+		.BranchE(),
+		.ALUSrcE(),
+		.FlagWriteE(),
+		.CondE(),
+		.FlagsE(),
+		.RD1E(),
+		.RD2E(),
+		.WA3E(),
+		.ExtImmE(),
+		.A3E(),
+		.RA1E(),
+		.RA2E(),
+		.Stuck());
+	*/
 
+	/*
+	execute # (.N(N)) sExecute(
+		.clk(),
+		.rst(),
+		.RD1E(),
+		.RD2E(),
+		.ExtImmE(),
+		.ResultW(),
+		.ALUResultMFB(),
 
-	execute # (parameter N = 24) (
-		input  logic clk,
-		input  logic rst,
-		input  logic [N-1:0] RD1E,
-		input  logic [N-1:0] RD2E,
-		input  logic [N-1:0] ExtImmE,
-		input  logic [N-1:0] ResultW,
-		input  logic [N-1:0] ALUResultMFB,
+		.PCSrcE(),
+		.RegWriteE(),
+		.MemtoRegE(),
+		.MemWriteE(),
+		.ALUControlE(),
+		.BranchE(),
+		.ALUSrcE(),
+		.FlagWriteE(),
+		.CondE(),
+		.FlagsE(),
 
-		input  logic PCSrcE,
-		input  logic RegWriteE,
-		input  logic MemtoRegE,
-		input  logic MemWriteE,
-		input  logic [2:0] ALUControlE,
-		input  logic BranchE,
-		input  logic ALUSrcE,
-		input  logic [1:0] FlagWriteE,
-		input  logic CondE,
-		input  logic [3:0] FlagsE,
+		.WA3E(),
+		.ForwardAE(),
+		.ForwardBE(),
 
-		input  logic [3:0] WA3E,
-		input  logic [1:0] ForwardAE,
-		input  logic [1:0] ForwardBE,
+		.PCSrcM(),
+		.RegWriteM(),
+		.MemWriteM(),
+		.MemtoRegM(),
+		.BranchTakenE(),
+		.ALUResultM(),
+		.WriteDataM(),
+		.ALUResultF(), 
+		.WA3M(),
+		.ALUFlagsD());
+	*/
 
-		output logic PCSrcM,
-		output logic RegWriteM,
-		output logic MemWriteM,
-		output logic MemtoRegM,
-		output logic BranchTakenE,
-		output logic [N-1:0] ALUResultM,
-		output logic [N-1:0] WriteDataM,
-		output logic [N-1:0] ALUResultF, 
-		output logic [3:0] WA3M,
-		output logic [3:0] ALUFlagsD
-	);
+	/*
+	INSTANTIATION OF MEMORY THAT IS GOING TO BE OUTSIDE THIS MODULE
+	FOR IMPLEMENTATION HELP ONLY
+	memory # (.N(N)) DUMMY_MEMORY (.clk(eclk),
+								  .data_address_scalar(data_address_scalar),
+								  .data_address_vector(data_address_vector),
+								  .write_data_scalar(write_data_scalar),
+								  .write_data_vector(write_data_vector),
+								  .MemWrite_scalar(MemWrite_scalar),
+								  .MemWrite_vector(MemWrite_vector),
+								  .read_data_scalar(read_data_scalar),
+								  .read_data_vector(read_data_vector));
+	*/
 
+	/*
+	THIS ARE THE VARIABLES IN MEMORY MODULE FROM A(),
+	SOME VARIABLES MUST BE INSTANTIATED OR PASSED IN THIS MODULE
+	CHECK
+	memory (.clk(),
+			.clock_img(),
+			.PCSrcM(),
+			.RegWriteM(),
+			.MemtoRegM(),
+			.MemWriteM(),
+			.ALUResultM(),
+			.WriteDataM(),
+			.WA3M(),
+			.ImgAddr(),
+			.PCSrcMV(),
+			.RegWriteMV(),
+			.MemtoRegMV(),
+			.MemWriteMV(),
+			.ALUResultMV(),
+			.WriteDataMV(),
+			.WA3MV(),
+			.ImgAddrV(),
+			
+			.PCSrcW(),
+			.RegWriteW(),
+			.MemtoRegW(),
+			.ReadDataW(),
+			.ALUOutW(),
+			.ALUOutM(),
+			.ImgData(),
+			.WA3W(),
+			.PCSrcWV(),
+			.RegWriteWV(),
+			.MemtoRegWV(),
+			.ReadDataWV(),
+			.ALUOutWV(),
+			.ALUOutMV(),
+			.ImgDataV(),
+			.WA3WV());
+		*/
 
-*/
+	/* Pipeline Register Memory-Writeback Stages */ /* A = regmw @ memory.sv */
+	/*
+	register_MW # (.N(N)) (.clk(clk),
+						   .PCSrcM(),
+						   .RegWriteM(),
+						   .MemtoRegM(),
+						   .ReadDataM(),
+						   .ALUOutM(),
+						   .WA3M(),
+						   
+						   .PCSrcW(),
+						   .RegWriteW(),
+						   .MemtoRegW(),
+						   .ReadDataW(),
+						   .ALUOutW(),
+						   .WA3W());
+	*/
 
-
-
-
-
-
+	/* ResultW Mux */ /* A = mux_pcnext */
+	mux_2NtoN # (.N(N)) mux_ResultW (.I0(xxxxxxxxxxxxxx),
+									 .I1(xxxxxxxxxxxxxx),
+									 .rst(rst),
+									 .S(xxxxxxxxxxxxxx),
+									 .en(1'b1),
+									 .O(xxxxxxxxxxxxxx));
 
 endmodule

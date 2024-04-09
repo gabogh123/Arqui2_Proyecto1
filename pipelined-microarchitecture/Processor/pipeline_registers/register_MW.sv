@@ -1,22 +1,34 @@
-module register_MW (	input logic clk,
-					input logic PCSrcM, RegWriteM, MemtoRegM,
-					input logic [31:0] MemOut, ALUResultM,
-					input logic [2:0] WA3M,
+/*
+Register for Memory and Writeback pipeline datapath.
+Date: 08/04/24
+*/
+module register_MW # (parameter N = 24) (
+		input logic clk,
+		input logic PCSrcM,
+		input logic RegWriteM,
+		input logic MemtoRegM,
+		input logic [N-1:0] ReadDataM,
+		input logic [N-1:0] ALUOutM, // ALUResultM
+		input logic [3:0] WA3M,
+		
+		output logic PCSrcW,
+		output logic RegWriteW,
+		output logic MemtoRegW,
+		output logic [N-1:0] ReadDataW,
+		output logic [N-1:0] ALUOutW,
+		output logic [3:0] WA3W
+	);
 					
-					output logic PCSrcW, RegWriteW, MemtoRegW,
-					output logic [31:0] ReadDataW,ALUOutW,
-					output logic [2:0] WA3W);
-					
 
-always_ff @(posedge clk) begin
+	always_ff @ (posedge clk) begin
 
-		PCSrcW <= PCSrcM;
-		RegWriteW <= RegWriteM;
-		MemtoRegW <= MemtoRegM;
-		ReadDataW <= MemOut;
-		ALUOutW <= ALUResultM;
-		WA3W <= WA3M;
+			PCSrcW <= PCSrcM;
+			RegWriteW <= RegWriteM;
+			MemtoRegW <= MemtoRegM;
+			ReadDataW <= ReadDataM;
+			ALUOutW <= ALUOutM;
+			WA3W <= WA3M;
 
-end
+	end
 
 endmodule 

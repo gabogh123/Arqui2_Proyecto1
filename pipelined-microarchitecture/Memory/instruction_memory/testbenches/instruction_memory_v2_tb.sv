@@ -1,18 +1,17 @@
 /*
 instruction memory testbench
 Date: 31/03/24
-ONLY SCALAR TESTS YET
 */
 module instruction_memory_v2_tb;
 
     parameter N = 24;
 
-    logic [13:0] address;	// from PC to A in instruction memory
+    logic [13:0] address;	    // from PC to A in instruction memory
     logic [N-1:0] instruction;	// from ALUResult to A in data memory
 
 	/* ASIP Processor */
-	instruction_memory_v2 uut (.address(address),
-						              .instruction(instruction));
+	instruction_memory_v2 #(.N(N)) uut (.address(address),
+						                .instruction(instruction));
 
 	// Initialize inputs
     initial begin
