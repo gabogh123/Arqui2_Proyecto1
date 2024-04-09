@@ -19,7 +19,8 @@ module execute # (parameter N = 24) (
 		input  logic BranchE,
 		input  logic ALUSrcE,
 		input  logic [1:0] FlagWriteE,
-		input  logic CondE,
+		input  logic [2:0] OpcodeE,
+		input  logic [1:0] SE,
 		input  logic [3:0] FlagsE,
 
 		input  logic [3:0] WA3E,
@@ -96,21 +97,24 @@ module execute # (parameter N = 24) (
 	logic MemWriteE_cond;
 	
 	/* Conditional Unit checks flags and branches */
-	Condition_Unit cond_unit (.clk(clk),
-							  .rst(rst),
-							  .PCSrcE(PCSrcE),
-							  .RegWriteE(RegWriteE),
-							  .MemWriteE(MemWriteE),
-							  .BranchE(BranchE),
-							  .FlagWriteE(FlagWriteE),
-							  .CondE(CondE),
-							  .FlagsE(FlagsE),
-							  .ALUFlags(ALUFlags),
-							  .ALUFlagsD(ALUFlagsD),
-							  .BranchTakenE(BranchTakenE),
-							  .PCSrcM(PCSrcE_cond),
-							  .RegWriteM(RegWriteE_cond),
-							  .MemWriteM(MemWriteE_cond));
+	conditional_unit cond_unit (.clk(clk),
+							  	.rst(rst),
+								.PCSrcE(PCSrcE),
+								.RegWriteE(RegWriteE),
+								.MemWriteE(MemWriteE),
+								.BranchE(BranchE),
+
+								.FlagWriteE(FlagWriteE),
+								.Opcode(OpcodeE),
+								.S(SE),
+								.FlagsE(FlagsE),
+								.ALUFlags(ALUFlags),
+
+								.ALUFlagsD(ALUFlagsD),
+								.BranchTakenE(BranchTakenE),
+								.PCSrcM(PCSrcE_cond),
+								.RegWriteM(RegWriteE_cond),
+								.MemWriteM(MemWriteE_cond));
 	
 	/* Pipeline Register Decode-Memory Stages */ /* A = regem */
 	register_EM # (.N(N)) reg_EM (.clk(clk),

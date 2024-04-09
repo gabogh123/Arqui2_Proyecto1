@@ -5,13 +5,11 @@ Date: 20/03/24
 
 module condition_checker_tb;
 
-
 	logic [2:0] opcode;
 	logic		N;
 	logic		Z;
 	logic		C;
 	logic		V;
-
 	logic		condEx;
 
 
@@ -20,8 +18,7 @@ module condition_checker_tb;
 						   .Z(Z),
 						   .C(C),
 						   .V(V),
-						   .condEx(condEx)
-						   );
+						   .condEx(condEx));
 
 	initial begin
 
@@ -57,7 +54,7 @@ module condition_checker_tb;
                  "condEx=%b", condEx);
 		
 	
-		label: assert (condEx===1)
+		label1: assert (condEx===1)
 			else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 		
 		// Testing not equal condition
@@ -76,7 +73,7 @@ module condition_checker_tb;
                  "N=%b Z=%b C=%b V=%b\n", N, Z, C, V,
                  "condEx=%b", condEx);
 		
-		label: assert (condEx===1)
+		label2: assert (condEx===1)
 			else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100
@@ -93,7 +90,7 @@ module condition_checker_tb;
                  "N=%b Z=%b C=%b V=%b\n", N, Z, C, V,
                  "condEx=%b", condEx);
 		
-		label: assert (condEx===0)
+		label3: assert (condEx===0)
 			else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		
@@ -111,12 +108,12 @@ module condition_checker_tb;
 		#100
 
 		assert ((condEx === 1)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100
 
 		$display("Signed Less than 2");
-		cond = 3'b110;
+		opcode = 3'b110;
 		N = 0;
 		Z = 1;
 		C = 1;
@@ -125,7 +122,7 @@ module condition_checker_tb;
 		#100
 
 		assert ((condEx === 0)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		//Testing greater than condition
 
@@ -133,7 +130,7 @@ module condition_checker_tb;
 		 #100
 
 		$display("Signed Greater than 1");
-		cond = 3'b101;
+		opcode = 3'b101;
 		N = 1;
 		Z = 0;
 		C = 0;
@@ -142,21 +139,21 @@ module condition_checker_tb;
 			#100
 
 		assert ((condEx === 1)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100
 
 		$display("Signed Greater than 2");
-		cond = 4'b1100;
+		opcode = 4'b1100;
 		N = 1;
 		Z = 1;
 		C = 1;
 		V = 1;
 
-			#100
+		#100
 
 		assert ((condEx === 0)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100
 
@@ -165,7 +162,7 @@ module condition_checker_tb;
 		#100
 
 		$display("Always 1");
-		cond = 4'b1111;
+		opcode = 4'b1111;
 		N = 0;
 		Z = 0;
 		C = 0;
@@ -173,13 +170,13 @@ module condition_checker_tb;
 
 		#100
 
-		assert ((cond_ex === 1)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", cond, N, Z, C, V);
+		assert ((condEx === 1)) 
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100
 
 		$display("Always");
-		cond = 4'b1111;
+		opcode = 4'b1111;
 		N = 1;
 		Z = 1;
 		C = 1;
@@ -187,10 +184,11 @@ module condition_checker_tb;
 
 		#100
 
-		assert ((cond_ex === 1)) 
-		else $error("Failed @ cond=%b N=%b Z=%b C=%b V=%b", cond, N, Z, C, V);
+		assert ((condEx === 1)) 
+		else $error("Failed @ opcode=%b N=%b Z=%b C=%b V=%b", opcode, N, Z, C, V);
 
 		#100;
 
+	end
 
 endmodule

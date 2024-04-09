@@ -15,7 +15,8 @@ module register_DE # (parameter N = 24) (
 		input logic BranchD,
 		input logic ALUSrcD,
 		input logic [1:0] FlagWriteD, 
-		input logic CondD, 
+		input logic [2:0] OpcodeD, 
+		input logic [1:0] SD, 
 		input logic [3:0] NFlags, // A = FlagsD,
 		
 		input logic [N-1:0] RD1D, // A = rd1,
@@ -34,7 +35,8 @@ module register_DE # (parameter N = 24) (
 		output logic BranchE,
 		output logic ALUSrcE,
 		output logic [1:0] FlagWriteE, 
-		output logic CondE, 
+		output logic [2:0] OpcodeE, 
+		output logic [1:0] SE, 
 		output logic [3:0] FlagsE,
 		
 		output logic [N-1:0] RD1E, // A = rdo1,
@@ -57,7 +59,8 @@ module register_DE # (parameter N = 24) (
 			BranchE <= 1'b0;
 			ALUSrcE <= 1'b0;
 			FlagWriteE <= 2'b0;
-			CondE <= 1'b0;
+			OpcodeE <= 3'b0; 
+			SE <= 2'b0;
 			FlagsE <= 1'b0;
 			RD1E <= 24'b0;
 			RD2E <= 24'b0;
@@ -76,7 +79,8 @@ module register_DE # (parameter N = 24) (
 			BranchE <= BranchD;
 			ALUSrcE <= ALUSrcD;
 			FlagWriteE <= FlagWriteD;
-			CondE <= CondD;
+			OpcodeE <= OpcodeD; 
+			SE <= SD;
 			FlagsE <= NFlags;
 			RD1E <= RD1D;
 			RD2E <= RD2D;

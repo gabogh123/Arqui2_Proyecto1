@@ -32,7 +32,7 @@ module memory # (parameter N = 24) (
 	assign vd_address = data_address_vector[14:0];
 
 	
-	/* Instruction memory (no clk) */
+	/* Instruction memory */
 	instruction_memory_v2 #(.N(N)) inst_memory (.address(in_address),
 								  	   			.instruction(instruction));
 

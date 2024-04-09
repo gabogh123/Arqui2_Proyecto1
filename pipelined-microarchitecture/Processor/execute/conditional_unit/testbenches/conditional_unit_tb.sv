@@ -9,7 +9,7 @@ module conditional_unit_tb;
     logic rst;
 
     logic [2:0] Opcode;
-    logic 		V,
+    logic 		V;
     logic [3:0] ALUFlags;
     // logic [1:0] FlagW;
 
@@ -48,7 +48,7 @@ module conditional_unit_tb;
         Opcode <= 3'b000;
         ALUFlags <= 4'b0000;
 
-        FlagW <= 2'b00;
+        // FlagW <= 2'b00;
         PCS <= 1'b0;
         RegW <= 1'b0;
         MemW <= 1'b0;
@@ -96,7 +96,7 @@ module conditional_unit_tb;
         Opcode <= 3'b110;
         ALUFlags <= 4'b0000;
 
-        FlagW <= 2'b00;
+        // FlagW <= 2'b00;
         PCS <= 1'b1;
         RegW <= 1'b1;
         MemW <= 1'b0;
@@ -107,7 +107,7 @@ module conditional_unit_tb;
         Opcode <= 4'b110;
         ALUFlags <= 4'b0100;
 
-        FlagW <= 2'b11;
+        // FlagW <= 2'b11;
         PCS <= 1'b1;
         RegW <= 1'b1;
         MemW <= 1'b0;
@@ -115,10 +115,10 @@ module conditional_unit_tb;
         #100
 
         $display("Opcode: EQ, last flags: N=0 Z=1 C=0 V=0");
-        Opcode <= 3'011;
+        Opcode <= 3'b011;
         ALUFlags <= 4'b0000;
 
-        FlagW <= 2'b11;
+        // FlagW <= 2'b11;
         PCS <= 1'b1;
         RegW <= 1'b1;
         MemW <= 1'b1;
@@ -134,7 +134,7 @@ module conditional_unit_tb;
         Opcode <= 3'b011;
         ALUFlags <= 4'b1111;
 
-        FlagW <= 2'b00;
+        // FlagW <= 2'b00;
         PCS <= 1'b1;
         RegW <= 1'b1;
         MemW <= 1'b0;
@@ -144,7 +144,7 @@ module conditional_unit_tb;
         assert((CondEx === 0) & (PCSrc === 0) & (RegWrite === 0) & (MemWrite === 0))
         else $error("Failed @ Opcode=%b ALUFlags=%b", Opcode, Flags);
 
-        #100
+        #100;
     end
 
     initial

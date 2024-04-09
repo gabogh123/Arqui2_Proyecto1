@@ -3,9 +3,9 @@ Processor Module
 Date: 07/04/24
 */
 module pipelined_processor # (parameter N = 24) (
-        input  logic			clk,
-		input  logic			rst,
-		input  logic			en,
+        input  logic		 clk,
+		input  logic		 rst,
+		input  logic		 en,
 
         input  logic [N-1:0] Instr,       		// RD from instruction memory
         input  logic [N-1:0] ReadData_scalar, 	// RD from data memory
@@ -16,23 +16,30 @@ module pipelined_processor # (parameter N = 24) (
         output logic [N-1:0] WriteData_scalar  	// to WD (write_scalar_data) from data memory
     );
 
-	/*
-	fetch # (.N(N)) fetch_stage (.clk(clk),
-							.rst(rst),
-							.ResultW(),
-							.ALUResultE(),
-							.PCSrcW(),
-							.BranchTakenE(),
-							.StallF(),
-							.StallD(),
-							.FlushD(),
-							.instruction(),
+	/* wiring from Writeback stage */
+	logic wPCSrcW;
+	logic wMemtoRegW;
+	logic [N-1:0] wReadDataW;
+	logic [N-1:0] wALUOutW;
+	logic [N-1:0] ResultW;
 
-							.PCF(),
-							.InstrD(),
-							.InstrD_vector(),
-							.PCPlus8D());
-	*/
+	/* Fetch stage */
+	fetch # (.N(N)) fetch_stage (.clk(clk),
+								 .rst(rst),
+								 .ResultW(ResultW),
+								 .ALUResultE(),
+								 .PCSrcW(wPCSrcW),
+								 .BranchTakenE(),
+								 .StallF(),
+								 .StallD(),
+								 .FlushD(),
+								 .instruction(Instr),
+								 
+								 .PCF(PC),
+								 .InstrD(),
+								 .InstrD_vector(),
+								 .PCPlus8D());
+
 
 	/*
 	decode # (.N(N)) sDecode (
@@ -118,49 +125,7 @@ module pipelined_processor # (parameter N = 24) (
 								  .read_data_vector(read_data_vector));
 	*/
 
-	/*
-	THIS ARE THE VARIABLES IN MEMORY MODULE FROM A(),
-	SOME VARIABLES MUST BE INSTANTIATED OR PASSED IN THIS MODULE
-	CHECK
-	memory (.clk(),
-			.clock_img(),
-			.PCSrcM(),
-			.RegWriteM(),
-			.MemtoRegM(),
-			.MemWriteM(),
-			.ALUResultM(),
-			.WriteDataM(),
-			.WA3M(),
-			.ImgAddr(),
-			.PCSrcMV(),
-			.RegWriteMV(),
-			.MemtoRegMV(),
-			.MemWriteMV(),
-			.ALUResultMV(),
-			.WriteDataMV(),
-			.WA3MV(),
-			.ImgAddrV(),
-			
-			.PCSrcW(),
-			.RegWriteW(),
-			.MemtoRegW(),
-			.ReadDataW(),
-			.ALUOutW(),
-			.ALUOutM(),
-			.ImgData(),
-			.WA3W(),
-			.PCSrcWV(),
-			.RegWriteWV(),
-			.MemtoRegWV(),
-			.ReadDataWV(),
-			.ALUOutWV(),
-			.ALUOutMV(),
-			.ImgDataV(),
-			.WA3WV());
-		*/
-
 	/* Pipeline Register Memory-Writeback Stages */ /* A = regmw @ memory.sv */
-	/*
 	register_MW # (.N(N)) (.clk(clk),
 						   .PCSrcM(),
 						   .RegWriteM(),
@@ -169,20 +134,19 @@ module pipelined_processor # (parameter N = 24) (
 						   .ALUOutM(),
 						   .WA3M(),
 						   
-						   .PCSrcW(),
+						   .PCSrcW(wPCSrcW),
 						   .RegWriteW(),
-						   .MemtoRegW(),
-						   .ReadDataW(),
-						   .ALUOutW(),
+						   .MemtoRegW(wMemtoRegW),
+						   .ReadDataW(wReadDataW),
+						   .ALUOutW(wALUOutW),
 						   .WA3W());
-	*/
 
 	/* ResultW Mux */ /* A = mux_pcnext */
-	mux_2NtoN # (.N(N)) mux_ResultW (.I0(xxxxxxxxxxxxxx),
-									 .I1(xxxxxxxxxxxxxx),
+	mux_2NtoN # (.N(N)) mux_ResultW (.I0(wALUOutW), //ready
+									 .I1(wReadDataW),
 									 .rst(rst),
-									 .S(xxxxxxxxxxxxxx),
+									 .S(wMemtoRegW),
 									 .en(1'b1),
-									 .O(xxxxxxxxxxxxxx));
+									 .O(ResultW));
 
 endmodule

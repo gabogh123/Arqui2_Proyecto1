@@ -4,8 +4,8 @@ Date: 07/04/2024
 */
 module control_unit_v2 (		
 		input  logic [2:0] Opcode,
-		input  logic V,
-		input  logic [2:0] Funct,
+		input  logic [1:0] S,
+		input  logic [2:0] Func,
 		input  logic [3:0] Rd,
 
 		output logic PCSrc,
@@ -13,6 +13,7 @@ module control_unit_v2 (
 		output logic MemtoReg,
 		output logic MemWrite,
 		output logic [2:0] ALUControl,
+		output logic ALUSel, // added
 		output logic Branch,
 		output logic ALUSrc,
 		output logic [1:0] FlagWrite,
@@ -30,24 +31,26 @@ module control_unit_v2 (
                    .PCS(PCSrc));
 
     /* Main Decoder */
-    main_decoder main_deco (.Opcode(Opcode),
-                            .V(V),
-                            .Funct(Funct),
+    main_decoder_v2 main_deco (.Opcode(Opcode),
+                            .S(S),
+                            .Func(Func),
                             .Branch(Branch),
-                            .MemtoReg(MemtoReg),
+                            .RegSrc(RegSrc),
+                            .RegW(RegWrite),
                             .MemW(MemWrite),
+                            .MemtoReg(MemtoReg),
                             .ALUSrc(ALUSrc),
                             .ImmSrc(ImmSrc),
-                            .RegW(RegWrite),
-                            .RegSrc(RegSrc),
                             .ALUOp(wAluOp));
 
     /* ALU Decoder */
-    alu_decoder alu_deco (.Opcode(Opcode),
-                          .Funct(Funct),
-                          .ALUOp(wAluOp),
-						  // Flag Write iba siempre a ser 1 ya que siempre se va a escribir *
-                          .ALUControl(ALUControl));
+    alu_decoder_v2 alu_deco (.Opcode(Opcode),
+                             .S(S),
+                             .Func(Func),
+                             .ALUOp(wAluOp),
+                             .ALUSel(ALUSel)
+                             .ALUControl(ALUControl)
+						     .FlagWrite(FlagWrite));
 
 	// *
 	assign FlagWrite = 2'b11;

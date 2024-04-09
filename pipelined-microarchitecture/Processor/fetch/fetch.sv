@@ -47,7 +47,7 @@ module fetch # (parameter N = 24) (
 	/* PC Register */
 	register_v2 # (.N(N)) program_counter (.clk(clk),
 										   .rst(rst),
-										   .en(StallF),
+										   .en(!StallF), /* Neg enable */
 										   .D(NPC),
 										   .Q(PCF));
 	
@@ -63,14 +63,14 @@ module fetch # (parameter N = 24) (
 	// Instruction Memory va a ir en el modulo de Memory instanciado en el top
 	
 	/* Selects the scalar datapath or vector datapath */ /* A = InstSelector */
-	datapath_selector # (.N(N)) data_select (.instruction(instruction),
+	datapath_selector # (.N(N)) data_select (.instruction(instruction), //ready
 										   	 .scalar_datapath_instruction(InstrF),
 										   	 .vector_datapath_instruction(InstrF_vector));
 
 	/* Pipeline Register Fetch-Decode Stages */ /* A = regfd */
 	register_FD # (.N(N)) reg_FD (.clk(clk),
 								  .rst(rst),
-								  .en(StallD),
+								  .en(!StallD), /* Neg enable */
 								  .clr(FlushD),
 								  .InstrF(InstrF),
 								  .InstrF_vector(InstrF_vector),

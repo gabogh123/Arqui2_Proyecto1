@@ -9,8 +9,10 @@ module conditional_unit (
 		input logic RegWriteE,
 		input logic MemWriteE,
 		input logic BranchE,
+
 		input logic [1:0] FlagWriteE,
-		input logic [3:0] CondE,
+		input logic [2:0] Opcode,
+		input logic [1:0] S,
 		input logic [3:0] FlagsE,
 		input logic [3:0] ALUFlags,
 	
@@ -26,7 +28,8 @@ module conditional_unit (
 	logic CondExE;
 
 	/* Checks conditions based on flags */ /* A = cc */
-	condition_checker cond_checker (.Cond(CondE),
+	condition_checker cond_checker (.Opcode(Opcode),
+									.S(S),
 									.Flags(FlagsE),
 									.CondEx(CondExE));
 
@@ -42,17 +45,17 @@ module conditional_unit (
 
 	/* Register for N and Z flags */ /* A = flagreg1 */
 	register_v2 #(.N(2)) nz_flags_reg (.clk(clk),
-									.rst(rst),
-									.en(FlagWrite[1]),
-									.D(ALUFlags[3:2]),
-									.Q(Flags[3:2]));
+									   .rst(rst),
+									   .en(FlagWrite[1]),
+									   .D(ALUFlags[3:2]),
+									   .Q(Flags[3:2]));
 
 	/* Register for C and V flags */ /* A = flagreg0 */
 	register_v2 #(.N(2)) cv_flags_reg (.clk(clk),
-									.rst(rst),
-									.en(FlagWrite[0]),
-									.D(ALUFlags[1:0]),
-									.Q(Flags[1:0]));
+									   .rst(rst),
+									   .en(FlagWrite[0]),
+									   .D(ALUFlags[1:0]),
+									   .Q(Flags[1:0]));
 								
 	/* ALUFlags for Decode stage */
 	assign ALUFlagsD = ALUFlags;

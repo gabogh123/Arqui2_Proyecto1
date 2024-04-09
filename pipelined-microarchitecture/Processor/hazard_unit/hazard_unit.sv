@@ -1,21 +1,21 @@
 module hazard_unit(
-  input logic [2:0] RA1E,
-  input logic [2:0] RA2E,
-  input logic [2:0] WA3M,
-  input logic [2:0] WA3W,
-  input logic [2:0] RA1D,
-  input logic [2:0] RA2D,
-  input logic [2:0] WA3E,
-  input logic RegWriteM,RegWriteW,MemtoRegE,
-  input logic PCSrcD,PCSrcE,PCSrcM,PCSrcW, BranchTakenE,
-  
-  output logic [1:0] ForwardAE,
-  output logic [1:0] ForwardBE,
-  output logic StallF,
-  output logic StallD,
-  output logic FlushE,
-  output logic FlushD
-);
+		input logic [2:0] RA1E,
+		input logic [2:0] RA2E,
+		input logic [2:0] WA3M,
+		input logic [2:0] WA3W,
+		input logic [2:0] RA1D,
+		input logic [2:0] RA2D,
+		input logic [2:0] WA3E,
+		input logic RegWriteM,RegWriteW,MemtoRegE,
+		input logic PCSrcD,PCSrcE,PCSrcM,PCSrcW, BranchTakenE,
+		
+		output logic [1:0] ForwardAE,
+		output logic [1:0] ForwardBE,
+		output logic StallF,
+		output logic StallD,
+		output logic FlushE,
+		output logic FlushD
+	);
 
   logic Match_12D_E, LDRstall, PCWrPendingF;
 
@@ -62,4 +62,4 @@ module hazard_unit(
 
 
 
-endmodule 
+endmodule

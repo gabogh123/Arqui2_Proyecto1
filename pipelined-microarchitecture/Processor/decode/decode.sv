@@ -22,7 +22,8 @@ module decode # (parameter N = 24) (
 		output logic BranchE,
 		output logic ALUSrcE,
 		output logic [1:0] FlagWriteE,
-		output logic CondE,
+		output logic [2:0] OpcodeE,
+		output logic [1:0 ]SE,
 		output logic [3:0] FlagsE,
 		output logic [N-1:0] RD1E,
 		output logic [N-1:0] RD2E,
@@ -36,19 +37,19 @@ module decode # (parameter N = 24) (
 
 	/* Instruction */
 	logic [2:0] inst_opcode;
-	logic inst_V;
+	logic inst_S;
 	logic [3:0] inst_rd;
 	logic [3:0] inst_rs;
 	logic [3:0] inst_rt;
 	logic [2:0] inst_funct;
 	logic [19:0] inst_add;
 	assign inst_opcode = InstrD[23:21];
-	assign inst_V = InstrD[20];
+	assign inst_S = {InstrD[20], Instr[0]};
 	assign inst_rd = InstrD[19:16];
 	assign inst_rs = InstrD[15:12];
 	assign inst_rt = InstrD[11:8];
-	assign inst_funct = InstrD[2:0];
-	assign inst_add = InstrD[19:0];
+	assign inst_funct = InstrD[3:1];
+	assign inst_add = InstrD[19:1];
 
 	/* $pc's address */
 	logic [3:0] reg15_address;
@@ -70,9 +71,6 @@ module decode # (parameter N = 24) (
 
 	logic [1:0] ImmSrcD;
 	logic [1:0] RegSrcD;
-
-	logic CondD;
-	assign CondD = 1'b0;
 	
 
 	/* RA1D (A1 from Register File) Mux */ /* A = mux_ra1 */
@@ -93,9 +91,10 @@ module decode # (parameter N = 24) (
 
 	/* Control_Unit */ /* A uses Stuck, but not implemented(?) */
 	control_unit_v2 cont_unit (.Opcode(inst_opcode),
-							   .V(inst_V),
+							   .S(inst_S),
 							   .Funct(inst_funct),
 							   .Rd(inst_rd),
+
 							   .PCSrc(PCSrcD),
 							   .RegWrite(RegWriteD),
 							   .MemtoReg(MemtoRegD),
@@ -123,14 +122,15 @@ module decode # (parameter N = 24) (
 	assign WA3E = inst_rd;
 
 	/* Extend */
-	extend # (.N(N)) extender (.A(inst_add),
-							   .ImmSrc(ImmSrcD),
-						   	   .ExtImm(ExtImmD));
+	extend_v2 # (.N(N)) extender (.A(inst_add),
+							      .ImmSrc(ImmSrcD),
+						   	      .ExtImm(ExtImmD));
 	
 	/* Pipeline Register Decode-Execute Stages */ /* A = regde */
 	register_DE # (.N(N)) reg_DE (.clk(clk),
 								  .rst(rst),
 								  .clr(FlushE),
+
 								  .PCSrcD(PCSrcD),
 								  .RegWriteD(RegWriteD),
 								  .MemtoRegD(MemtoRegD),
@@ -139,14 +139,17 @@ module decode # (parameter N = 24) (
 								  .BranchD(BranchD),
 								  .ALUSrcD(ALUSrcD),
 								  .FlagWriteD(FlagWriteD),
-								  .CondD(CondD),
+								  .OpcodeD(inst_opcode),
+								  .SD(inst_S),
 								  .NFlags(NFlags),
+
 								  .RD1D(RD1D),
 								  .RD2D(RD2D),
 								  .ExtImmD(ExtImmD),
 								  .A3D(WA3W),
 								  .RA1D(RA1D),
 								  .RA2D(RA2D),
+
 								  .PCSrcE(PCSrcE),
 								  .RegWriteE(RegWriteE),
 								  .MemtoRegE(MemtoRegE),
@@ -155,8 +158,10 @@ module decode # (parameter N = 24) (
 								  .BranchE(BranchE),
 								  .ALUSrcE(ALUSrcE),
 								  .FlagWriteE(FlagWriteE),
-								  .CondE(CondE),
+								  .OpcodeE(OpcodeE),
+								  .SE(SE),
 								  .FlagsE(FlagsE),
+
 								  .RD1E(RD1E),
 								  .RD2E(RD2E),
 								  .ExtImmE(ExtImmE),
