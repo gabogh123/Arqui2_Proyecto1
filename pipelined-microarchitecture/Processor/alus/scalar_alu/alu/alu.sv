@@ -1,10 +1,9 @@
 /*
 ALU parametrizable para N
 Date: 16/03/24
-HACER TESTBENCH
 */
 `timescale 1 ps / 100 fs
-module alu #(parameter N = 24) (
+module alu # (parameter N = 24) (
 		input  [N-1:0] 			A, // Input A (24-bit)
 		input  [N-1:0] 			B, // Input B (24-bit)
 		input  [2:0]   ALUControl, // ALU Control (3-bit)
@@ -14,18 +13,20 @@ module alu #(parameter N = 24) (
 	);
 
 	logic [N-1:0] add, sub, mult, sll, srl;
-	logic C_add, C_sub, C_mult, Z_add, Z_sub, Z_mult, V_add, V_sub, V_mult, N_add, N_sub, N_mult, gt_sub;
+	logic C_add, C_sub, C_mult;
+	logic Z_add, Z_sub, Z_mult;
+	logic V_add, V_sub, V_mult;
+	logic N_add, N_sub, N_mult;
+	logic gt_sub;
 	logic [4:0] shamt;
 
 	logic			   c_flag; // Carry Out
 	logic 			   z_flag; // Zero Flag
-	logic 			  gt_flag; // Greater than Flag
 	logic 			   v_flag; // Overflow Flag
 	logic 			   n_flag; // Negative Flag
+	logic 			  gt_flag; // Greater than Flag
 	 
-	/*
-	REVISAR EN TESTBENCH QUE FUNCIONE LOL
-	*/
+	/* Shift amount */
 	assign shamt = B[7:3];
 
 	//add
@@ -55,6 +56,7 @@ module alu #(parameter N = 24) (
 
 	//shift right logical 
 	assign srl = A >> shamt;
+
 
 	//multiplication
 	multiplier #(.N(N)) multi(A,
