@@ -1,7 +1,7 @@
 import numpy as np
 from pydub import AudioSegment
 
-def generate_mif_file(file_name, data_width, depth, datos):
+def generate_mif_file(file_name, data_width, depth, datos, offset):
     with open(file_name, 'w') as mif_file:
         mif_file.write(f"DEPTH = {depth};\n")
         mif_file.write(f"WIDTH = {data_width};\n")
@@ -11,7 +11,8 @@ def generate_mif_file(file_name, data_width, depth, datos):
         mif_file.write("BEGIN\n")
         for address in range(depth):
             # Escribir la direccion
-            mif_file.write(f"{address:05X} : ")
+            dir = address + offset
+            mif_file.write(f"{dir:05X} : ")
             # Escribir los 16 datos de la direccion
             data = decimal_to_fixed_point(datos[address])
             mif_file.write(f"{data}")
@@ -59,7 +60,7 @@ data_width = 16  # Width of each memory location in bits
 
 coeficientes = np.array([0.5, -1, -0.671875, 1, 0.625, 0.75, 0.125, -0.015625, 0.25, 0.2421875, 1, -0.125, -0.75, 0.515625, -0.515625, 1])
 
-generate_mif_file(file_name, data_width, depth,scaled_arr)
-generate_mif_file(file_coeficientes, data_width, depth_coef,coeficientes)
+generate_mif_file(file_name, data_width, depth,scaled_arr,0)
+generate_mif_file(file_coeficientes, data_width, depth_coef,coeficientes,depth)
 
 #print(decimal_to_fixed_point())
