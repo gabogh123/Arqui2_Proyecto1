@@ -1,9 +1,6 @@
 import numpy as np
 from pydub import AudioSegment
 
-
-
-
 def generate_mif_file(file_name, data_width, depth, datos):
     with open(file_name, 'w') as mif_file:
         mif_file.write(f"DEPTH = {depth};\n")
@@ -12,15 +9,12 @@ def generate_mif_file(file_name, data_width, depth, datos):
         mif_file.write("DATA_RADIX = BIN;\n")
         mif_file.write("CONTENT\n")
         mif_file.write("BEGIN\n")
-        dato = 0
         for address in range(depth):
             # Escribir la direccion
             mif_file.write(f"{address:05X} : ")
             # Escribir los 16 datos de la direccion
-            for i in range(16):
-                data = decimal_to_fixed_point(datos[dato])
-                mif_file.write(f"{data}")
-                dato = dato + 1
+            data = decimal_to_fixed_point(datos[address])
+            mif_file.write(f"{data}")
             mif_file.write("\n")
         mif_file.write("END;\n")
 
@@ -40,7 +34,7 @@ def decimal_to_fixed_point(num):
     return binary_str
 
 #Se genera el array con los datos del audio
-entrada = AudioSegment.from_file('G:/Documentos/S2024/Arqui/Proyecto1/Audio/Audio.mp3')
+entrada = AudioSegment.from_file('G:/Documentos/S2024/Arqui/Proyecto1/audio_conversion/Audio/Audio.mp3')
 audio_array = np.array(entrada.get_array_of_samples())
 
 
@@ -54,13 +48,18 @@ scaled_arr = 2 * (audio_array - min_value) / (max_value - min_value) - 1
 #restored_arr = 0.5 * (scaled_arr + 1) * (max_value - min_value) + min_value
 
 #Se define la informacion para el .mif
-depth = int(audio_array.size/16)
+depth = int(audio_array.size)
+
+depth_coef = 16
 
 
-file_name = "G:/Documentos/S2024/Arqui/Proyecto1/Mifgen/entrada.mif"
-data_width = 256  # Width of each memory location in bits
+file_name = "G:/Documentos/S2024/Arqui/Proyecto1/audio_conversion/entrada.mif"
+file_coeficientes = "G:/Documentos/S2024/Arqui/Proyecto1/audio_conversion/coeficientes.mif"
+data_width = 16  # Width of each memory location in bits
 
+coeficientes = np.array([0.5, -1, -0.671875, 1, 0.625, 0.75, 0.125, -0.015625, 0.25, 0.2421875, 1, -0.125, -0.75, 0.515625, -0.515625, 1])
 
 generate_mif_file(file_name, data_width, depth,scaled_arr)
+generate_mif_file(file_coeficientes, data_width, depth_coef,coeficientes)
 
 #print(decimal_to_fixed_point())
