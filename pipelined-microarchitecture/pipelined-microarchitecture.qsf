@@ -129,10 +129,11 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id fir_filter_t
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME fir_filter_tb -section_id fir_filter_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE Processor/fetch/testbenches/fetch_tb.sv -section_id fetch_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/fir_filter_tb.sv -section_id fir_filter_tb
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_AF14 -to clk
 set_location_assignment PIN_AA14 -to pwr
 set_location_assignment PIN_AA15 -to dbg
 set_location_assignment PIN_Y16 -to rst
 set_location_assignment PIN_W15 -to stp
 set_location_assignment PIN_V16 -to out
+set_global_assignment -name SYSTEMVERILOG_FILE Processor/performance_monitor/performance_monitor.sv
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

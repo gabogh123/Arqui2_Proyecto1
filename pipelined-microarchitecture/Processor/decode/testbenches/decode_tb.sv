@@ -69,8 +69,7 @@ module decode_tb;
 						  .A3E(A3E),
 						  .RA1E(RA1E),
 						  .RA2E(RA2E),
-						  ,Stuck(Stuck)
-						);
+						  .Stuck(Stuck));
 
 		
 	// Initialize inputs
@@ -78,7 +77,7 @@ module decode_tb;
 		$display("decode stage module testbench:\n");
 
 		clk = 0;
-		rst = 0,
+		rst = 0;
 		RegWriteW = 1;
 		FlushE = 1;
 		PCPlus8D = 24'b1000;
