@@ -1,61 +1,67 @@
 N = 16
 
-addi $e0, $zero, pos_coeficientes
-addi $e1, $zero, 1 # contador del numero de coeficientes a utilizar
-ldrv $v0, $e0, 0 # Se cargan los coeficientes en v0
-addi $e2, $zero, N # Condicion para cambiar de loop 
-addi $e3, $zero, pos_entrada
-ldrv $v1, $e3, 0 # Se cargan los primeros 16 datos de entrada 
-addi $e4, $zero, 0 # registro para acumular el resultados
-addi $e6, $zero, 0 # registro para controlar la suma
-sub $e0, $e0, $e0 # Se reinicia e0
-addi $e0, $zero, pos_salida
+somi $e0, $zero, 0x08E500 #Se cargan la posicion de los coeficiente
+somi $e1, $zero, 1 # contador del numero de coeficientes a utilizar
+carv $v0, $e0, 0 # Se cargan los coeficientes en v0
+somi $e2, $zero, 16 # Condicion para cambiar de loop 
+somi $e3, $zero, 0x00000 #Se carga la posicio donde inicia la entrada
+carv $v1, $e3, 0 # Se cargan los primeros 16 datos de entrada 
+somi $e4, $zero, 0 # regigaro para acumular el resultados
+somi $e6, $zero, 0 # regigaro para controlar la suma
+sou $e0, $e0, $e0 # Se reinicia e0
+somi $e0, $zero, 0x08E510 #Se guarda la posicion donde se empieza a escribir la salida 
 
 .firinit: 
     sdlv $e1, $e1, 0
-    multv $v2, $v0, $v1
-    b suma
-    sub $e6, $e6, $e6
-    str $e4, 0($e0)
-    sub $e4 , $e4, $e4 
-    addi $e0, $zero, 1
-    addi $e1, $zero, 1
-    beq $e1, $e2, fir
-    b _firinit
+    mltv $v2, $v0, $v1
+    sau suma
+    sou $e6, $e6, $e6
+    gar $e4, 0($e0)
+    sou $e4 , $e4, $e4 
+    somi $e0, $zero, 1
+    somi $e1, $zero, 1
+    cmpe $e1, $e2, fir
+    sau _firinit
 
 .fir:
     sdlv $e1, $e1, 0
-    sub $e2, $e2 , $e2
-    addi $e2, $zero,  582896 # condicion de parada
-    sub $e1, $e1, $e1
-    addi $e1,$zero, 0 # contador para el loop
+    sou $e2, $e2 , $e2
+    somi $e2, $zero,  582896 # condicion de parada
+    sou $e1, $e1, $e1
+    somi $e1,$zero, 0 # contador para el loop
 
 .fir_loop:
-    multv $v2, $v0, $v1
+    mltv $v2, $v0, $v1
     b sumafir
-    sub $e6, $e6, $e6
-    str $e4, 0($e0)
-    sub $e4 , $e4, $e4
-    addi $e3, $e3, 1 # Muevo a la siguiente x
-    ldrv $v1, $e3, 0 # Se cargan los valores de entrada
-    addi $e0, $zero, 1 # Muevo a la siguiente salida 
-    addi $e1, $e1, 1 # Se suma al contador
-    beq $e1, $e2, _end
-    b _fir_loop 
+    sou $e6, $e6, $e6
+    gar $e4, 0($e0)
+    sou $e4 , $e4, $e4
+    somi $e3, $e3, 1 # Muevo a la siguiente x
+    carv $v1, $e3, 0 # Se cargan los valores de entrada
+    somi $e0, $zero, 1 # Muevo a la siguiente salida 
+    somi $e1, $e1, 1 # Se suma al contador
+    cmpe $e1, $e2, _end
+    sau _fir_loop 
 
 
 .suma:
-    add $e4, $e4, $v2($e6)
-    addi $e6, $e6, 1
-    beq $e6, $e1, _firinit
-    b suma
+    getv $e2, $v2, $e6
+    som $e4, $e4, $e2
+    somi $e6, $e6, 1
+    sou $e2, $e2, $e2
+    somi $e2, $zero, 16 # Condicion para cambiar de loop 
+    cmpe $e6, $e1, _firinit
+    sau suma
 
 
 .sumafir:
-    add $e4, $e4, $v2($e6)
-    addi $e6, $e6, 1
-    beq $e6, $e1, _fir_loop
-    b _sumafir
+    getv $e2, $v2, $e6
+    som $e4, $e4, $e2
+    somi $e6, $e6, 1
+    sou $e2, $e2, $e2
+    somi $e2, $zero, 582896 # Condicion para cambiar de loop 
+    cmpe $e6, $e1, _fir_loop
+    sau _sumafir
 
 .end:
-    end
+    fin
