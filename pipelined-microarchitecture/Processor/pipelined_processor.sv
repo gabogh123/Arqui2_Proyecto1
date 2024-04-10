@@ -26,7 +26,7 @@ module pipelined_processor # (parameter N = 24) (
 	logic wRegWriteD_E;
 	logic wMemtoRegD_E;
 	logic wMemWriteD_E;
-	logic wALUControlD_E;
+	logic [2:0] wALUControlD_E;
 	logic wALUSelD_E;
 	logic wBranchD_E;
 	logic wALUSrcD_E;
@@ -69,8 +69,8 @@ module pipelined_processor # (parameter N = 24) (
 	logic wStallD;
 	logic wFlushD;
 	logic wFlushE;
-	logic wForwardAE;
-	logic wForwardBE;
+	logic [1:0] wForwardAE;
+	logic [1:0] wForwardBE;
 	logic wMatch;
 
 
@@ -90,6 +90,7 @@ module pipelined_processor # (parameter N = 24) (
 								 .InstrD(wInstrF_D),
 								//  .InstrD_vector(),
 								 .PCPlus8D(wPCPlus8));
+
 
 	/* scalar Decode stage */
 	decode # (.N(N)) sDecode (.clk(clk),
@@ -162,19 +163,6 @@ module pipelined_processor # (parameter N = 24) (
 								.WA3M(wWA3E_M),
 								.ALUFlagsD(wALUFlagsE_D));
 
-	/*
-	INSTANTIATION OF MEMORY THAT IS GOING TO BE OUTSIDE THIS MODULE
-	FOR IMPLEMENTATION HELP ONLY
-	memory # (.N(N)) DUMMY_MEMORY (.clk(eclk),
-								  .data_address_scalar(data_address_scalar),
-								  .data_address_vector(data_address_vector),
-								  .write_data_scalar(write_data_scalar),
-								  .write_data_vector(write_data_vector),
-								  .MemWrite_scalar(MemWrite_scalar),
-								  .MemWrite_vector(MemWrite_vector),
-								  .read_data_scalar(read_data_scalar),
-								  .read_data_vector(read_data_vector));
-	*/
 
 	/* Pipeline Register Memory-Writeback Stages */ /* A = regmw @ memory.sv */
 	register_MW # (.N(N)) reg_MW (.clk(clk),
@@ -192,6 +180,7 @@ module pipelined_processor # (parameter N = 24) (
 								  .ALUOutW(wALUOutW),
 								  .WA3W(wWA3W_D));
 
+
 	/* ResultW Mux */ /* A = mux_pcnext */
 	mux_2NtoN # (.N(N)) mux_ResultW (.I0(wALUOutW), //ready
 									 .I1(wReadDataW),
@@ -199,6 +188,7 @@ module pipelined_processor # (parameter N = 24) (
 									 .S(wMemtoRegW),
 									 .en(1'b1),
 									 .O(ResultW));
+
 
 	/* Hazard Unit */
 	hazard_unit hazards (.RA1E(wRA1E),

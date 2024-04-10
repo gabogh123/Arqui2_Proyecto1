@@ -9,7 +9,7 @@ module fetch_tb;
 	logic clk;
 	logic rst;
 	logic [N-1:0] ResultW;
-	logic [N-1:0] ALUResultE;
+	logic [N-1:0] ExtImmE;
 	logic PCSrcW;
 	logic BranchTakenE;
 	logic StallF;
@@ -39,13 +39,14 @@ module fetch_tb;
 	fetch # (.N(N)) uut (.clk(clk),
 						 .rst(rst),
 						 .ResultW(ResultW),
-						 .ALUResultE(ALUResultE),
+						 .ExtImmE(ExtImmE),
 						 .PCSrcW(PCSrcW),
 						 .BranchTakenE(BranchTakenE),
 						 .StallF(StallF),
 						 .StallD(StallD),
 						 .FlushD(FlushD),
 						 .instruction(instruction),
+
 						 .PCF(PCF),
 						 .InstrD(InstrD),
 						 .InstrD_vector(InstrD_vector),
@@ -60,7 +61,7 @@ module fetch_tb;
 
 		clk = 0;
 		ResultW = 24'b0;
-		ALUResultE = 24'b0;
+		ExtImmE = 24'b0;
 		PCSrcW = 1'b0;
 		BranchTakenE = 1'b0;
 		StallF = 1'b1; // enable pc register

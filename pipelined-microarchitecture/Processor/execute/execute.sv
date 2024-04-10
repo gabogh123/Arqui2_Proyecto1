@@ -44,7 +44,11 @@ module execute # (parameter N = 24) (
 	logic [N-1:0] WriteDataE;
 	logic [N-1:0] SrcAE;
 	logic [N-1:0] SrcBE;
+	logic [N-1:0] ALUResult_nfp;
+	logic [N-1:0] ALUResult_wfp;
 	logic [N-1:0] ALUResultE;
+	logic [3:0] ALUFlags_nfp;
+	logic [3:0] ALUFlags_wfp;
 	logic [3:0] ALUFlags;
 	
 
@@ -52,7 +56,7 @@ module execute # (parameter N = 24) (
 	mux_4NtoN # (.N(N)) mux_SrcAE (.I0(RD1E),
 								   .I1(ResultW),
 								   .I2(ALUResultMFB),
-								   .I3(24'hFFFFFF), // All 1's because it's not used
+								   .I3(24'hffffff), // All 1's because it's not used
 								   .rst(rst),
 								   .S(ForwardAE),
 								   .en(1'b1),
@@ -62,7 +66,7 @@ module execute # (parameter N = 24) (
 	mux_4NtoN # (.N(N)) mux_WriteDataE (.I0(RD2E),
 										.I1(ResultW),
 										.I2(ALUResultMFB),
-										.I3(24'hFFFFFF),
+										.I3(24'hffffff),
 										.rst(rst),
 										.S(ForwardBE),
 										.en(1'b1),
@@ -76,23 +80,35 @@ module execute # (parameter N = 24) (
 								   .en(1'b1),
 								   .O(SrcBE));
 
-	/* ALU Scalar */
+	/* ALU Scalar no FP */
 	alu # (.N(N)) alu_scalar (.A(SrcAE),
                               .B(SrcBE),
                               .ALUControl(ALUControlE),
-                              .result(ALUResultE),
-                              .flags(ALUFlags));
+                              .result(ALUResult_nfp),
+                              .flags(ALUFlags_nfp));
 
 	/* ALU Scalar w FP */
-	// alu_fp
+	alu # (.N(N)) alu_fp_scalar (.A(SrcAE),
+                                 .B(SrcBE),
+                                 .ALUControl(ALUControlE),
+                                 .result(ALUResult_wfp),
+                                 .flags(ALUFlags_wfp));
+	
+	/* ALUResult Mux */
+	mux_2NtoN # (.N(N)) mux_ALUResult (.I0(ALUResult_nfp),
+								   	   .I1(ALUResult_wfp),
+								   	   .rst(rst),
+								   	   .S(ALUSelE),
+								   	   .en(1'b1),
+								   	   .O(ALUResultE));
 
 	/* ALUFlags Mux */
-	// mux_2NtoN
-	// usar ALUSel
-
-	/* ALUResult Mux */
-	// mux_2NtoN
-	// usar ALUSel
+	mux_2NtoN # (.N(4)) mux_ALUFlags (.I0(ALUFlags_nfp),
+								   	  .I1(ALUFlags_wfp),
+								   	  .rst(rst),
+								   	  .S(ALUSelE),
+								   	  .en(1'b1),
+								   	  .O(ALUFlags));
 	
 	/* Conditioned control signals */
 	logic PCSrcE_cond;

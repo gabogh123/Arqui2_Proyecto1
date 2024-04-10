@@ -1,3 +1,7 @@
+/*
+ALU w fixed point parametrizable para N
+Date: 16/03/24
+*/
 module alu_fp # (parameter N = 24)(
         input   [N-1:0] A_fp, 
         input   [N-1:0] B_fp,
