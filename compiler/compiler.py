@@ -194,15 +194,6 @@ def get_j_type(instruction: list, labels: dict) -> str:
 #-----------------------------------------------------------------------
 # Methods to compute immediate binary values for different types of instructions
 
-#def xori_imm(imm, labels):
- #   try:
-  #      imm = labels[imm]
-   #     bin_str = to_bin(imm, IMM_SIZE)
-    #except KeyError:
-     #   bin_str = to_bin(imm, IMM_SIZE)
-
-#    return bin_str
-
 def branch_imm(index, label, labels):
     try:
         b_dest = labels[label]

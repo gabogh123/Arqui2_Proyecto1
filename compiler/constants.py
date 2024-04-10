@@ -75,7 +75,7 @@ isa = {
     BGT : {'type': I, 'opcode': '110','S1':'1','S0':'0'},
     SDLV : {'type': I, 'opcode': '100','S1':'0','S0':'0'},
 
-    B : {'type': J, 'opcode': '101','S1':'1','S0':'0'},
+    B : {'type': J, 'opcode': '110','S1':'1','S0':'1'},
     DNT : {'type': J, 'opcode': '111','S1':'1','S0':'1'},
     END: {'type': J, 'opcode': '111','S1':'0','S0':'0'}
 }
