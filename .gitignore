@@ -441,5 +441,7 @@ incremental_db/
 db/
 _output_files/
 PLLJ_PLLSPE_INFO.txt
+lol/
 
 
+microarchitecture/output_files/microarchitecture.sld

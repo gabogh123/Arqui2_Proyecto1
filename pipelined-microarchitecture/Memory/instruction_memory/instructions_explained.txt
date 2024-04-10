@@ -1,0 +1,22 @@
+100110000000000000000001 // 980001 // addi $e0, $zero, 0x1 # $e0 = 1 
+000010001000000001100011 // 088063 // sll $e0, $e0, 12 # $e0 = 1 0000 0000 0000
+100110110000000000010000 // 9B0010 // addi $e3, $zero, 0x10 # $e3 = 0x10 
+010010011000000000000000 // 498000 // lw $e1, ($e0) # Carga en $e1 lo que hay en la direccion de memoria que esta en $e0 (1000) 5
+010010101000000000000001 // 4a8001 // lw $e2, 1($e0) # Carga en $e2 lo que hay en la direccion de memoria que esta en $e0+1 (1001) 3
+000010111001101000000000 // 0b9a00 // add $e3, $e1, $e2  # $e3 = 5 + 3 = 8 
+000010001000100000000000 // 088800 // add $e0, $e0, $e0 # $e0 = 0x2000
+001010111000000000000010 // 2b8002 // sw $e3, 2($e0) # Guardo el valor de $e3 (8) en 0x2002
+100111000000000000001010 // 9c000a // addi $e4, $zero, 0xa # Carga un 10 en el registro $e4 
+000011011100101100000001 // 0dcb01 // sub $e5, $e4, $e3  # $e5 = 10 - 8 = 2
+000011101100101100000010 // 0ecb02 // mul $e6, $e4, $e3  # $e6 = 10 * 8 = 80 (0x50)
+001011101000000000000011 // 2e8003 // sw $e6, 3($e0) # Guardo el valor de $e06 en 0x2003 
+101110001110000000001011 // b8e00b // subi $e0, $e6, 0xb   # $e0 = 80 - 11 = 69
+110110011101000000001000 // d9d004 // muli $e1, $e5, 0x8   # $e1 = 2 * 8 = 16 1000
+000010011001000000010111 // 099017 // slr $e1, $e1, 2 #$ e1 = 10 por el shift right
+000010011001000001010011 // 088063 // sll $e1, $e1, 10 # $e0 = 1 0000 0000 0000
+010010101001000000000000 // 4A9000 // lw $e2, ($e1) # Carga en $e2 lo que hay en la direccion de memoria que esta en $e1 (2000) 5
+010010111001000000000010 // 4B9002 // lw $e3, 2($e1) # Carga en $e3 lo que hay en la direccion de memoria que esta en $e1+2 (2002) 3
+111010001001000000000000 // e89000 // beq $e0, $e1, 0000 # beq no se cumple
+111010011101000000001001 // 39d009 // beq $e1, $e5, b1001 # beq se cumple, debe cambiar a la direccion 0001
+000010001001101000000000 // 089a00 // add $e0, $e1, $e2 # Esta instruccion tiene que ser saltada
+101011101100000000000000 // aec000 // bgt $e6, $e4, 0000 # $e6=80 $e4=10, debe pasar a la direccion 0000 
