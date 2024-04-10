@@ -40,44 +40,57 @@ module decode_tb;
 	/* internal signals */
 	//
 
+	decode # (.N(N)) uut (.clk(clk),
+						  .rst(rst),
+						  .RegWriteW(RegWriteW),
+						  .FlushE(FlushE),
+						  .NFlags(NFlags),
+						  .InstrD(InstrD),
+						  .PCPlus8D(PCPlus8D),
+						  .ResultW(ResultW),
+						  .WA3E(WA3E),
 
-	// CAMBIAR POR LA INSTANCIA DE DECODE O AGREGAR Y USAR ESTA TAMBIEN PARA EL TEST
-	fetch # (.N(N)) uut (.clk(clk),
-						 .rst(rst),
-						 .ResultW(ResultW),
-						 .ALUResultE(ALUResultE),
-						 .PCSrcW(PCSrcW),
-						 .BranchTakenE(BranchTakenE),
-						 .StallF(StallF),
-						 .StallD(StallD),
-						 .FlushD(FlushD),
-						 .instruction(instruction),
-						 .PCF(PCF),
-						 .InstrD(InstrD),
-						 .InstrD_vector(InstrD_vector),
-						 .PCPlus8D(PCPlus8D));
+						  .PCSrcD(PCSrcD),
+						  .PCSrcE(PCSrcE),
+						  .RegWriteE(RegWriteE),
+						  .MemtoRegE(MemtoRegE),
+						  .MemWriteE(MemWriteE),
+						  .ALUControlE(ALUControlE),
+						  .BranchE(BranchE),
+						  .ALUSrcE(ALUSrcE),
+						  .FlagWriteE(FlagWriteE),
+						  .OpcodeE(OpcodeE),
+						  .SE(SE),
+						  .FlagsE(FlagsE),
+						  .RD1E(RD1E),
+						  .RD2E(RD2E),
+						  .WA3E(WA3E),
+						  .ExtImmE(ExtImmE),
+						  .A3E(A3E),
+						  .RA1E(RA1E),
+						  .RA2E(RA2E),
+						  ,Stuck(Stuck)
+						);
 
-	instruction_memory_v2 # (.N(N)) inst_mem_ut (.address(PCF),
-												 .instruction(instruction));
-				
+		
 	// Initialize inputs
     initial begin
-		$display("fetch stage module testbench:\n");
+		$display("decode stage module testbench:\n");
 
 		clk = 0;
+		rst = 0,
+		RegWriteW = 1;
+		FlushE = 1;
+		PCPlus8D = 24'b1000;
 		ResultW = 24'b0;
-		ALUResultE = 24'b0;
-		PCSrcW = 1'b0;
-		BranchTakenE = 1'b0;
-		StallF = 1'b1; // enable pc register
-		StallD = 1'b1; // enable pipeline register 
-		FlushD = 1'b0; // clear pipeline register
+		WA3W = 4'b1000;
         
         /*
-        $monitor("Register_v2 Signals:\n",
+        $monitor("Decode Signals:\n",
                  "RegIn = %b (%h)\n", RegIn, RegIn,
                  "WriteEn = %b\n", WriteEn,
                  "RegOut = %b (%h)\n\n\n", RegOut, RegOut);*/
+
     end
 
     always begin

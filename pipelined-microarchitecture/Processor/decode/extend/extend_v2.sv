@@ -15,7 +15,7 @@ module extend_v2 # (parameter N = 24) (
             /* Zero Extention 13 bits */
             2'b00 : begin
                 ExtImm = {13'b0, A[10:0]};
-            end
+            end 
 
             /* Zero Extention 5 bits */
             2'b01 : begin
