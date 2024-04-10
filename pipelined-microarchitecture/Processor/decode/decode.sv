@@ -31,12 +31,12 @@ module decode # (parameter N = 24) (
 		output logic [N-1:0] RD2E,
 		output logic [3:0] WA3E,
 		output logic [N-1:0] ExtImmE,
-		output logic [3:0] A3E,
+		// output logic [3:0] A3E,
 		output logic [3:0] RA1H,
 		output logic [3:0] RA2H,
 		output logic [3:0] RA1E,
-		output logic [3:0] RA2E,
-		output logic Stuck
+		output logic [3:0] RA2E
+		// output logic Stuck
 	);
 
 	/* Instruction */

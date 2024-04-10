@@ -29,7 +29,7 @@ module main_decoder_v2(
                 /* sll => 011 & slr => 111 */
                 if (Func[1:0] == 2'b11) begin
                     Branch   = 1'b0;
-                    RegSrc   = 2'b0x;
+                    RegSrc   = 2'b00; // 2'b0x;
                     MemtoReg = 1'b0;
                     MemW     = 1'b0;
                     ALUSrc   = 1'b1;
@@ -44,7 +44,7 @@ module main_decoder_v2(
                     MemtoReg = 1'b0;
                     MemW     = 1'b0;
                     ALUSrc   = 1'b0;
-                    ImmSrc   = 2'bxx;
+                    ImmSrc   = 2'b10; // 2'bxx;
                     RegW     = 1'b1;
                     ALUOp    = 1'b1;
                 end
@@ -65,7 +65,7 @@ module main_decoder_v2(
 			/* Scalar datapath */ /* Scalar Immediate Arithmetic Operations */
 			3'b010: begin
 				Branch   = 1'b0;
-                RegSrc   = 2'b0x;
+                RegSrc   = 2'b00; // 2'b0x;
                 MemtoReg = 1'b0;
                 MemW     = 1'b0;
                 ALUSrc   = 1'b1;
@@ -79,8 +79,8 @@ module main_decoder_v2(
 				/* str */
                 if (S == 2'b00) begin
                     Branch   = 1'b0;
-                    RegSrc   = 2'b0x;
-                    MemtoReg = 1'bx;
+                    RegSrc   = 2'b00; // 2'b0x;
+                    MemtoReg = 1'b0; // 1'bx;
                     MemW     = 1'b1; // writes on memory
                     ALUSrc   = 1'b1;
                     ImmSrc   = 2'b00;
@@ -90,7 +90,7 @@ module main_decoder_v2(
                 /* ldr */
                 else if (S == 2'b01) begin
                     Branch   = 1'b0;
-                    RegSrc   = 2'b0x;
+                    RegSrc   = 2'b00; // 2'b0x;
                     MemtoReg = 1'b1; // writes on regs from memory
                     MemW     = 1'b0;
                     ALUSrc   = 1'b1;
@@ -128,7 +128,7 @@ module main_decoder_v2(
 				/* b (J type instruction) */
                 if (Func[1:0] == 2'b11) begin
                     Branch   = 1'b1;
-                    RegSrc   = 2'bxx;
+                    RegSrc   = 2'b01; // 2'bxx;
                     MemtoReg = 1'b0;
                     MemW     = 1'b0;
                     ALUSrc   = 1'bx;
