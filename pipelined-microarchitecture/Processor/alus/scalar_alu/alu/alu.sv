@@ -76,7 +76,7 @@ module alu # (parameter N = 24) (
 								  .I5(24'hffffff),
 								  .I6(24'hffffff),
 								  .I7(srl), //111
-								  .enable(1),
+								  .en(1),
 								  .rst(0),
 								  .S(ALUControl),
 								  .O(result));
@@ -90,7 +90,7 @@ module alu # (parameter N = 24) (
 								  .I5(0),
 								  .I6(0),
 								  .I7(0),
-								  .enable(1),
+								  .en(1),
 								  .rst(0),
 								  .S(ALUControl),
 								  .O(c_flag));
@@ -104,7 +104,7 @@ module alu # (parameter N = 24) (
 								  .I5(0),
 								  .I6(0),
 								  .I7(24'b0),
-								  .enable(1),
+								  .en(1),
 								  .rst(0),
 								  .S(ALUControl),
 								  .O(z_flag));
@@ -118,7 +118,7 @@ module alu # (parameter N = 24) (
 								  .I5(0),
 								  .I6(0),
 								  .I7(0),
-								  .enable(1),
+								  .en(1),
 								  .rst(0),
 								  .S(ALUControl),
 								  .O(v_flag));
@@ -132,7 +132,7 @@ module alu # (parameter N = 24) (
 								  .I5(0),
 								  .I6(0),
 								  .I7(0),
-								  .enable(1),
+								  .en(1),
 								  .rst(0),
 								  .S(ALUControl),
 								  .O(n_flag));
@@ -146,7 +146,7 @@ module alu # (parameter N = 24) (
 								   .I5(0),
 								   .I6(0),
 								   .I7(0),
-								   .enable(1),
+								   .en(1),
 								   .rst(0),
 								   .S(ALUControl),
 								   .O(gt_flag));

@@ -40,7 +40,7 @@ module condition_checker(
         end
 		else begin
             /* undefined */
-            default: CondEx = 1'b0;
+            CondEx = 1'b0;
         end
 
     end 

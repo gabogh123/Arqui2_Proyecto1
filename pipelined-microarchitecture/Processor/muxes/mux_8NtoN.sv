@@ -14,7 +14,7 @@ module mux_8NtoN # (parameter N = 24) (
 
 		input  logic   [2:0]  	  S,
 		input  logic        	rst,
-		input  logic	 	 enable,
+		input  logic	 	 	 en,
 
 		output logic [N-1:0]  	  O
 	);
@@ -30,28 +30,28 @@ module mux_8NtoN # (parameter N = 24) (
 									.I1(I1),
 									.rst(rst),
 									.S(S[0]),
-									.enable(enable),
+									.en(en),
 									.O(O_00_10));
 
 	mux_2NtoN # (.N(N)) m2NtoN_0_1 (.I0(I2),
 									.I1(I3),
 									.rst(rst),
 									.S(S[0]),
-									.enable(enable),
+									.en(en),
 									.O(O_01_10));
 
 	mux_2NtoN # (.N(N)) m2NtoN_0_2 (.I0(I4),
 									.I1(I5),
 									.rst(rst),
 									.S(S[0]),
-									.enable(enable),
+									.en(en),
 									.O(O_02_11));
 
 	mux_2NtoN # (.N(N)) m2NtoN_0_3 (.I0(I6),
 									.I1(I7),
 									.rst(rst),
 									.S(S[0]),
-									.enable(enable),
+									.en(en),
 									.O(O_03_11));
 
 	wire [N-1:0] O_10_20;
@@ -63,14 +63,14 @@ module mux_8NtoN # (parameter N = 24) (
 									.I1(O_01_10),
 									.rst(rst),
 									.S(S[1]),
-									.enable(enable),
+									.en(en),
 									.O(O_10_20));
 
 	mux_2NtoN # (.N(N)) m2NtoN_1_1 (.I0(O_02_11),
 									.I1(O_03_11),
 									.rst(rst),
 									.S(S[1]),
-									.enable(enable),
+									.en(en),
 									.O(O_11_20));
 
 	// Stage 3
@@ -79,7 +79,7 @@ module mux_8NtoN # (parameter N = 24) (
 									.I1(O_11_20),
 									.rst(rst),
 									.S(S[2]),
-									.enable(enable),
+									.en(en),
 									.O(O));
 
 endmodule

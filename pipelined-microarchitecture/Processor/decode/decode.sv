@@ -19,17 +19,21 @@ module decode # (parameter N = 24) (
 		output logic MemtoRegE,
 		output logic MemWriteE,
 		output logic [2:0] ALUControlE,
+		output logic ALUSelE,
 		output logic BranchE,
 		output logic ALUSrcE,
+
 		output logic [1:0] FlagWriteE,
 		output logic [2:0] OpcodeE,
-		output logic [1:0 ]SE,
+		output logic [1:0] SE,
 		output logic [3:0] FlagsE,
 		output logic [N-1:0] RD1E,
 		output logic [N-1:0] RD2E,
 		output logic [3:0] WA3E,
 		output logic [N-1:0] ExtImmE,
 		output logic [3:0] A3E,
+		output logic [3:0] RA1H,
+		output logic [3:0] RA2H,
 		output logic [3:0] RA1E,
 		output logic [3:0] RA2E,
 		output logic Stuck
@@ -37,14 +41,14 @@ module decode # (parameter N = 24) (
 
 	/* Instruction */
 	logic [2:0] inst_opcode;
-	logic inst_S;
+	logic [1:0] inst_S;
 	logic [3:0] inst_rd;
 	logic [3:0] inst_rs;
 	logic [3:0] inst_rt;
 	logic [2:0] inst_funct;
 	logic [19:0] inst_add;
 	assign inst_opcode = InstrD[23:21];
-	assign inst_S = {InstrD[20], Instr[0]};
+	assign inst_S = {InstrD[20], InstrD[0]};
 	assign inst_rd = InstrD[19:16];
 	assign inst_rs = InstrD[15:12];
 	assign inst_rt = InstrD[11:8];
@@ -65,6 +69,7 @@ module decode # (parameter N = 24) (
 	logic MemtoRegD;
 	logic MemWriteD;
 	logic [2:0] ALUControlD;
+	logic ALUSelD;
 	logic BranchD;
 	logic ALUSrcD;
 	logic [1:0] FlagWriteD;
@@ -81,6 +86,8 @@ module decode # (parameter N = 24) (
 								  .en(1'b1),
 								  .O(RA1D));
 
+	assign RA1H = RA1D;
+
 	/* RA2D (A2 from Register File) Mux */ /* A = mux_ra2 */
 	mux_2NtoN # (.N(4)) mux_ra2d (.I0(inst_rt),
 								  .I1(inst_rd),
@@ -89,10 +96,12 @@ module decode # (parameter N = 24) (
 								  .en(1'b1),
 								  .O(RA2D));
 
+	assign RA2H = RA2D;
+
 	/* Control_Unit */ /* A uses Stuck, but not implemented(?) */
 	control_unit_v2 cont_unit (.Opcode(inst_opcode),
 							   .S(inst_S),
-							   .Funct(inst_funct),
+							   .Func(inst_funct),
 							   .Rd(inst_rd),
 
 							   .PCSrc(PCSrcD),
@@ -100,6 +109,7 @@ module decode # (parameter N = 24) (
 							   .MemtoReg(MemtoRegD),
 							   .MemWrite(MemWriteD),
 							   .ALUControl(ALUControlD),
+							   .ALUSel(ALUSelD),
 							   .Branch(BranchD),
 							   .ALUSrc(ALUSrcD),
 							   .FlagWrite(FlagWriteD),
@@ -136,6 +146,7 @@ module decode # (parameter N = 24) (
 								  .MemtoRegD(MemtoRegD),
 								  .MemWriteD(MemWriteD),
 								  .ALUControlD(ALUControlD),
+								  .ALUSelD(ALUSelD),
 								  .BranchD(BranchD),
 								  .ALUSrcD(ALUSrcD),
 								  .FlagWriteD(FlagWriteD),
@@ -155,6 +166,7 @@ module decode # (parameter N = 24) (
 								  .MemtoRegE(MemtoRegE),
 								  .MemWriteE(MemWriteE),
 								  .ALUControlE(ALUControlE),
+								  .ALUSelE(ALUSelE),
 								  .BranchE(BranchE),
 								  .ALUSrcE(ALUSrcE),
 								  .FlagWriteE(FlagWriteE),

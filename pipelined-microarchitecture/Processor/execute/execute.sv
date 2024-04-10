@@ -16,6 +16,7 @@ module execute # (parameter N = 24) (
 		input  logic MemtoRegE,
 		input  logic MemWriteE,
 		input  logic [2:0] ALUControlE,
+		input  logic ALUSelE,
 		input  logic BranchE,
 		input  logic ALUSrcE,
 		input  logic [1:0] FlagWriteE,
@@ -34,7 +35,7 @@ module execute # (parameter N = 24) (
 		output logic BranchTakenE,
 		output logic [N-1:0] ALUResultM,
 		output logic [N-1:0] WriteDataM,
-		output logic [N-1:0] ALUResultF, 
+		output logic [N-1:0] ExtImmF, 
 		output logic [3:0] WA3M,
 		output logic [3:0] ALUFlagsD
 	);
@@ -87,9 +88,11 @@ module execute # (parameter N = 24) (
 
 	/* ALUFlags Mux */
 	// mux_2NtoN
+	// usar ALUSel
 
 	/* ALUResult Mux */
 	// mux_2NtoN
+	// usar ALUSel
 	
 	/* Conditioned control signals */
 	logic PCSrcE_cond;
@@ -133,7 +136,8 @@ module execute # (parameter N = 24) (
 								.WriteDataM(WriteDataM),
 								.WA3M(WA3M));
 	
-	/* ALUResult for Fetch stage */
-	assign ALUResultF = ALUResultE;
+	/* ExtImm for Fetch stage (ALUResult was used in book's implementation) */
+	/* Used for sending the branch address in 'b' instruction */
+	assign ExtImmF = ExtImmE;
 
 endmodule

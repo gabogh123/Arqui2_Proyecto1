@@ -6,7 +6,7 @@ module fetch # (parameter N = 24) (
 		input  logic clk,
 		input  logic rst,
 		input  logic [N-1:0] ResultW,
-		input  logic [N-1:0] ALUResultE,
+		input  logic [N-1:0] ExtImmE,
 		input  logic PCSrcW,
 		input  logic BranchTakenE,
 		input  logic StallF,
@@ -38,7 +38,7 @@ module fetch # (parameter N = 24) (
 	
 	/* PC from ALU Mux */ /* A = mux_pcnext */
 	mux_2NtoN # (.N(N)) mux_PCfromALU (.I0(PCJump),
-									   .I1(ALUResultE),
+									   .I1(ExtImmE),
 									   .rst(rst),
 									   .S(BranchTakenE),
 									   .en(1'b1),

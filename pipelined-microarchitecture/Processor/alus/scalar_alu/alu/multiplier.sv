@@ -18,8 +18,8 @@ module multiplier #(parameter N = 24) (
     assign r = a * b;
     assign result = r[N-1:0];
 
-    assign z_flag = (result == 0) ? 1 : 0;
-    assign c_flag = (r[2*N-2:N] > 0) ? 1 : 0;
+    assign z_flag = (result == 0) ? 1'b1 : 1'b0;
+    assign c_flag = (r[2*N-2:N] > 0) ? 1'b1 : 1'b0;
     assign n_flag = r[N-1];
 
     assign sign_a = a[N-1];

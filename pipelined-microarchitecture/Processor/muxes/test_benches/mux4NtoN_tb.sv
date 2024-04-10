@@ -10,14 +10,14 @@ module mux4NtoN_tb;
 	reg  [N-1:0] I2;
 	reg  [N-1:0] I3;
 	reg    [1:0]  S;
-	reg      enable;
+	reg      en;
 	reg  [N-1:0]  O;
 
 	mux_4NtoN # (.N(N)) uut (.I0(I0),
 							 .I1(I1),
 							 .I2(I2),
 							 .I3(I3),
-							 .enable(enable),
+							 .en(en),
 							 .S(S),
 							 .O(O));
 	
@@ -29,9 +29,9 @@ module mux4NtoN_tb;
 		I2 <= 32'b0;
 		I3 <= 32'b0;
 		S <= 2'b00;
-		enable <= 0;
+		en <= 0;
 
-		$monitor("S=%b enable=%b\n", S, enable,
+		$monitor("S=%b en=%b\n", S, en,
 				 "I0=%b I1=%b I2=%b I3=%b\n", I0, I1, I2, I3,
 				 "O=%b\n", O);
 	end
@@ -47,7 +47,7 @@ module mux4NtoN_tb;
 
 		#50
 
-		enable = 1;
+		en = 1;
 
 		#50
 
@@ -56,7 +56,7 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b11100101100111110001000000100000))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -65,7 +65,7 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b00101000101001000100111010101111))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -74,7 +74,7 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b00010010001000100010010110101000))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -83,11 +83,11 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b01010000000010101001110101001001))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#50
 		
-		enable = 0;
+		en = 0;
 
 		#50
 
@@ -96,7 +96,7 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b0))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -105,7 +105,7 @@ module mux4NtoN_tb;
 		#100
 		
 		assert((O === 32'b0))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 
 		#100;
 

@@ -11,7 +11,8 @@ module register_DE # (parameter N = 24) (
 		input logic RegWriteD,
 		input logic MemtoRegD,
 		input logic MemWriteD,
-		input logic [2:0] ALUControlD, 
+		input logic [2:0] ALUControlD,
+		input logic ALUSelD,
 		input logic BranchD,
 		input logic ALUSrcD,
 		input logic [1:0] FlagWriteD, 
@@ -32,6 +33,7 @@ module register_DE # (parameter N = 24) (
 		output logic MemtoRegE,
 		output logic MemWriteE,
 		output logic [2:0] ALUControlE, 
+		output logic ALUSelE,
 		output logic BranchE,
 		output logic ALUSrcE,
 		output logic [1:0] FlagWriteE, 
@@ -56,6 +58,7 @@ module register_DE # (parameter N = 24) (
 			MemtoRegE <= 1'b0;
 			MemWriteE <= 1'b0;
 			ALUControlE <= 3'b0;
+			ALUSelE <= 1'b0;
 			BranchE <= 1'b0;
 			ALUSrcE <= 1'b0;
 			FlagWriteE <= 2'b0;
@@ -76,6 +79,7 @@ module register_DE # (parameter N = 24) (
 			MemtoRegE <= MemtoRegD;
 			MemWriteE <= MemWriteD;
 			ALUControlE <= ALUControlD;
+			ALUSelE <= ALUSelD;
 			BranchE <= BranchD;
 			ALUSrcE <= ALUSrcD;
 			FlagWriteE <= FlagWriteD;

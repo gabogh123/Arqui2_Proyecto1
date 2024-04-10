@@ -37,7 +37,7 @@ module alu_decoder(
         input  logic            ALUOp,
 
         output logic [2:0] ALUControl,
-        output logic ALUSel;
+        output logic ALUSel
     );
 
     always @(*)

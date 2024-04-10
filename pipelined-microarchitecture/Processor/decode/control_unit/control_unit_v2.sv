@@ -48,8 +48,8 @@ module control_unit_v2 (
                              .S(S),
                              .Func(Func),
                              .ALUOp(wAluOp),
-                             .ALUSel(ALUSel)
-                             .ALUControl(ALUControl)
+                             .ALUSel(ALUSel),
+                             .ALUControl(ALUControl),
 						     .FlagWrite(FlagWrite));
 
 	// *

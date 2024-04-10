@@ -15,9 +15,7 @@ module datapath_selector # (parameter N = 24) (
 
 	/* Control bits in instruction */
 	logic [2:0] opcode;
-	logic [1:0] s;
 	assign opcode = instruction[23:21];
-	assign s = {instruction[20], instruction[0]};
 
 
 	/* Logic signals for dnt instruction => 24'b111 1 1111 1111 1111 1111 111 1 */

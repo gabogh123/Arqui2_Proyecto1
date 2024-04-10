@@ -64,6 +64,6 @@ module fir_filter # (parameter N = 24) (
 								  .read_data_vector(read_data_vector));
 					
 
-	assign out = pwr & stp & stp;
+	assign out = pwr & stp & dbg;
 
 endmodule

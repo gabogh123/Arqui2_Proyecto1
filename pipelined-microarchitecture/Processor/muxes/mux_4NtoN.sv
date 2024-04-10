@@ -10,7 +10,7 @@ module mux_4NtoN # (parameter N = 24) (
 		
 		input  logic   [1:0]  S,
 		input  logic 		rst,
-		input  logic	 enable,
+		input  logic	 	 en,
 
 		output logic [N-1:0]  O
 	);
@@ -22,14 +22,14 @@ module mux_4NtoN # (parameter N = 24) (
 								   .I1(I1),
 								   .rst(rst),
 								   .S(S[0]),
-								   .enable(enable),
+								   .en(en),
 								   .O(O_0));
 
 	mux_2NtoN # (.N(N)) m2NtoN_O1 (.I0(I2),
 								   .I1(I3),
 								   .rst(rst),
 								   .S(S[0]),
-							       .enable(enable),
+							       .en(en),
 								   .O(O_1));
 
 
@@ -37,7 +37,7 @@ module mux_4NtoN # (parameter N = 24) (
 								  .I1(O_1),
 								  .rst(rst),
 								  .S(S[1]),
-								  .enable(enable),
+								  .en(en),
 								  .O(O));
 	
 endmodule

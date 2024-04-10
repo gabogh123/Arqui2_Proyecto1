@@ -27,7 +27,7 @@ module main_decoder_v2(
             /* Scalar datapath */ /* Scalar Arithmetic Operations */
 			3'b000: begin
                 /* sll => 011 & slr => 111 */
-                if (func[1:0] == 2'b11) begin
+                if (Func[1:0] == 2'b11) begin
                     Branch   = 1'b0;
                     RegSrc   = 2'b0x;
                     MemtoReg = 1'b0;
@@ -126,7 +126,7 @@ module main_decoder_v2(
 			/* Scalar datapath */ /* Branches */
 			3'b110: begin
 				/* b (J type instruction) */
-                if (func[1:0] == 2'b11) begin
+                if (Func[1:0] == 2'b11) begin
                     Branch   = 1'b1;
                     RegSrc   = 2'bxx;
                     MemtoReg = 1'b0;

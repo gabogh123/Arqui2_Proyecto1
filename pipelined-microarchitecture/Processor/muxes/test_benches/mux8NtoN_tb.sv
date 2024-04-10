@@ -14,7 +14,7 @@ module mux8NtoN_tb;
 	reg  [N-1:0] I6;
 	reg  [N-1:0] I7;
 	reg    [2:0]  S;
-	reg      enable;
+	reg      en;
 	reg  [N-1:0]  O;	
 
 	mux_8NtoN # (.N(N)) uut (.I0(I0),
@@ -25,7 +25,7 @@ module mux8NtoN_tb;
 							 .I5(I5),
 							 .I6(I6),
 							 .I7(I7),
-							 .enable(enable),
+							 .en(en),
 							 .S(S),
 							 .O(O));
 
@@ -41,9 +41,9 @@ module mux8NtoN_tb;
 		I6 <= 32'b0;
 		I7 <= 32'b0;
 		S <= 3'b000;
-		enable <= 0;
+		en <= 0;
 
-		$monitor("S=%b enable=%b\n", S, enable,
+		$monitor("S=%b en=%b\n", S, en,
 				 "I0=%b I1=%b I2=%b I3=%b\n", I0, I1, I2, I3,
 				 "I4=%b I5=%b I6=%b I7=%b\n", I4, I5, I6, I7,
 				 "O=%b\n", O);
@@ -64,7 +64,7 @@ module mux8NtoN_tb;
 
 		#50
 
-		enable = 1;
+		en = 1;
 
 		#50
 
@@ -73,7 +73,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b11100101100111110001000000100000))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -82,7 +82,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b10101010000000000000000000000100))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -91,7 +91,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b01010010001001001001000100101010))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -100,7 +100,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b00101000101001000100111010101111))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -109,7 +109,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b11111010110110110110111011011011))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -118,7 +118,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b00010010001000100010010110101000))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -127,7 +127,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b01010000000010101001110101001001))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -136,11 +136,11 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b11101000100101011101001001110101))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#50
 		
-		enable = 0;
+		en = 0;
 
 		#50
 
@@ -149,7 +149,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b0))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -158,7 +158,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b0))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100
 
@@ -167,7 +167,7 @@ module mux8NtoN_tb;
 		#100
 		
 		assert((O === 32'b0))
-		else $error("Failed when S=%b with enable=%b", S, enable);
+		else $error("Failed when S=%b with en=%b", S, en);
 		
 		#100;
 
