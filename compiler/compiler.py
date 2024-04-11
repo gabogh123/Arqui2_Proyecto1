@@ -121,7 +121,8 @@ def get_r_type(instruction: list) -> str:
     if (mnemonic == ADD or mnemonic == SUB or mnemonic == MULT or 
         mnemonic ==  ADDF or mnemonic == SUBF or mnemonic == MULTF
         or mnemonic == ADDV or mnemonic == SUBV or mnemonic == MULTV
-        or mnemonic == ADDVF or mnemonic == SUBVF or mnemonic == MULTVF):
+        or mnemonic == ADDVF or mnemonic == SUBVF or mnemonic == MULTVF
+        or mnemonic == GETV):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
         rt = get_register(instruction[3])
@@ -146,24 +147,24 @@ def get_i_type(i: int, instruction: list, labels: dict) -> str:
     s1 = isa[mnemonic]['S1']
     s0 = isa[mnemonic]['S0']
 
-    if (mnemonic == ADDI or mnemonic == SUBI or mnemonic == MULTI):
+    if (mnemonic == ADDI or mnemonic == SUBI or mnemonic == MULTI or mnemonic == SDLV):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
         imm = to_bin(instruction[3], 11)
 
-    if (mnemonic == BEQ or mnemonic == BGT or mnemonic == BNQ or mnemonic == SDLV ):
+    if (mnemonic == BEQ or mnemonic == BGT or mnemonic == BNQ):
         rd = get_register(instruction[1])
         rs = get_register(instruction[2])
-        #imm = branch_imm(i, instruction[3], labels) // agregar para saltar a labels
-        imm = to_bin(instruction[3], 11)
+        imm = branch_imm(i, instruction[3], labels) 
+        #imm = to_bin(instruction[3], 11)
 
-    #L oad y store solo sirven sin inmediato de momento (arreglar)
+    #Load y store solo sirven sin inmediato de momento (arreglar)
 
     if (mnemonic == STR or mnemonic == LDR or
         mnemonic == STRV or mnemonic == LDRV):
-        rd = get_register(instruction[2])
-        rs = get_register(instruction[3])
-        imm = '0' * IMM_SIZE
+        rd = get_register(instruction[1])
+        rs = get_register(instruction[2])
+        imm = to_bin(instruction[3], 11)
 
     return opcode  + s1  + rd  + rs  + imm + s0
     #return opcode + ',' + s1 + ',' + rd + ',' + rs + ',' + imm + ',' + s0
@@ -173,16 +174,14 @@ def get_j_type(instruction: list, labels: dict) -> str:
     """
     Transforms J type instruction to binary
     """
-
-    
     mnemonic = instruction[0]
     opcode = isa[mnemonic]['opcode']
     s1 = isa[mnemonic]['S1']
     s0 = isa[mnemonic]['S0']
 
     if (mnemonic == B):
-        #addr = jump_imm(instruction[1], labels)
-        addr = to_bin(instruction[1], 19)
+        addr = jump_imm(instruction[1], labels)
+        #addr = to_bin(instruction[1], 19)
 
     if (mnemonic == END or mnemonic == DNT):
         #addr = jump_imm(instruction[1], labels)

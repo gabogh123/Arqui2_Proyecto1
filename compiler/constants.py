@@ -38,6 +38,7 @@ BEQ = 'cmpe'
 BNQ = 'cmpn'
 BGT = 'cmpm'
 SDLV = 'sdlv'
+GETV = 'getv'
 
 #Instrucciones tipo J
 B = 'sau'
@@ -53,6 +54,8 @@ isa = {
     SUBF : {'type': R, 'opcode': '000', 'S1':'0', 'funct': '101', 'S0':'0'},
     MULTF : {'type': R, 'opcode': '000', 'S1':'0', 'funct': '110', 'S0':'0'},
     SRL : {'type': R, 'opcode': '000', 'S1':'0', 'funct': '111', 'S0':'0'},
+    GETV : {'type': R, 'opcode': '100', 'S1':'0', 'funct': '11', 'S0':'0'},
+
 
     ADDV : {'type': R, 'opcode': '001','S1':'0', 'funct': '000','S0':'0'},
     SUBV : {'type': R, 'opcode': '001', 'S1':'0','funct': '001','S0':'1'},
@@ -97,5 +100,13 @@ registers = {
     '$e4': '1100', 
     '$e5': '1101', 
     '$e6': '1110', 
-    '$pc': '1111'
+    '$pc': '1111',
+    '$v0': '0000',
+    '$v1': '0001',
+    '$v2': '0010',
+    '$v3': '0011',
+    '$v4': '0100',
+    '$v5': '0101',
+    '$v6': '0110',
+    '$v7': '0111'
 }
