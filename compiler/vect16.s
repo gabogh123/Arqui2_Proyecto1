@@ -4,7 +4,7 @@ somi $e0, $zero, 0x08E500 #Se cargan la posicion de los coeficiente
 somi $e1, $zero, 1 # contador del numero de coeficientes a utilizar
 carv $v0, $e0, 0 # Se cargan los coeficientes en v0
 somi $e2, $zero, 16 # Condicion para cambiar de loop 
-somi $e3, $zero, 0x00000 #Se carga la posicio donde inicia la entrada
+somi $e3, $zero, 0x0 #Se carga la posicio donde inicia la entrada
 carv $v1, $e3, 0 # Se cargan los primeros 16 datos de entrada 
 somi $e4, $zero, 0 # regigaro para acumular el resultados
 somi $e6, $zero, 0 # regigaro para controlar la suma
