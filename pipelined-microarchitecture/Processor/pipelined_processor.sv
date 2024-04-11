@@ -73,6 +73,14 @@ module pipelined_processor # (parameter N = 24) (
 	logic [1:0] wForwardBE;
 	logic wMatch;
 
+	/* wiring from Performance Counter */
+	logic print_counters;
+	logic instruction_fetched;
+	logic hazard_detected;
+	logic alu_operation_arithmetic;
+	logic memory_read;
+	logic memory_written;
+	logic [23:0] perf_counters[4:0];
 
 	/* Fetch stage */
 	fetch # (.N(N)) fetch_stage (.clk(clk),
@@ -213,5 +221,16 @@ module pipelined_processor # (parameter N = 24) (
 						 .StallD(wStallD),
 						 .FlushE(wFlushE),
 						 .FlushD(wFlushD));
+
+
+	/* Performance monitor counters */
+	performance_monitor perf_monitor(.clk(clk),
+									.print(print_counters),
+									.instruction_fetched(instruction_fetched),
+									.hazard_detected(hazard_detected),
+									.alu_operation_arithmetic(alu_operation_arithmetic),
+									.MemRead(memory_read),
+									.MemWrite(memory_written),
+									.counters(perf_counters));
 
 endmodule
