@@ -9,6 +9,8 @@ module vectmem(input logic clk,we,
 
 	//assign RAMout = RAM;
 
+initial $readmemh("G:/Documentos/S2024/Arqui/MemoriaVectorial/imemory.memh",RAM);
+
 
 	always_ff @(posedge clk) begin
 		if (we) begin 
