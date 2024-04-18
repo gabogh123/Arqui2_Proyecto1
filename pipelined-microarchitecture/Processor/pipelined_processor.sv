@@ -10,10 +10,16 @@ module pipelined_processor # (parameter N = 24) (
         input  logic [N-1:0] Instr,       		// RD from instruction memory
         input  logic [N-1:0] ReadData_scalar, 	// RD from data memory
 
+        input  logic [255:0] ReadData_vector, 	// RD from data memory
+
         output logic [N-1:0] PC,       	 		// to A from instruction memory
         output logic MemWrite_scalar,           // ScalarMemWrite from Data memory
         output logic [N-1:0] ALUResult_scalar,	// to A from, data memory
-        output logic [N-1:0] WriteData_scalar  	// to WD (write_scalar_data) from data memory
+        output logic [N-1:0] WriteData_scalar,  	// to WD (write_scalar_data) from data memory
+        
+        output logic MemWrite_vector,
+		output logic [255:0] ALUResult_vector,
+        output logic [255:0] WriteData_vector
     );
 
 	/* wiring from Fetch stage */
@@ -42,6 +48,11 @@ module pipelined_processor # (parameter N = 24) (
 	logic [3:0] wRA2E;
 	logic [3:0] wRA1H;
 	logic [3:0] wRA2H;
+	// vector Decode stage
+	logic [255:0] wvRD1D_E;
+	logic [255:0] wvRD2D_E;
+	logic wvRegWriteD_E;
+	logic wvMemWriteD_E;
 
 	/* wiring from Execute stage */
 	logic [N-1:0] wExtImmE_F;
@@ -51,6 +62,8 @@ module pipelined_processor # (parameter N = 24) (
 	logic wRegWriteE_M;
 	logic wMemtoRegE_M;
 	logic [3:0] wWA3E_M;
+	//vector Execute stage
+	logic wvRegWriteE_M;
 
 	/* wiring from Memory stage */
 
@@ -63,6 +76,11 @@ module pipelined_processor # (parameter N = 24) (
 	logic [N-1:0] wALUOutW;
 	logic [N-1:0] ResultW;
 	logic [3:0] wWA3W_D;
+	// vector Writeback stage
+	logic wvRegWriteW_D;
+	logic [255:0] wvReadDataW;
+	logic [255:0] wvALUOutW;
+	logic [255:0] wvResultW_D_E;
 
 	/* wiring from Hazard Unit */
 	logic wStallF;
@@ -111,6 +129,9 @@ module pipelined_processor # (parameter N = 24) (
 							  .ResultW(ResultW),
 							  .WA3W(wWA3W_D),
 
+							  .vRegWriteW(wvRegWriteW_D),
+							  .vResultW(wvResultW_D_E),
+
 							  .PCSrcD(wPCSrcD_H),
 							  .PCSrcE(wPCSrcD_E),
 							  .RegWriteE(wRegWriteD_E),
@@ -120,6 +141,7 @@ module pipelined_processor # (parameter N = 24) (
 							  .ALUSelE(wALUSelD_E),
 							  .BranchE(wBranchD_E),
 							  .ALUSrcE(wALUSrcD_E),
+
 							  .FlagWriteE(wFlagWriteD_E),
 							  .OpcodeE(wOpcodeD_E),
 							  .SE(wSD_E),
@@ -128,12 +150,17 @@ module pipelined_processor # (parameter N = 24) (
 							  .RD2E(wRD2D_E),
 							  .WA3E(wWA3D_E),
 							  .ExtImmE(wExtImmD_E),
-							//   .A3E(),
+							  //.A3E(),
 							  .RA1H(wRA1H),
 							  .RA2H(wRA2H),
 							  .RA1E(wRA1E),
-							  .RA2E(wRA2E));
-							//   .Stuck());
+							  .RA2E(wRA2E),
+							  //.Stuck());
+
+							  .vRegWriteE(wvRegWriteD_E),
+							  .vMemWriteE(wvMemWriteD_E),
+							  .vRD1E(wvRD1D_E),
+							  .vRD2E(wvRD2D_E));
 
 
 	/* scalar Execute stage */
@@ -144,6 +171,12 @@ module pipelined_processor # (parameter N = 24) (
 								.ExtImmE(wExtImmD_E),
 								.ResultW(ResultW),
 								.ALUResultMFB(ALUResult_scalar),
+								
+								.vRD1E(wvRD1D_E),
+								.vRD2E(wvRD2D_E),
+								.vResultW(wvResultW_D_E),
+								.vALUResultMFB(ALUResult_vector),
+
 								.PCSrcE(wPCSrcD_E),
 								.RegWriteE(wRegWriteD_E),
 								.MemtoRegE(wMemtoRegD_E),
@@ -156,6 +189,10 @@ module pipelined_processor # (parameter N = 24) (
 								.OpcodeE(wOpcodeD_E),
 								.SE(wSD_E),
 								.FlagsE(wFlagsD_E),
+
+								.vRegWriteE(wvRegWriteD_E),
+								.vMemWriteE(wvMemWriteD_E),
+
 								.WA3E(wWA3D_E),
 								.ForwardAE(wForwardAE),
 								.ForwardBE(wForwardBE),
@@ -169,7 +206,12 @@ module pipelined_processor # (parameter N = 24) (
 								.WriteDataM(WriteData_scalar),
 								.ExtImmF(wExtImmE_F), 
 								.WA3M(wWA3E_M),
-								.ALUFlagsD(wALUFlagsE_D));
+								.ALUFlagsD(wALUFlagsE_D),
+								
+								.vRegWriteM(wvRegWriteE_M),
+								.vMemWriteM(MemWrite_vector),
+								.vALUResultM(ALUResult_vector),
+								.vWriteDataM(WriteData_vector));
 
 
 	/* Pipeline Register Memory-Writeback Stages */ /* A = regmw @ memory.sv */
@@ -180,22 +222,38 @@ module pipelined_processor # (parameter N = 24) (
 								  .ReadDataM(ReadData_scalar),
 								  .ALUOutM(ALUResult_scalar),
 								  .WA3M(wWA3E_M),
+
+								  .vRegWriteM(wvRegWriteE_M),
+								  .vReadDataM(ReadData_vectorr),
+								  .vALUOutM(ALUResult_vector),
 								
 								  .PCSrcW(wPCSrcW_F),
 								  .RegWriteW(wRegWriteW_D),
 								  .MemtoRegW(wMemtoRegW),
 								  .ReadDataW(wReadDataW),
 								  .ALUOutW(wALUOutW),
-								  .WA3W(wWA3W_D));
+								  .WA3W(wWA3W_D),
+								  
+								  .vRegWriteW(wvRegWriteW_D),
+								  .vReadDataW(),
+								  .vALUOutW());
 
 
 	/* ResultW Mux */ /* A = mux_pcnext */
-	mux_2NtoN # (.N(N)) mux_ResultW (.I0(wALUOutW), //ready
+	mux_2NtoN # (.N(N)) mux_ResultW (.I0(wALUOutW),
 									 .I1(wReadDataW),
 									 .rst(rst),
 									 .S(wMemtoRegW),
 									 .en(1'b1),
 									 .O(ResultW));
+
+	/* vResultW (vector) Mux */
+	mux_2NtoN # (.N(256)) mux_vResultW (.I0(wvALUOutW),
+									 	.I1(wvReadDataW),
+									 	.rst(rst),
+									 	.S(wMemtoRegW),
+									 	.en(1'b1),
+									 	.O(wvResultW_D_E));
 
 
 	/* Hazard Unit */

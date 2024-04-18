@@ -26,6 +26,11 @@ module register_DE # (parameter N = 24) (
 		input logic [3:0] A3D, // A = a3, /* A added */
 		input logic [3:0] RA1D, // /* A added */
 		input logic [3:0] RA2D, // /* A added */
+
+		input logic vRegWriteD,
+		input logic vMemWriteD,
+		input logic [255:0] vRD1D,
+		input logic [255:0] vRD2D,
 		
 		
 		output logic PCSrcE,
@@ -46,7 +51,12 @@ module register_DE # (parameter N = 24) (
 		output logic [N-1:0] ExtImmE, // A = exto,
 		output logic [3:0] A3E, // A = ao3, /* A added */
 		output logic [3:0] RA1E, // /* A added */
-		output logic [3:0] RA2E  // /* A added */
+		output logic [3:0] RA2E,  // /* A added */
+
+		output logic vRegWriteE,
+		output logic vMemWriteE,
+		output logic [255:0] vRD1E,
+		output logic [255:0] vRD2E
 	);
 					
 
@@ -71,6 +81,11 @@ module register_DE # (parameter N = 24) (
 			A3E <= 4'b0;
 			RA1E <= 4'b0;
 			RA2E <= 4'b0;
+
+			vRegWriteE <= 255'b0;
+			vMemWriteE <= 255'b0;
+			vRD1E <= 255'b0;
+			vRD2E <= 255'b0;
 		end
 
 		else begin
@@ -92,6 +107,11 @@ module register_DE # (parameter N = 24) (
 			A3E <= A3D;
 			RA1E <= RA1D;
 			RA2E <= RA2D;
+
+			vRegWriteE <= vRegWriteD;
+			vMemWriteE <= vMemWriteD; 
+			vRD1E <= vRD1D;
+			vRD2E <= vRD2D;
 		end
 
 	end

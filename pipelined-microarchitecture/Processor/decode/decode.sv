@@ -13,6 +13,9 @@ module decode # (parameter N = 24) (
 		input logic [N-1:0] ResultW,
 		input logic [3:0] WA3W,
 
+		input logic vRegWriteW, // Faltaria traer este, se va a usar el escalar mientras
+		input logic [255:0] vResultW, // Viene del result vectorial
+		
 		output logic PCSrcD,
 		output logic PCSrcE,
 		output logic RegWriteE,
@@ -35,8 +38,13 @@ module decode # (parameter N = 24) (
 		output logic [3:0] RA1H,
 		output logic [3:0] RA2H,
 		output logic [3:0] RA1E,
-		output logic [3:0] RA2E
+		output logic [3:0] RA2E,
 		// output logic Stuck
+
+		output logic vRegWriteE,
+		output logic vMemWriteE,
+		output logic [255:0] vRD1E,
+		output logic [255:0] vRD2E
 	);
 
 	/* Instruction */
@@ -64,6 +72,10 @@ module decode # (parameter N = 24) (
 	logic [N-1:0] RD1D;
 	logic [N-1:0] RD2D;
 	logic [N-1:0] ExtImmD;
+
+	/* Vector Register File wires */
+	logic [255:0] vRD1D;
+	logic [255:0] vRD2D;
 	
 	logic RegWriteD;
 	logic MemtoRegD;
@@ -76,6 +88,9 @@ module decode # (parameter N = 24) (
 
 	logic [1:0] ImmSrcD;
 	logic [1:0] RegSrcD;
+
+	logic vRegWriteD;
+	logic vMemWriteD;
 	
 
 	/* RA1D (A1 from Register File) Mux */ /* A = mux_ra1 */
@@ -115,19 +130,22 @@ module decode # (parameter N = 24) (
 							   .FlagWrite(FlagWriteD),
 							   .ImmSrc(ImmSrcD),
 							   .RegSrc(RegSrcD),
-							   .Stuck(Stuck));
+							   .Stuck(Stuck),
+							   
+							   .vRegWrite(vRegWriteD),
+							   .vMemWrite(vMemWriteD));
 
-	/* Register File */
-	register_file # (.N(N)) reg_file (.clk(clk),
-									  .rst(rst),
-									  .WD3(ResultW),
-									  .A1(RA1D),
-									  .A2(RA2D),
-									  .A3(WA3W),
-									  .WE3(RegWriteW),
-									  .R15(PCPlus8D),
-									  .RD1(RD1D),
-									  .RD2(RD2D));
+	/* Register File Scalar */
+	register_file # (.N(N)) reg_file_s (.clk(clk),
+									  	.rst(rst),
+									 	.A1(RA1D),
+									  	.A2(RA2D),
+									  	.A3(WA3W),
+									  	.WD3(ResultW),
+									  	.R15(PCPlus8D),
+									  	.WE3(RegWriteW),
+									  	.RD1(RD1D),
+									  	.RD2(RD2D));
 
 	assign WA3E = inst_rd;
 
@@ -135,6 +153,19 @@ module decode # (parameter N = 24) (
 	extend_v2 # (.N(N)) extender (.A(inst_add),
 							      .ImmSrc(ImmSrcD),
 						   	      .ExtImm(ExtImmD));
+
+
+	/* Register File Vector */
+	register_file_vector # (.N(256)) reg_file_v (.clk(clk),
+												.rst(rst),
+												.A1(RA1D),
+												.A2(RA2D),
+												.A3(WA3W),
+												.WD3(vResultW),
+												.WE3(vRegWriteW),
+												.RD1(vRD1D),
+												.RD2(vRD2D));
+	
 	
 	/* Pipeline Register Decode-Execute Stages */ /* A = regde */
 	register_DE # (.N(N)) reg_DE (.clk(clk),
@@ -161,6 +192,11 @@ module decode # (parameter N = 24) (
 								  .RA1D(RA1D),
 								  .RA2D(RA2D),
 
+								  .vRegWriteD(vRegWriteD),
+                                  .vMemWriteD(vMemWriteD),
+								  .vRD1D(vRD1D),
+								  .vRD2D(vRD2D),
+
 								  .PCSrcE(PCSrcE),
 								  .RegWriteE(RegWriteE),
 								  .MemtoRegE(MemtoRegE),
@@ -179,6 +215,11 @@ module decode # (parameter N = 24) (
 								  .ExtImmE(ExtImmE),
 								  .A3E(A3E),
 								  .RA1E(RA1E),
-								  .RA2E(RA2E));
+								  .RA2E(RA2E),
+
+								  .vRegWriteE(vRegWriteE),
+                                  .vMemWriteE(vMemWriteE),
+								  .vRD1E(vRD1E),
+								  .vRD2E(vRD2E));
 
 endmodule

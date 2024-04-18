@@ -19,7 +19,10 @@ module control_unit_v2 (
 		output logic [1:0] FlagWrite,
 		output logic [1:0] ImmSrc,
 		output logic [1:0] RegSrc,
-		output logic Stuck /* A added */
+		output logic Stuck, /* A added */
+
+		output logic vRegWrite,
+		output logic vMemWrite
 	);
 
     wire wAluOp;
@@ -41,7 +44,10 @@ module control_unit_v2 (
                             .MemtoReg(MemtoReg),
                             .ALUSrc(ALUSrc),
                             .ImmSrc(ImmSrc),
-                            .ALUOp(wAluOp));
+                            .ALUOp(wAluOp),
+                            
+                            .vRegW(vRegWrite),
+                            .vMemW(vMemWrite));
 
     /* ALU Decoder */
     alu_decoder_v2 alu_deco (.Opcode(Opcode),

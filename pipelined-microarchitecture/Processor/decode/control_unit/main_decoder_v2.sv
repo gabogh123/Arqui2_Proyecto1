@@ -18,7 +18,10 @@ module main_decoder_v2(
         output logic       MemtoReg,
         output logic         ALUSrc,
         output logic [1:0]   ImmSrc,
-        output logic          ALUOp
+        output logic          ALUOp,
+
+        output logic           vRegW,
+        output logic           vMemW
     );
 
     always @ (*)
@@ -36,6 +39,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b11;
                     RegW     = 1'b1;
                     ALUOp    = 1'b1;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
                 /* everything else doesn't need to extend the immediate */
                 else begin
@@ -47,6 +52,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b10; // 2'bxx;
                     RegW     = 1'b1;
                     ALUOp    = 1'b1;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
 			end
 			
@@ -60,6 +67,8 @@ module main_decoder_v2(
                 ImmSrc   = 2'bxx;
                 RegW     = 1'bx;
                 ALUOp    = 1'bx;
+                vRegW    = RegW;    // Modify for specific vectorial implementation
+                vMemW    = MemW;    // Modify for specific vectorial implementation
 			end
 
 			/* Scalar datapath */ /* Scalar Immediate Arithmetic Operations */
@@ -72,6 +81,8 @@ module main_decoder_v2(
                 ImmSrc   = 2'b00; // needs to extend the immediate
                 RegW     = 1'b1;
                 ALUOp    = 1'b1;
+                vRegW    = RegW;    // Modify for specific vectorial implementation
+                vMemW    = MemW;    // Modify for specific vectorial implementation
 			end
 
 			/* Scalar datapath */ /* Scalar memory access */
@@ -86,6 +97,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b00;
                     RegW     = 1'b0;
                     ALUOp    = 1'b0;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
                 /* ldr */
                 else if (S == 2'b01) begin
@@ -97,6 +110,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b00;
                     RegW     = 1'b1;
                     ALUOp    = 1'b0;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
                 /* unimplemented */
                 else begin
@@ -108,6 +123,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'bxx;
                     RegW     = 1'bx;
                     ALUOp    = 1'bx;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
 			end
 
@@ -121,6 +138,8 @@ module main_decoder_v2(
                 ImmSrc   = 2'bxx;
                 RegW     = 1'bx;
                 ALUOp    = 1'bx;
+                vRegW    = RegW;    // Modify for specific vectorial implementation
+                vMemW    = MemW;    // Modify for specific vectorial implementation
 			end
 
 			/* Scalar datapath */ /* Branches */
@@ -135,6 +154,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b01;
                     RegW     = 1'b0;
                     ALUOp    = 1'b0;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
                 /* everything else doesn't need to extend the immediate */
                 else begin
@@ -146,6 +167,8 @@ module main_decoder_v2(
                     ImmSrc   = 2'b00;
                     RegW     = 1'b0;
                     ALUOp    = 1'b1;
+                    vRegW    = RegW;    // Modify for specific vectorial implementation
+                    vMemW    = MemW;    // Modify for specific vectorial implementation
                 end
 			end
 
@@ -159,6 +182,8 @@ module main_decoder_v2(
                 ImmSrc   = 2'bxx;
                 RegW     = 1'bx;
                 ALUOp    = 1'bx;
+                vRegW    = RegW;    // Modify for specific vectorial implementation
+                vMemW    = MemW;    // Modify for specific vectorial implementation
 			end
 
 			/* Default */
@@ -172,6 +197,8 @@ module main_decoder_v2(
                 ImmSrc   = 2'bxx;
                 RegW     = 1'bx;
                 ALUOp    = 1'bx;
+                vRegW    = RegW;    // Modify for specific vectorial implementation
+                vMemW    = MemW;    // Modify for specific vectorial implementation
 			end
     
         endcase

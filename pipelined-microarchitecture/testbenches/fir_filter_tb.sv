@@ -185,18 +185,18 @@ module fir_filter_tb;
 
 	initial	begin
 
-		#200
+		#100
 
 
 		pwr <= 0;
 		rst <= 0;
 
-		#300
+		#200
 		
 		pwr <= 1;
 		rst <= 1;
 
-		#300;
+		#200;
 
 		// rst = 1;
 
@@ -205,6 +205,6 @@ module fir_filter_tb;
 	end
 
 	initial
-	#3000 $finish;                                 
+	#4000 $finish;                                 
 
 endmodule
