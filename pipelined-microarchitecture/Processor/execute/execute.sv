@@ -11,6 +11,11 @@ module execute # (parameter N = 24) (
 		input  logic [N-1:0] ResultW,
 		input  logic [N-1:0] ALUResultMFB,
 
+		input  logic [255:0] vRD1E,
+		input  logic [255:0] vRD2E,
+		input  logic [255:0] vResultW,
+		input  logic [255:0] vALUResultMFB,
+
 		input  logic PCSrcE,
 		input  logic RegWriteE,
 		input  logic MemtoRegE,
@@ -23,6 +28,9 @@ module execute # (parameter N = 24) (
 		input  logic [2:0] OpcodeE,
 		input  logic [1:0] SE,
 		input  logic [3:0] FlagsE,
+
+		input  logic vRegWriteE,
+		input  logic vMemWriteE,
 
 		input  logic [3:0] WA3E,
 		input  logic [1:0] ForwardAE,
@@ -37,7 +45,12 @@ module execute # (parameter N = 24) (
 		output logic [N-1:0] WriteDataM,
 		output logic [N-1:0] ExtImmF, 
 		output logic [3:0] WA3M,
-		output logic [3:0] ALUFlagsD
+		output logic [3:0] ALUFlagsD,
+
+		output logic vRegWriteM,
+		output logic vMemWriteM,
+		output logic [255:0] vALUResultM,
+		output logic [255:0] vWriteDataM
 	);
 
 	/* wiring */
@@ -50,6 +63,12 @@ module execute # (parameter N = 24) (
 	logic [3:0] ALUFlags_nfp;
 	logic [3:0] ALUFlags_wfp;
 	logic [3:0] ALUFlags;
+	/* vector wiring */
+	logic [255:0] vWriteDataE;
+	logic [255:0] vSrcAE;
+	logic [255:0] vSrcBE;
+	logic [255:0] vALUResultE;
+	logic [63:0] vALUFlags;
 	
 
 	/* SrcAE (ALU's A Operand) Mux */ /* A = mux_ra1E */
@@ -80,36 +99,54 @@ module execute # (parameter N = 24) (
 								   .en(1'b1),
 								   .O(SrcBE));
 
-	/* ALU Scalar no FP */
-	alu # (.N(N)) alu_scalar (.A(SrcAE),
-                              .B(SrcBE),
-                              .ALUControl(ALUControlE),
-                              .result(ALUResult_nfp),
-                              .flags(ALUFlags_nfp));
+	/* Scalar ALU */
+	alus # (.N(N)) sALU (.rst(rst),
+						 .A(SrcAE),
+						 .B(SrcBE),
+						 .ALUControl(ALUControlE),
+						 .ALUSel(ALUSelE),
+						 .result(ALUResultE),
+						 .flags(ALUFlags));
 
-	/* ALU Scalar w FP */
-	alu # (.N(N)) alu_fp_scalar (.A(SrcAE),
-                                 .B(SrcBE),
-                                 .ALUControl(ALUControlE),
-                                 .result(ALUResult_wfp),
-                                 .flags(ALUFlags_wfp));
-	
-	/* ALUResult Mux */
-	mux_2NtoN # (.N(N)) mux_ALUResult (.I0(ALUResult_nfp),
-								   	   .I1(ALUResult_wfp),
-								   	   .rst(rst),
-								   	   .S(ALUSelE),
-								   	   .en(1'b1),
-								   	   .O(ALUResultE));
+	/* ********************************** vector ***************************** */
 
-	/* ALUFlags Mux */
-	mux_2NtoN # (.N(4)) mux_ALUFlags (.I0(ALUFlags_nfp),
-								   	  .I1(ALUFlags_wfp),
+	/* vSrcAE (vALU's A Operand) Mux */
+	mux_4NtoN # (.N(256)) mux_vSrcAE (.I0(vRD1E),
+								      .I1(vResultW),
+								   	  .I2(vALUResultMFB),
+								   	  .I3(256'hffffff), // All 1's because it's not used
 								   	  .rst(rst),
-								   	  .S(ALUSelE),
+								   	  .S(ForwardAE),
 								   	  .en(1'b1),
-								   	  .O(ALUFlags));
+								   	  .O(vSrcAE));
+
+	/* vWriteDataE (vALU's posible operand and Vector Data Memory's write data) Mux */
+	mux_4NtoN # (.N(N)) mux_vWriteDataE (.I0(vRD2E),
+										.I1(vResultW),
+										.I2(vALUResultMFB),
+										.I3(256'hffffffffffffffffffffffffffffffffffff),
+										.rst(rst),
+										.S(ForwardBE),
+										.en(1'b1),
+										.O(vWriteDataE));
+
+	/* vSrcBE (vALU's B Operand) Mux */
+	mux_2NtoN # (.N(N)) mux_vSrcBE (.I0(vWriteDataE),
+								   .I1(256'hffffffffffffffffffffffffffffffffffff), // posible -> vExtImmE (not implemented extend for vector)
+								   .rst(rst),
+								   .S(ALUSrcE),
+								   .en(1'b1),
+								   .O(vSrcBE));
+
+	/* Vector ALU */
+	vector_alu # (.N(16)) vALU (.A(vSrcAE),
+								.B(vSrcBE),
+								.ALUControl(ALUControlE),
+								.ALUSel(ALUSelE),
+								.result(vALUResultE),
+								.flags(vALUFlags)); // ALUFlags for vector wont be needed
 	
+
 	/* Conditioned control signals */
 	logic PCSrcE_cond;
 	logic RegWriteE_cond;
@@ -144,13 +181,20 @@ module execute # (parameter N = 24) (
 								.ALUResultE(ALUResultE),
 								.WriteDataE(WriteDataE),
 								.WA3E(WA3E),
+
+								.vALUResultE(vALUResultE),
+								.vWriteDataE(vWriteDataE),
+
 								.PCSrcM(PCSrcM),
 								.RegWriteM(RegWriteM),
 								.MemtoRegM(MemtoRegM),
 								.MemWriteM(MemWriteM),
 								.ALUResultM(ALUResultM),
 								.WriteDataM(WriteDataM),
-								.WA3M(WA3M));
+								.WA3M(WA3M),
+
+								.vALUResultM(vALUResultM),
+								.vWriteDataM(vWriteDataM));
 	
 	/* ExtImm for Fetch stage (ALUResult was used in book's implementation) */
 	/* Used for sending the branch address in 'b' instruction */

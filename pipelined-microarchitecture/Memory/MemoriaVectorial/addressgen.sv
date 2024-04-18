@@ -1,9 +1,13 @@
-module addressgen(input logic [31:0] address,
-						 output logic [31:0] a,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15);
-			
+/*
+
+*/
+module addressgen(
+		input logic [31:0] address,
+		output logic [31:0] a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15
+	);		
 
 			
-assign a = address;
+assign a0 = address;
 assign a1 = address + 1;
 assign a2 = address + 2;
 assign a3 = address + 3;

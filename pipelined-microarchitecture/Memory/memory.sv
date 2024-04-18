@@ -1,12 +1,11 @@
 /*
 Top Memory Module
 Date: 16/03/24
-FALTA VECTOR MEMORY
 */
 module memory # (parameter N = 24) (
 		input  logic clk,
 
-		input  logic [N-1:0] pc_address,	// from PC to A in instruction memory
+		input  logic [N-1:0] pc_address,			// from PC to A in instruction memory
 		input  logic [N-1:0] data_address_scalar,	// from ALUResult to A in data memory
 		input  logic [N-1:0] data_address_vector,	// NYI: not yet implemented
 
@@ -46,13 +45,12 @@ module memory # (parameter N = 24) (
 								  .q(read_data_scalar));
 
 
-	/* Vector Data Memory */ /*
-	ram_vector ram_scalar_memory (.address(vd_address),
+	/* Vector Data Memory */
+	ram_vector ram_vector_memory (.address(vd_address),
 								  .clock(clk),
 								  .data(write_data_vector),
-								  .rden(1'b1),
+								  //.rden(1'b1),
 								  .wren(MemWrite_vector),
 								  .q(read_data_vector));
-	*/
 
 endmodule

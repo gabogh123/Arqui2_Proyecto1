@@ -142,14 +142,14 @@ module fir_filter_tb;
 		WD3 = uut.asip.sDecode.ResultW;
 		R15 = uut.asip.sDecode.PCPlus8D;
 		// -> Registers
-		e0_reg = uut.asip.sDecode.reg_file.reg_array[8];
-		e1_reg = uut.asip.sDecode.reg_file.reg_array[9];
-		e2_reg = uut.asip.sDecode.reg_file.reg_array[10];
-		e3_reg = uut.asip.sDecode.reg_file.reg_array[11];
-		e4_reg = uut.asip.sDecode.reg_file.reg_array[12];
-		e5_reg = uut.asip.sDecode.reg_file.reg_array[13];
-		e6_reg = uut.asip.sDecode.reg_file.reg_array[14];
-		pc_reg = uut.asip.sDecode.reg_file.reg_array[15];
+		e0_reg = uut.asip.sDecode.reg_file_s.reg_array[8];
+		e1_reg = uut.asip.sDecode.reg_file_s.reg_array[9];
+		e2_reg = uut.asip.sDecode.reg_file_s.reg_array[10];
+		e3_reg = uut.asip.sDecode.reg_file_s.reg_array[11];
+		e4_reg = uut.asip.sDecode.reg_file_s.reg_array[12];
+		e5_reg = uut.asip.sDecode.reg_file_s.reg_array[13];
+		e6_reg = uut.asip.sDecode.reg_file_s.reg_array[14];
+		pc_reg = uut.asip.sDecode.reg_file_s.reg_array[15];
 		// -> RegFile data
 		RegWriteW = uut.asip.sDecode.RegWriteW;
 		RD1 = uut.asip.sDecode.RD1D;
@@ -185,18 +185,18 @@ module fir_filter_tb;
 
 	initial	begin
 
-		#200
+		#100
 
 
 		pwr <= 0;
 		rst <= 0;
 
-		#300
+		#200
 		
 		pwr <= 1;
 		rst <= 1;
 
-		#300;
+		#200;
 
 		// rst = 1;
 
@@ -205,6 +205,6 @@ module fir_filter_tb;
 	end
 
 	initial
-	#3000 $finish;                                 
+	#4000 $finish;                                 
 
 endmodule
