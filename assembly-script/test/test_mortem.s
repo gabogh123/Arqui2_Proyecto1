@@ -23,4 +23,6 @@
 
  //7
     sw $e3, 2($e0) # Guardo el valor de $e3 en 0x2002
+
+    lw $e1, 2($e0) # Carga en $e1 lo que hay en la direccion de memoria que esta en $e0 (1000) 5
  
