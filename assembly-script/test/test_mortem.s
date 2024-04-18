@@ -13,15 +13,15 @@
      //3
     lw $e1, ($e0) # Carga en $e1 lo que hay en la direccion de memoria que esta en $e0 (1000) 5
 
-  lw $e2, 1($e0) # Carga en $e2 lo que hay en la direccion de memoria que esta en $e0+1 (1001) 3  
+    lw $e2, 1($e0) # Carga en $e2 lo que hay en la direccion de memoria que esta en $e0+1 (1001) 3  
     //5
     # add A y B
     add $e3, $e1, $e2  # $e3 = 5 + 3 = 8 
 
-# Para guardar en la seccion de datos
+	# Para guardar en la seccion de datos
     add $e0, $e0, $e0 # $e0 = 0x2000
 
- //7
+ 	//7
     sw $e3, 2($e0) # Guardo el valor de $e3 en 0x2002
 
     lw $e1, 2($e0) # Carga en $e1 lo que hay en la direccion de memoria que esta en $e0 (1000) 5
